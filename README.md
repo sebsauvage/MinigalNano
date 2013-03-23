@@ -7,6 +7,8 @@ This fork (Minigal Nano SSE) is based on Thomas Rybak's version which seems to h
 
 This fork holds some improvements, like thumbnail cache and folder/image description.
 
+Online demo: http://sebsauvage.net/minecraft/
+
 Installation
 ============
 
