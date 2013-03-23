@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title><% title %></title>
+	<link rel="stylesheet" href="<% gallery_root %>css/mediaboxAdvBlack21.css" type="text/css" media="screen" />
+	<script src="<% gallery_root %>js/mootools.js" type="text/javascript"></script>
+	<script src="<% gallery_root %>js/mediaboxAdv-1.3.4b.js" type="text/javascript"></script>
+<style type="text/css">
+body {
+	margin: 0 auto;
+	padding: 0;
+	width: <% gallery_width %>;
+	font: 14px Georgia, "Times New Roman", Times, serif;
+}
+h1 {
+	font: normal 320%/100% Georgia, "Times New Roman", Times, serif;
+	margin: 20px 0 5px 0;
+	letter-spacing: -2px;
+}
+.credits {
+	border-bottom: solid 1px #ccc;
+	padding-bottom: 5px;
+	margin: 0 0 30px 0;
+	font: 120% Garamond, Georgia, serif;
+}
+.credits em {
+	color: #999;
+}
+.backlink a {
+	font-size: 10px;
+	text-decoration: none;
+	color: #AAA;
+}
+.backlink a:hover,
+.backlink a:visited:hover {
+	color: #000;
+}
+img {
+	border: none;
+}
+#page_nav {
+	color: #999;
+	clear:both;
+	text-align: center;
+}
+#page_nav a:link, #page_nav a:visited, #page_nav a:hover, #page_nav a:visited:hover {
+	text-decoration: none;
+	color: #222;
+}
+#breadcrumb_nav {
+	color: #999;
+}
+#breadcrumb_nav a:link, #breadcrumb_nav a:visited, #breadcrumb_nav a:hover, #breadcrumb_nav a:visited:hover {
+	text-decoration: none;
+	color: #222;
+}
+a {
+	color: black;	
+}
+#container {
+	overflow: auto;
+	width: 100%
+}
+.hidden {
+	visibility: hidden;
+	position:absolute;
+	top:0;
+	left:0;
+	display:inline;
+}
+
+/* ---------- gallery styles start here ----------------------- */
+.gallery {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.gallery li {
+	padding: 10px;
+	margin: 0;
+	float: left;
+	position: relative;
+	width: 130px;
+	height: 130px;
+}
+.gallery li:hover img {
+	border-color: #000;
+	background: #ddd;
+}
+.gallery img {
+	background: #fff;
+	border: solid 1px #888;
+	padding: 5px;
+}
+.gallery em {
+	background: #fff url(images/grey-gradient.gif) repeat-y;
+	color: #000;
+	font-style: normal;
+	padding: 2px 10px;
+	display: block;
+	position: absolute;
+	top: 110px;
+	left: 9px;
+	border: 1px solid #999;
+	border-left-color: #888;
+}
+.gallery a {
+	text-decoration: none;
+}
+.gallery a:hover em {
+	background: #ffdb01 url(images/orange-gradient.gif) repeat-y;
+	border-color: #c25b08;
+}
+.newversion {
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 0;
+	padding: 0;
+	border: none;
+	float: none;
+}
+.newversion a img {
+	background-color: transparent;
+	color: white;
+	border: none;
+	text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+<h1><em><% title %></em></h1>
+<p class="credits"><em>by:</em> <% author %></p>
+<span id="breadcrumb_nav"><% breadcrumb_navigation %></span>
+<div id="container">
+<ul class="gallery">
+<% thumbnails %>
+</ul>
+</div>
+<br />
+<div id="page_nav"><% page_navigation %></div>
+<br />
+<!-- CREDITS - DO NOT REMOVE OR YOU WILL VOID MiniGal Nano TERMS OF USE -->
+<div class="backlink" align="center"><a href="http://www.minigal.dk" title="Powered by MiniGal Nano" target="_blank">Powered by MiniGal Nano <% version %></a></div>
+<br /><br />
+</body>
+</html>
