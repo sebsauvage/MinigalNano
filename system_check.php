@@ -3,10 +3,8 @@ ini_set("memory_limit","256M");
 
 $exif = "No";
 $gd = "No";
-$update = "No";
 if (function_exists('exif_read_data')) $exif = "Yes";
 if (extension_loaded('gd') && function_exists('gd_info')) $gd = "Yes";
-if (ini_get("allow_url_fopen") == 1) $update = "Yes";
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -109,17 +107,7 @@ div {
 <div class="right">
 	Memory is needed to create thumbnails. Bigger images uses more memory	
 </div>
-<br />
 
-<div class="left">
-	New version check
-</div>
-<div class="middle-neutral">
-	<?php echo $update ?>
-</div>
-<div class="right">
-	The ability to check for new version and display this automatically. The script will work without it	
-</div>
 <br /><br />
 <a href="http://www.minigal.dk/minigal-nano.html" target="_blank">Support website</a>
 | <a href="http://www.minigal.dk/forum" target="_blank">Support forum</a>
