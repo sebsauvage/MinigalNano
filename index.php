@@ -1,4 +1,5 @@
-<?php
+﻿<?php
+
 /*
 MINIGAL NANO
 - A PHP/HTML/CSS based image gallery script
@@ -13,6 +14,11 @@ Support: www.minigal.dk
 Community: www.minigal.dk/forum
 
 Please enjoy this free script!
+
+
+Upgraded to https://github.com/sebsauvage/MinigalNano
+by Sébastien SAUVAGE.
+
 */
 
 // Do not edit below this section unless you know what you are doing!
@@ -21,9 +27,9 @@ Please enjoy this free script!
 //-----------------------
 // Debug stuff
 //-----------------------
-	error_reporting(E_ERROR);
+//	error_reporting(E_ERROR);
 //	error_reporting(E_ALL);
-//	error_reporting(0);
+	error_reporting(-1);
 /*
 	$mtime = microtime();
 	$mtime = explode(" ",$mtime);
@@ -31,11 +37,11 @@ Please enjoy this free script!
 	$starttime = $mtime;
 */
 
-$version = "0.3.5";
+header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
+$version = "0.3.7";
 ini_set("memory_limit","256M");
 
-require("config_default.php");
-include("config.php");
+require("config.php");
 //-----------------------
 // DEFINE VARIABLES
 //-----------------------
@@ -46,6 +52,7 @@ $new = "";
 $images = "";
 $exif_data = "";
 $messages = "";
+$comment = "";
 
 //-----------------------
 // PHP ENVIRONMENT CHECK
@@ -126,6 +133,8 @@ function checkpermissions($file) {
 //-----------------------
 // CHECK FOR NEW VERSION
 //-----------------------
+// New version check disabled because original author does not update it software anymore.
+/*
 if (ini_get('allow_url_fopen') == "1") {
 	$file = @fopen ("http://www.minigal.dk/minigalnano_version.php", "r");
 	$server_version = fgets ($file, 1024);
@@ -134,10 +143,14 @@ if (ini_get('allow_url_fopen') == "1") {
 	}
 	fclose($file);
 }
+*/
 
 if (!defined("GALLERY_ROOT")) define("GALLERY_ROOT", "");
-$thumbdir = rtrim('photos' . "/" .$_REQUEST["dir"],"/");
-$thumbdir = str_replace("/..", "", $thumbdir); // Prevent looking at any up-level folders
+$requestedDir = '';
+if (!empty($_GET['dir'])) $requestedDir = $_GET['dir'];
+$thumbdir = rtrim('photos/'.$requestedDir,'/');
+
+$thumbdir = str_replace('/..', '', $thumbdir); // Prevent directory traversal attacks.
 $currentdir = GALLERY_ROOT . $thumbdir;
 
 //-----------------------
@@ -156,12 +169,12 @@ $dirs = array();
 				{
 					checkpermissions($currentdir . "/" . $file); // Check for correct file permission
 					// Set thumbnail to folder.jpg if found:
-					if (file_exists("$currentdir/" . $file . "/folder.jpg"))
+					if (file_exists($currentdir. '/' . $file . '/folder.jpg'))
 					{
 						$dirs[] = array(
 							"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file . "/folder.jpg"),
-							"html" => "<li><a href='?dir=" .ltrim($_GET['dir'] . "/" . $file, "/") . "'><em>" . padstring($file, $label_max_length) . "</em><span></span><img src='" . GALLERY_ROOT . "createthumb.php?filename=$currentdir/" . $file . "/folder.jpg&amp;size=$thumb_size'  alt='$label_loading' /></a></li>");
+							"html" => "<li><a href='?dir=" .ltrim($requestedDir . "/" . $file, "/") . "'><em>" . padstring($file, $label_max_length) . "</em><span></span><img src='" . GALLERY_ROOT . "createthumb.php?filename=$currentdir/" . $file . "/folder.jpg&amp;size=$thumb_size'  alt='$label_loading' /></a></li>");
 					}  else
 					{
 					// Set thumbnail to first image found (if any):
@@ -171,19 +184,20 @@ $dirs = array();
 						$dirs[] = array(
 							"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
-							"html" => "<li><a href='?dir=" . ltrim($_GET['dir'] . "/" . $file, "/") . "'><em>" . padstring($file, $label_max_length) . "</em><span></span><img src='" . GALLERY_ROOT . "createthumb.php?filename=$thumbdir/" . $file . "/" . $firstimage . "&amp;size=$thumb_size'  alt='$label_loading' /></a></li>");
+							"html" => "<li><a href='?dir=" . ltrim($requestedDir . "/" . $file, "/") . "'><em>" . padstring($file, $label_max_length) . "</em><span></span><img src='" . GALLERY_ROOT . "createthumb.php?filename=$thumbdir/" . $file . "/" . $firstimage . "&amp;size=$thumb_size'  alt='$label_loading' /></a></li>");
 						} else {
 						// If no folder.jpg or image is found, then display default icon:
 							$dirs[] = array(
 								"name" => $file,
 								"date" => filemtime($currentdir . "/" . $file),
-								"html" => "<li><a href='?dir=" . ltrim($_GET['dir'] . "/" . $file, "/") . "'><em>" . padstring($file) . "</em><span></span><img src='" . GALLERY_ROOT . "images/folder_" . strtolower($folder_color) . ".png' width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>");
+								"html" => "<li><a href='?dir=" . ltrim($requestedDir . "/" . $file, "/") . "'><em>" . padstring($file) . "</em><span></span><img src='" . GALLERY_ROOT . "images/folder_" . strtolower($folder_color) . ".png' width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>");
 						}
 					}
 				}
 			}	
 
 // 2. LOAD CAPTIONS
+$img_captions['']='';
 if (file_exists($currentdir ."/captions.txt"))
 {
 	$file_handle = fopen($currentdir ."/captions.txt", "rb");
@@ -209,12 +223,20 @@ if (file_exists($currentdir ."/captions.txt"))
 						//Read EXIF
 						if ($display_exif == 1) $img_captions[$file] .= readEXIF($currentdir . "/" . $file);
 
+                        // Read the optionnal image title and caption in html file (image.jpg --> image.jpg.html)
+                        // Format: title::caption
+                        // Example: My cat::My cat like to <i>roll</i> on the floor.
+                        // If file is not provided, image filename will be used instead.
 						checkpermissions($currentdir . "/" . $file);
+
+                        $img_captions[$file] = $file;
+                        if (is_file($currentdir.'/'.$file.'.html')) { $img_captions[$file] = $file.'::'.htmlspecialchars(file_get_contents($currentdir.'/'.$file.'.html'),ENT_QUOTES); }
+
 			  			$files[] = array (
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title='$img_captions[$file]'><span></span><img src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
+				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title='".$img_captions[$file]."'><span></span><img src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
 		  			}
 					// Other filetypes
 					$extension = "";
@@ -238,7 +260,7 @@ if (file_exists($currentdir ."/captions.txt"))
      			}   		
 	}
   closedir($handle);
-  } else die("ERROR: Could not open $currentdir for reading!");
+  } else die("ERROR: Could not open ".htmlspecialchars(stripslashes($currentdir))." for reading!");
 
 //-----------------------
 // SORT FILES AND FOLDERS
@@ -270,6 +292,7 @@ if (sizeof($files) > 0)
 //-----------------------
 // OFFSET DETERMINATION
 //-----------------------
+    if (!isset($_GET["page"])) $_GET["page"] = 1;
 	$offset_start = ($_GET["page"] * $thumbs_pr_page) - $thumbs_pr_page;
 	if (!isset($_GET["page"])) $offset_start = 0;
 	$offset_end = $offset_start + $thumbs_pr_page;
@@ -284,7 +307,6 @@ if (sizeof($files) > 0)
 //-----------------------
 // PAGE NAVIGATION
 //-----------------------
-if (!isset($_GET["page"])) $_GET["page"] = 1;
 if (sizeof($dirs) + sizeof($files) > $thumbs_pr_page)
 {
 	$page_navigation .= "$label_page ";
@@ -293,18 +315,18 @@ if (sizeof($dirs) + sizeof($files) > $thumbs_pr_page)
 		if ($_GET["page"] == $i)
 			$page_navigation .= "$i";
 			else
-				$page_navigation .= "<a href='?dir=" . $_GET["dir"] . "&amp;page=" . ($i) . "'>" . $i . "</a>";
+				$page_navigation .= "<a href='?dir=" . $requestedDir . "&amp;page=" . ($i) . "'>" . $i . "</a>";
 		if ($i != ceil((sizeof($files) + sizeof($dirs)) / $thumbs_pr_page)) $page_navigation .= " | ";
 	}
 	//Insert link to view all images
 	if ($_GET["page"] == "all") $page_navigation .= " | $label_all";
-	else $page_navigation .= " | <a href='?dir=" . $_GET["dir"] . "&amp;page=all'>$label_all</a>";
+	else $page_navigation .= " | <a href='?dir=" . $requestedDir . "&amp;page=all'>$label_all</a>";
 }
 
 //-----------------------
 // BREADCRUMB NAVIGATION
 //-----------------------
-if ($_GET['dir'] != "")
+if ($requestedDir != "")
 {
 	$breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> > ";
 	$navitems = explode("/", $_REQUEST['dir']);
@@ -357,6 +379,7 @@ for ($i = $offset_start - sizeof($dirs); $i < $offset_end && $offset_current < $
 }
 
 //Include hidden links for all images AFTER current page so lightbox is able to browse images on different pages
+if ($i<0) $i=1;
 for ($y = $i; $y < sizeof($files); $y++)
 {	
 	$page_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "' rel='lightbox[billeder]'  class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
@@ -369,12 +392,20 @@ if ($messages != "") {
 $messages = "<div id=\"topbar\">" . $messages . " <a href=\"#\" onclick=\"document.getElementById('topbar').style.display = 'none';\";><img src=\"images/close.png\" /></a></div>";
 }
 
+// Read folder comment.
+$comment_filepath = $currentdir . $file . "/comment.html";
+if (file_exists($comment_filepath))
+{
+    $fd = fopen($comment_filepath, "r");
+    $comment = utf8_encode(fread($fd,filesize ($comment_filepath))); // utf8_encode to convert from iso-8859 to UTF-8
+    fclose($fd);
+}
 //PROCESS TEMPLATE FILE
 	if(GALLERY_ROOT != "") $templatefile = GALLERY_ROOT . "templates/integrate.html";
 	else $templatefile = "templates/" . $templatefile . ".html";
 	if(!$fd = fopen($templatefile, "r"))
 	{
-		echo "Template $templatefile not found!";
+		echo "Template ".htmlspecialchars(stripslashes($templatefile))." not found!";
 		exit();
 	}
 	else
@@ -390,6 +421,7 @@ $messages = "<div id=\"topbar\">" . $messages . " <a href=\"#\" onclick=\"docume
 		$template = preg_replace("/<% thumbnails %>/", "$thumbnails", $template);
 		$template = preg_replace("/<% breadcrumb_navigation %>/", "$breadcrumb_navigation", $template);
 		$template = preg_replace("/<% page_navigation %>/", "$page_navigation", $template);
+		$template = preg_replace("/<% folder_comment %>/", "$comment", $template);
 		$template = preg_replace("/<% bgcolor %>/", "$backgroundcolor", $template);
 		$template = preg_replace("/<% gallery_width %>/", "$gallery_width", $template);
 		$template = preg_replace("/<% version %>/", "$version", $template);

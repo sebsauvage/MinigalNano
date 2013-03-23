@@ -14,16 +14,62 @@ Community: www.minigal.dk/forum
 
 Please enjoy this free script!
 
+Version 0.3.5 modified by Sebastien SAUVAGE (sebsauvage.net):
+   - Added thumbnail cache (reduces server CPU load, server bandwith and speeds up client page display).
+   - Thumbnails are now always in JPEG even if the source image is PNG or GIF.
 
 USAGE EXAMPLE:
 File: createthumb.php
 Example: <img src="createthumb.php?filename=photo.jpg&amp;width=100&amp;height=100">
 */
 //	error_reporting(E_ALL);
-
+	error_reporting(0);
+/*
 if (preg_match("/.jpg$|.jpeg$/i", $_GET['filename'])) header('Content-type: image/jpeg');
 if (preg_match("/.gif$/i", $_GET['filename'])) header('Content-type: image/gif');
 if (preg_match("/.png$/i", $_GET['filename'])) header('Content-type: image/png');
+*/
+
+function str_split_php4( $text, $split = 1 ) {
+    // place each character of the string into and array
+    $array = array();
+    for ( $i=0; $i < strlen( $text ); ){
+        $key = NULL;
+        for ( $j = 0; $j < $split; $j++, $i++ ) {
+            $key .= $text[$i];
+        }
+        array_push( $array, $key );
+    }
+    return $array;
+}
+
+function sanitize($name)
+{
+// Sanitize image filename (taken from http://iamcam.wordpress.com/2007/03/20/clean-file-names-using-php-preg_replace/ )
+$fname=$name;
+$replace="_";
+$pattern="/([[:alnum:]_\.-]*)/";
+$fname=str_replace(str_split_php4(preg_replace($pattern,$replace,$fname)),$replace,$fname);
+return $fname;
+}
+
+// Make sure the "thumbs" directory exists.
+if (!is_dir('thumbs')) { mkdir('thumbs',0700); }
+
+// Thumbnail file name and path.
+// (We always put thumbnails in jpg for simplification)
+$thumbname = 'thumbs/'.sanitize($_GET['filename']).'.jpg';
+
+if (file_exists($thumbname))  // If thumbnail exists, serve it.
+{
+    $fd = fopen($thumbname, "r");
+    $cacheContent = fread($fd,filesize ($thumbname));
+    fclose($fd);
+    header('Content-type: image/jpeg');
+    echo($cacheContent);
+}
+else // otherwise, generate thumbnail, send it and save it to file.
+{
 
 	// Display error image if file isn't found
 	if (!is_file($_GET['filename'])) {
@@ -82,11 +128,19 @@ if (preg_match("/.png$/i", $_GET['filename'])) header('Content-type: image/png')
          imagecopyresampled($target,$source,0,0,$xoord,$yoord,$_GET['size'],$_GET['size'],$width,$height);
 		 imagedestroy($source);
 
-         if (preg_match("/.jpg$/i", $_GET['filename'])) ImageJPEG($target,null,90);
-         if (preg_match("/.gif$/i", $_GET['filename'])) ImageGIF($target,null,90);
-         if (preg_match("/.png$/i", $_GET['filename'])) ImageJPEG($target,null,90); // Using ImageJPEG on purpose
+         //if (preg_match("/.jpg$/i", $_GET['filename'])) ImageJPEG($target,null,90);
+         //if (preg_match("/.gif$/i", $_GET['filename'])) ImageGIF($target,null,90);
+         //if (preg_match("/.png$/i", $_GET['filename'])) ImageJPEG($target,null,90); // Using ImageJPEG on purpose
+         ob_start(); // Start output buffering.
+         header('Content-type: image/jpeg'); // We always render the thumbnail in JPEG even if the source is GIF or PNG.
+		 ImageJPEG($target,null,80);
          imagedestroy($target);
+		 
+		 $cachedImage = ob_get_contents(); // Get the buffer content.
+         ob_end_flush();// End buffering
+         $fd = fopen($thumbname, "w"); // Save buffer to disk
+         if ($fd) { fwrite($fd,$cachedImage); fclose($fd); }
 
-
+}
 
 ?>

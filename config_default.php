@@ -16,10 +16,10 @@ Please enjoy this free script!
 */
 
 // EDIT SETTINGS BELOW TO CUSTOMIZE YOUR GALLERY
-$thumbs_pr_page 		= "18"; //Number of thumbnails on a single page
+$thumbs_pr_page 		= "21"; //Number of thumbnails on a single page
 $gallery_width 			= "900px"; //Gallery width. Eg: "500px" or "70%"
 $backgroundcolor 		= "white"; //This provides a quick way to change your gallerys background to suit your website. Use either main colors like "black", "white", "yellow" etc. Or HEX colors, eg. "#AAAAAA"
-$templatefile 			= "mano"; //Template filename (must be placed in 'templates' folder)
+$templatefile 			= "darkgold2"; //Template filename (must be placed in 'templates' folder)
 $title 					= "My Gallery"; // Text to be displayed in browser titlebar
 $author 				= "Me :)";
 $folder_color 			= "black"; // Color of folder icons: blue / black / vista / purple / green / grey

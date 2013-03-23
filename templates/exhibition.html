@@ -98,6 +98,10 @@ a {
 	vertical-align: middle;
 }
 
+#folder_comment
+{
+ margin-bottom:10px;
+}
 /* ---------- gallery styles start here ----------------------- */
 .gallery {
 	list-style: none;
@@ -167,6 +171,7 @@ a {
 <span id="breadcrumb_nav"><% breadcrumb_navigation %></span>
 <br /><br />
 <div id="container">
+<div id="folder_comment"><% folder_comment %></div>
 <ul class="gallery">
 <% thumbnails %>
 </ul>
@@ -175,7 +180,7 @@ a {
 <div id="page_nav"><% page_navigation %></div>
 <br />
 <!-- CREDITS - DO NOT REMOVE OR YOU WILL VOID MiniGal Nano TERMS OF USE -->
-<div class="backlink" align="center"><a href="http://www.minigal.dk" title="Powered by MiniGal Nano" target="_blank">Powered by MiniGal Nano <% version %></a></div>
+<div class="backlink" align="center"><a href="https://github.com/sebsauvage/MinigalNano" title="Powered by MiniGal Nano" target="_blank">Powered by MiniGal Nano <% version %></a></div>
 <br /><br />
 </body>
 </html>
