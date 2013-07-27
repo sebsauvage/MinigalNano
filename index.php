@@ -285,8 +285,8 @@ if (sizeof($files) > 0)
 		$date[$key] = strtolower($row['date']);
 		$size[$key] = strtolower($row['size']);
 	}
-	if (strtoupper($sortdir_files) == "DESC") array_multisort($$sorting_files, SORT_DESC, $name, SORT_ASC, $files);
-	else array_multisort($$sorting_files, SORT_ASC, $name, SORT_ASC, $files);
+	if (strtoupper($sortdir_files) == "DESC") @array_multisort($$sorting_files, SORT_DESC, $name, SORT_ASC, $files);
+	else @array_multisort($$sorting_files, SORT_ASC, $name, SORT_ASC, $files);
 }
 
 //-----------------------
