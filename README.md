@@ -1,34 +1,58 @@
 Minigal Nano SSE
 ================
 
-MiniGal Nano is a very simple image gallery. It only requires php and GD (no database, no special libraries like PEAR or ImageMagick). MiniGal Nano does not have a web admin interface: You only have to upload your images in the photo folder.
+MiniGal Nano is a very simple image gallery. It adheres to the KISS principle and is very easy to install. MiniGal Nano does not have a web admin interface: You just upload your images in the photo folder. It only requires php and GD (no database, no special libraries like PEAR or ImageMagick).
 
-This fork (Minigal Nano SSE) is based on Thomas Rybak's version which seems to have been abandonned in 2010: http://www.minigal.dk/minigal-nano.html
+Minigal Nano uses a javascript Lightbox (Use left/right arrows for navigation), but it degrades gracefully if javascript is disabled.
 
-This fork holds some improvements, like thumbnail cache and folder/image description.
+This fork (Minigal Nano SSE) is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandonned in 2010.
 
-Online demo: http://sebsauvage.net/minecraft/
+It adds a handfull of features like tumbnails cache and image/folder description.
+
+
+Online demo: [http://sebsauvage.net/galerie/]()
 
 Installation
 ============
 
 * Place all the files in a directory on your server.
-* Create the "photos" subdirectory.
+* Customize `config.php`
+* Create the "photos" subdirectory and upload your photos.
 
 Adding your photos
 ==================
 
-* Simply add your photos to the "photos" directory.
+* Simply add your photos to the `photos` directory.
 * You can create as many subdirectories as you want.
-* To add a folder comment, simply create "comment.html" file in the folder.
-* To add a title and caption on an image, create a .html files with: title::caption.
-  Example: For: "myimage.jpg", create the file "myimage.jpg.html" containing:
-         My cat::My cat <i>loves</i> to roll on the floor.
-  The title and caption will be displayed when clicking on the image.
 
-------------------------------------------------------------------------------
+Adding a comment to a gallery
+=============================
+
+* Simple create `comment.html` in the gallery's folder.
+
+Adding a comment to an image
+============================
+
+* Create an html file. Filename must be the image filename plus `.html`. (eg. `myimage.jpg` → `myimage.jpg.html`)
+* The html file can contain:
+ * comment
+ * title::comment
+
+Using a custom image for folders
+================================
+
+* Create `folder.jpg` inside a folder: This image will be used as default image for folder.
+
+
+Thumbnails
+=========
+
+You do not have to care about thumbnails: They are automatically created in the `thumbs` directory.
+If some thumbnails are wrong, you can purge this directory: Thumbnails will be automatically re-created.
+
+--------------------------------------------------
 
 MiniGal Nano SSE by Sébastien SAUVAGE is licensed under a Creative Commons Attribution-Share Alike.
 https://creativecommons.org/licenses/by-sa/2.5/
 
-------------------------------------------------------------------------------
+--------------------------------------------------
