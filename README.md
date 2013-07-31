@@ -10,7 +10,7 @@ This fork (Minigal Nano SSE) is based on [Thomas Rybak's](http://www.minigal.dk/
 It adds a handfull of features like tumbnails cache and image/folder description.
 
 
-Online demo: [http://sebsauvage.net/galerie/]()
+Online demo: [http://sebsauvage.net/galerie/](http://sebsauvage.net/galerie/)
 
 Installation
 ============
