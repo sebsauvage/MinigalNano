@@ -158,7 +158,7 @@ $currentdir = GALLERY_ROOT . $thumbdir;
 //-----------------------
 $files = array();
 $dirs = array();
- if ($handle = opendir($currentdir))
+ if (is_directory($currentdir) && $handle = opendir($currentdir))
  {
 	while (false !== ($file = readdir($handle)))
     {
