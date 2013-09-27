@@ -17,6 +17,7 @@ h1 {
 	font: normal 320%/100% Georgia, "Times New Roman", Times, serif;
 	margin: 20px 0 5px 0;
 	letter-spacing: -2px;
+	font-style: italic;
 }
 .credits {
 	border-bottom: solid 1px #ccc;
@@ -24,8 +25,9 @@ h1 {
 	margin: 0 0 30px 0;
 	font: 120% Garamond, Georgia, serif;
 }
-.credits em {
+.credits span {
 	color: #999;
+	font-style: italic;
 }
 .backlink {
 	text-align: center;
@@ -140,8 +142,8 @@ a {
 </head>
 <body>
 <header role="banner">
-<h1><em><% title %></em></h1>
-<p class="credits"><em>by:</em> <% author %></p>
+<h1><% title %></h1>
+<p class="credits"><span>by:</span> <% author %></p>
 <nav id="breadcrumb_nav" role="navigation"><% breadcrumb_navigation %></nav>
 </header>
 <section id="container">
