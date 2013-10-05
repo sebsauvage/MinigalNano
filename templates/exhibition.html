@@ -25,8 +25,9 @@ h1 {
 	margin: 0 0 30px 0;
 	font: 120% Georgia, Lucida Sans Unicode, Garamond, Georgia, serif;
 }
-.credits em {
+.credits span {
 	color: #999;
+	font-style: italic;
 }
 .backlink {
 	font-style: italic;
@@ -170,7 +171,7 @@ a {
 <header role="banner">
 <h1><% title %></h1>
 <% messages %>
-<p class="credits"><em>by: </em><% author %></p>
+<p class="credits"><span>by:</span> <% author %></p>
 <nav id="breadcrumb_nav" role="navigation"><% breadcrumb_navigation %></nav>
 </header>
 <section id="container">
