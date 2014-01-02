@@ -217,8 +217,8 @@ if (file_exists($currentdir ."/captions.txt"))
 // 3. LOAD FILES
 	        	if ($file != "." && $file != ".." && $file != "folder.jpg")
 		  		{
-		  			// JPG, GIF and PNG
-		  			if (preg_match("/.jpg$|.gif$|.png$/i", $file))
+		  			// JPG, GIF, PNG, AVI, MP4, WEBM 
+		  			if (preg_match("/.jpg$|.gif$|.png$|.avi$|.mp4$|.webm$/i", $file))
 		  			{
 						//Read EXIF
 						if ($display_exif == 1) $img_captions[$file] .= readEXIF($currentdir . "/" . $file);
