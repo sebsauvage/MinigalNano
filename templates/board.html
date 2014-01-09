@@ -11,11 +11,15 @@
 
 
 	<style type="text/css">
+		html{
+			font-size: 62.5%;
+		}
 		body {
 			margin: 0;
 			padding: 0;
 			width: 100%;
-			font: 14px Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 1.5rem;
+			font-family:Helvetica, Arial, sans-serif;
 			background: #E7E6E0;
 			color: #333333;
 		}
@@ -25,8 +29,8 @@
 			text-decoration: none;
 		}
 		h1 {
-			font: italic 250%/100% Georgia, Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", serif;
-			margin: 20px 0 5px 0;
+			font-family: italic Georgia, Lucida, serif;
+			margin: 20px 0 0 0;
 			
 		}
 		h1 a{
@@ -47,6 +51,9 @@
 		nav {
 			font-size: 1.3em;
 			padding: 15px 0px;
+		}
+		body > nav {
+			text-align: center;
 		}
 		#folder_comment
 		{
@@ -71,8 +78,10 @@
 			position: relative;
 			overflow:hidden;
 			margin: .5%;
+			/*
 			-webkit-box-shadow:  0px 0px 2px -1px #000;
 			box-shadow:  0px 0px 2px -1px #000;
+			*/
 		}
 		#gallery img {
 			background: #000;
@@ -83,7 +92,7 @@
 			text-align: center;
 			font-style: normal;
 			font-weight: bold;
-			padding: 8px 2px;
+			padding: 8px 0px;
 			display: block;
 			position: absolute;
 			bottom:0px;
@@ -96,7 +105,6 @@
 			text-align: center;
 		}
 		footer a {
-			font-size: 10px;
 			text-decoration: none;
 			color: #666;
 		}
@@ -131,28 +139,28 @@
 		<div>
 			<h1><a href="<% gallery_root %>"><% title %></a></h1>
 			<% messages %>
-			<aside>by: <% author %></aside>
 			<nav><% breadcrumb_navigation %></nav>
 		</div>
 	</header>
+
 	<main id="container">
 		<header><% folder_comment %></header>
 		<ul id="gallery">
 			<% thumbnails %>
 		</ul>
 	</main>
+
+	<div class="clear"></div>
 	<nav><% page_navigation %></nav>
 	<!-- CREDITS - DO NOT REMOVE OR YOU WILL VOID MiniGal Nano TERMS OF USE -->
-	<div class="clear"></div>
 	<footer>
+		Gallery by <% author %>.
 		<a href="https://github.com/sebsauvage/MinigalNano" title="Powered by MiniGal Nano" target="_blank">
-			Made with MiniGal Nano
+			Made with MiniGal Nano by SebSauvage.
 		</a>
-		 | 
 		<a href="http://tomcanac.com" title="Tom Canac" target="_blank">
-			Board theme by Tom Canac
+			Board theme by Tom Canac.
 		</a>
-		 | 
 		<a  title="<% title %> RSS" href="rss/" />
 			RSS
 		<a>
