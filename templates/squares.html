@@ -21,33 +21,30 @@
 			padding: 0;
 			width: 100%;
 			font-size: 1.5rem;
-			font-family:Helvetica, Arial, sans-serif;
-			background: #E7E6E0;
-			color: #333333;
+			font-family: Helvetica, Arial, sans-serif;
+			background: #2B2B2B;
+			color: #FFF;
 		}
 
 		a {
-			color: #333333;
+			color: #74b336;
 			font-weight: bold;
 			text-decoration: none;
 		}
 		h1 {
-			font-family: Georgia, Lucida, serif;
-			font-style: italic;
 			margin: 20px 0 0 0;
 			
 		}
 		h1 a{
-			color: #CC2027;	
+			color: #74b336;	
 		}
 
 		body > header{
-			background-color:#FFF;
 			padding: 1px;
-			margin-bottom: 15px;
+			text-align: center;
 		}
 		#container, #innerheader{
-			max-width: <% gallery_width %>;
+			/*max-width: <% gallery_width %>;*/
 			margin: 0px auto;
 		}
 		img {
@@ -75,41 +72,50 @@
 			padding: 0;
 		}
 		#gallery li, #gallery li img {
-			border-radius: 4px;
 		}
 		#gallery li {
 			float: left;
 			position: relative;
 			overflow:hidden;
-			margin: .5%;
-			-webkit-box-shadow:  0px 0px 2px -1px #000;
-			box-shadow:  0px 0px 2px -1px #000;
 		}
 		#gallery li img{
 			width: 100%;
 		}	
 		#gallery em {
-			background: #FFF;
-			text-align: center;
-			font-style: normal;
-			padding: 8px 0px;
+			padding: 40% 0%;
 			display: block;
 			position: absolute;
 			bottom:0px;
 			width: 100%;
+			top:100%;
+			color: #FFF;
+			background: rgba(0,0,0, .9);
+			text-align: center;
+			font-family: Georgia, Lucida, serif;
+			font-style: italic;
+			font-size: 2.5rem;
+			-webkit-transition: all .2s ease-in;
+			-moz-transition: all .2s ease-in;
+			-ms-transition: all .2s ease-in;
+			-o-transition: all .2s ease-in;
+			transition: all .2s ease-in;
+		}
+		#gallery li:hover em{
+			top:0%;
+			-webkit-transition: all .2s ease-in;
+			-moz-transition: all .2s ease-in;
+			-ms-transition: all .2s ease-in;
+			-o-transition: all .2s ease-in;
+			transition: all .2s ease-in;
 		}
 		footer {
 			margin: 25px 0px;
 			text-align: center;
 		}
-		footer a {
-			text-decoration: none;
-			color: #666;
-		}
 
 		/*----responsive----*/
 		#gallery li {
-			width: 24%;
+			width: 25%;
 			height: 0;
 			padding-bottom: 24%;
 		}

@@ -19,9 +19,9 @@ Please enjoy this free script!
 $thumbs_pr_page 		= "39"; //Number of thumbnails on a single page
 $gallery_width 			= "80%"; //Gallery width. Eg: "500px" or "70%"
 $backgroundcolor 		= "white"; //This provides a quick way to change your gallerys background to suit your website. Use either main colors like "black", "white", "yellow" etc. Or HEX colors, eg. "#AAAAAA"
-$templatefile 			= "board"; //Template filename (must be placed in 'templates' folder)
-$title 				= "MiniGal Nano test gallery"; // Text to be displayed in browser titlebar
-$author 			= "John Doe";
+$templatefile 			= "squares"; //Template filename (must be placed in 'templates' folder)
+$title 					= "MiniGal Nano test gallery"; // Text to be displayed in browser titlebar
+$author					= "John Doe";
 $folder_color 			= "black"; // Color of folder icons: blue / black / vista / purple / green / grey
 $sorting_folders		= "name"; // Sort folders by: [name][date]
 $sorting_files			= "name"; // Sort files by: [name][date][size]
@@ -30,9 +30,9 @@ $sortdir_files			= "ASC"; // Sort direction of files: [ASC][DESC]
 
 //LANGUAGE STRINGS
 $label_home 			= "Home"; //Name of home link in breadcrumb navigation
-$label_new 			= "New"; //Text to display for new images. Use with $display_new variable
+$label_new 				= "New"; //Text to display for new images. Use with $display_new variable
 $label_page 			= "Page"; //Text used for page navigation
-$label_all 			= "All"; //Text used for link to display all images in one page
+$label_all 				= "All"; //Text used for link to display all images in one page
 $label_noimages 		= "No images"; //Empty folder text
 $label_loading 			= "Loading..."; //Thumbnail loading text
 
