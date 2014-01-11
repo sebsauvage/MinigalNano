@@ -1,16 +1,16 @@
-Minigal Nano SSE
+MiniBoardNano SSE
 ================
 
-MiniGal Nano is a very simple image gallery. It adheres to the KISS principle and is very easy to install. MiniGal Nano does not have a web admin interface: You just upload your images in the photo folder. It only requires php and GD (no database, no special libraries like PEAR or ImageMagick).
+miniBoardNano is a fork of MiniGal Nano by Sebsauvage. It just make it more graphic, with new themes and icons. Some little technicals improvements are made, but all the MiniGal Nano stuff you can find over the web should be compatible with miniBoardNano. The following text is nearly the same as the official documentation of MiniGal Nano by Sebsauvage.
 
-Minigal Nano uses a javascript Lightbox (Use left/right arrows for navigation), but it degrades gracefully if javascript is disabled.
+miniBoardNano is a very simple image gallery. It adheres to the KISS principle and is very easy to install. miniBoardNano does not have a web admin interface: You just upload your images in the photo folder. It only requires php and GD (no database, no special libraries like PEAR or ImageMagick).
+Boardigal Nano uses a javascript Lightbox (Use left/right arrows for navigation), but it degrades gracefully if javascript is disabled.
 
-This fork (Minigal Nano SSE) is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandonned in 2010.
+miniBoardNano is based on Minigal Nano SSE, that is is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandonned in 2010.
 
-It adds a handfull of features like tumbnails cache and image/folder description.
+Its add new themes and icons, use more modern html/css, update JS libs, and wants to be more community pull-friendly for the future.
 
-
-Online demo: [http://sebsauvage.net/galerie/](http://sebsauvage.net/galerie/)
+Online demo: [http://boards.tomcanac.com/](http://boards.tomcanac.com/)
 
 Installation
 ============
@@ -52,7 +52,8 @@ If some thumbnails are wrong, you can purge this directory: Thumbnails will be a
 
 --------------------------------------------------
 
-MiniGal Nano SSE by Sébastien SAUVAGE is licensed under a Creative Commons Attribution-Share Alike.
-https://creativecommons.org/licenses/by-sa/2.5/
+* Icons in the images folder are from the nitrux pack [http://store.nitrux.in/](http://store.nitrux.in/)
 
+miniBoardNano SSE by TomCanac is **highly** based on MiniGal Nano by Sébastien SAUVAGE  and is under the same licensed : Creative Commons Attribution-Share Alike.
+https://creativecommons.org/licenses/by-sa/2.5/
 --------------------------------------------------
