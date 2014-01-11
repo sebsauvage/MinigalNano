@@ -107,17 +107,13 @@ body > nav {
 #gallery li:hover img {
 	-webkit-box-shadow:0 0 5px 0 #000;
 	box-shadow:0 0 5px 0 #000;
-	-webkit-transition:all .3s ease;
-	-moz-transition:all .3s ease;
-	-ms-transition:all .3s ease;
-	-o-transition:all .3s ease;
-	transition:all .3s ease;
 }
 
-#gallery em,
+#gallery li:hover img,
+#gallery li img,
+#gallery li em,
 #gallery li:hover em {
 	-webkit-transition:all .2s ease-in;
-	-moz-transition:all .2s ease-in;
 	-ms-transition:all .2s ease-in;
 	-o-transition:all .2s ease-in;
 	transition:all .2s ease-in;
@@ -125,8 +121,8 @@ body > nav {
 
 #gallery em {
 	position:absolute;
-	top:0;
-	bottom:0;
+	top:-1px;
+	bottom:-1px;
 	zoom:1;
 	width:100%;
 	padding:40% 0;
@@ -136,8 +132,10 @@ body > nav {
 	font-size:2.5rem;
 	font-style:italic;
 	color:#FFF;
+	margin: -0.5px 0 0 -0.5px;
+	border:1px solid black;
 	opacity:0;
-	background:rgba(0,0,0,.9);
+	background:#000;
 	filter:alpha(opacity=0);
 }
 
@@ -145,12 +143,6 @@ body > nav {
 	zoom:1;
 	opacity:1;
 	filter:alpha(opacity=1);
-}
-
-#gallery li:hover img {
-	zoom:1;
-	opacity:0;
-	filter:alpha(opacity=0);
 }
 
 footer {
