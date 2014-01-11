@@ -6,7 +6,7 @@ miniBoardNano is a fork of MiniGal Nano by Sebsauvage. It just make it more grap
 miniBoardNano is a very simple image gallery. It adheres to the KISS principle and is very easy to install. miniBoardNano does not have a web admin interface: You just upload your images in the photo folder. It only requires php and GD (no database, no special libraries like PEAR or ImageMagick).
 Boardigal Nano uses a javascript Lightbox (Use left/right arrows for navigation), but it degrades gracefully if javascript is disabled.
 
-miniBoardNano is based on Minigal Nano SSE, that is is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandonned in 2010.
+miniBoardNano is based on Minigal Nano SEE by [Sebsauvage](https://github.com/sebsauvage/MinigalNano), that is is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandonned in 2010.
 
 Its add new themes and icons, use more modern html/css, update JS libs, and wants to be more community pull-friendly for the future.
 
