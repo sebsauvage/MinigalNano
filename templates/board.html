@@ -25,37 +25,37 @@
 			background: #E7E6E0;
 			color: #333333;
 		}
-
 		a {
 			color: #333333;
 			font-weight: bold;
 			text-decoration: none;
 		}
 		h1 {
+			margin: 20px 0 0 0;
 			font-family: Georgia, Lucida, serif;
 			font-style: italic;
-			margin: 20px 0 0 0;
-			
 		}
 		h1 a{
 			color: #CC2027;	
 		}
-
 		body > header{
 			background-color:#FFF;
-			padding: 1px;
-			margin-bottom: 15px;
+			padding: 1px 0 0 0;
+			margin-bottom: 1rem;
 		}
 		#container, #innerheader{
 			max-width: <% gallery_width %>;
 			margin: 0px auto;
+		}
+		header aside{
+			padding: 2rem 0;
 		}
 		img {
 			border: none;
 		}
 		nav {
 			font-size: 1.3em;
-			padding: 15px 0px;
+			padding-top: 2rem;
 		}
 		body > nav {
 			text-align: center;
@@ -106,7 +106,6 @@
 			text-decoration: none;
 			color: #666;
 		}
-
 		/*----responsive----*/
 		#gallery li {
 			width: 24%;
@@ -140,11 +139,12 @@
 			<h1><a href="<% gallery_root %>"><% title %></a></h1>
 			<% messages %>
 			<nav role="navigation"><% breadcrumb_navigation %></nav>
+			<aside><% folder_comment %></aside>
 		</div>
 	</header>
 
 	<main id="container">
-		<header><% folder_comment %></header>
+		
 		<ul id="gallery">
 			<% thumbnails %>
 		</ul>

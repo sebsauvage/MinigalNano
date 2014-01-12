@@ -19,7 +19,7 @@ Please enjoy this free script!
 $thumbs_pr_page 		= "39"; //Number of thumbnails on a single page
 $gallery_width 			= "80%"; //Gallery width. Eg: "500px" or "70%"
 $backgroundcolor 		= "white"; //This provides a quick way to change your gallerys background to suit your website. Use either main colors like "black", "white", "yellow" etc. Or HEX colors, eg. "#AAAAAA"
-$templatefile 			= "rounded"; //Template filename (must be placed in 'templates' folder)
+$templatefile 			= "board"; //Template filename (must be placed in 'templates' folder)
 $title 					= "MiniBoardNano gallery"; // Text to be displayed in browser titlebar
 $author					= "John Doe";
 $folder_color 			= "black"; // Color of folder icons: blue / black / vista / purple / green / grey

@@ -12,126 +12,121 @@
 		<link rel="stylesheet" href="<% gallery_root %>css/mediaboxAdvWhite.css" type="text/css" media="screen" />
 
 	<style type="text/css">
-		html{
-			font-size: 62.5%;
+		html {
+			font-size:62.5%;
 		}
-		.clear{clear:both;}
+		.clear {
+			clear:both;
+		}
 		body {
-			margin: 0;
-			padding: 0;
-			width: 100%;
-			font-size: 1.5rem;
-			font-family: Helvetica, Arial, sans-serif;
-			background: #2B2B2B;
-			color: #BBB;
+			width:100%;
+			margin:0;
+			padding:0;
+			text-shadow:0 1px 0 #000;
+			font-family:Helvetica,Arial,sans-serif;
+			font-size:1.5rem;
+			color:#FFF;
+			background:#232321;
 		}
-
-		a, h1 a {
-			color: #CE4D45;
-			font-weight: bold;
-			text-decoration: none;
+		a,
+		h1 a {
+			text-decoration:none;
+			color:#FF0084;
 		}
 		h1 {
-			margin: 20px 0 0 0;
-			
+			margin:20px 0 0;
+			font-weight:normal;
 		}
-
-		body > header{
-			padding: 1px;
-			text-align: center;
+		body > header {
+			padding:1px;
+			text-align:center;
 		}
-		#container, #innerheader{
-			/*max-width: <% gallery_width %>;*/
-			margin: 0px auto;
+		#container,
+		#innerheader {
+			margin:0 auto;
 		}
-		img {
-			border: none;
+		#container header {
+			padding:2rem;
 		}
 		nav {
-			font-size: 1.3em;
-			padding: 15px 0px;
+			padding-top:15px;
+			font-size:1.3em;
 		}
 		body > nav {
-			text-align: center;
+			text-align:center;
 		}
-		#folder_comment
-		{
+		#folder_comment {
 			margin-bottom:10px;
 		}
 		#folder_comment a {
-			color: #FFCC11;
-			text-decoration: none;
+			text-decoration:none;
+			color:#FFCC11;
 		}
-
+		#gallery li:hover img,
+		#gallery li img,
+		#gallery li em,
+		#gallery li:hover em {
+			-webkit-transition:all .2s ease-in;
+			-ms-transition:all .2s ease-in;
+			-o-transition:all .2s ease-in;
+			transition:all .2s ease-in;
+		}
 		#gallery {
-			list-style: none;
-			margin: 0;
-			padding: 0;
-		}
-		#gallery li, #gallery li img {
+			margin:0;
+			padding:0;
+			list-style:none;
 		}
 		#gallery li {
-			float: left;
-			position: relative;
+			float:left;
+			position:relative;
 			overflow:hidden;
 		}
-		#gallery li img{
-			width: 100%;
-		}	
-		#gallery em {
-			padding: 40% 0%;
-			display: block;
-			position: absolute;
-			bottom:0px;
-			width: 100%;
-			top:100%;
-			color: #FFF;
-			background: rgba(0,0,0, .9);
-			text-align: center;
-			font-family: Georgia, Lucida, serif;
-			font-style: italic;
-			font-size: 2.5rem;
-			-webkit-transition: all .2s ease-in;
-			-moz-transition: all .2s ease-in;
-			-ms-transition: all .2s ease-in;
-			-o-transition: all .2s ease-in;
-			transition: all .2s ease-in;
+		#gallery li img {
+			width:100%;
 		}
-		#gallery li:hover em{
-			top:0%;
-			-webkit-transition: all .2s ease-in;
-			-moz-transition: all .2s ease-in;
-			-ms-transition: all .2s ease-in;
-			-o-transition: all .2s ease-in;
-			transition: all .2s ease-in;
+		#gallery em {
+			display:block;
+			position:absolute;
+			top:100%;
+			bottom:0;
+			width:100%;
+			padding:40% 0;
+			text-align:center;
+			font-family:Georgia,Lucida,serif;
+			font-size:2.5rem;
+			font-style:italic;
+			color:#FFF;
+			background:rgba(0,0,0,.9);
+		}
+		#gallery li:hover em {
+			top:0;
 		}
 		footer {
-			margin: 25px 0px;
-			text-align: center;
+			margin:25px 0;
+			text-align:center;
 		}
-
 		/*----responsive----*/
 		#gallery li {
-			width: 25%;
-			height: 0;
-			padding-bottom: 24%;
+			width:25%;
+			height:0;
+			padding-bottom:24%;
 		}
-		@media (max-width: 1000px) {
+		@media(max-width:1000px) {
 			#gallery li {
-				width: 32%;
-				padding-bottom: 32%;
+				width:32%;
+				padding-bottom:32%;
 			}
 		}
-		@media (max-width: 800px) {
+		@media(max-width:800px) {
 			#gallery li {
-				width: 48%;
-				padding-bottom: 48%;
+				width:48%;
+				padding-bottom:48%;
 			}
 		}
-		@media (max-width: 450px) {
+		@media(max-width:450px) {
 			#gallery li {
-				width: 100%;
-				padding-bottom: 100%;
+				width:100%;
+				padding-bottom:100%;
 			}
 		}
 	</style>
