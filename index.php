@@ -298,7 +298,7 @@ if (sizeof($files) > 0)
 	$offset_end = $offset_start + $thumbs_pr_page;
 	if ($offset_end > sizeof($dirs) + sizeof($files)) $offset_end = sizeof($dirs) + sizeof($files);
 
-	if ($_GET["page"] == "all")
+	if ($_GET["page"] == "all" || $lazyload)
 	{
 		$offset_start = 0;
 		$offset_end = sizeof($dirs) + sizeof($files);
@@ -307,7 +307,7 @@ if (sizeof($files) > 0)
 //-----------------------
 // PAGE NAVIGATION
 //-----------------------
-if (sizeof($dirs) + sizeof($files) > $thumbs_pr_page)
+if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page)
 {
 	$page_navigation .= "$label_page ";
 	for ($i=1; $i <= ceil((sizeof($files) + sizeof($dirs)) / $thumbs_pr_page); $i++)
