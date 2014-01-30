@@ -111,6 +111,20 @@
 				text-decoration: none;
 				color: #666;
 			}
+			/*----lazyloading---*/
+			.loader{
+				background: url('images/loader.gif') center center no-repeat;
+			}
+			.b-lazy {
+				-webkit-transition: opacity 100ms ease-in-out 10ms;
+				-moz-transition: opacity 100ms ease-in-out 10ms;
+				-o-transition: opacity 100ms ease-in-out 10ms;
+				transition: opacity 100ms ease-in-out 10ms;
+				opacity: 0;
+			}
+			.b-lazy.b-loaded {
+				opacity: 1;
+			}
 			/*----responsive----*/
 			#gallery li {
 				width: 24%;
