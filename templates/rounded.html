@@ -6,191 +6,210 @@
 		<meta name="generator" content="MinigalNano SSE <% version %>" />
 		<title><% title %></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss/" /><link>	
+		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss/" /><link>
+		<script src="<% gallery_root %>js/lazy.js"></script>
+		<script>
+			window.addEventListener('load', function(){
+				var bLazy = new Blazy;
+			}, false);
+		</script>
 		<script src="<% gallery_root %>js/mootools.js"></script>
 		<script src="<% gallery_root %>js/mediaboxAdv-1.3.4b.js"></script>
 		<link rel="stylesheet" href="<% gallery_root %>css/mediaboxAdvWhite.css" type="text/css" media="screen" />
-
-	<style type="text/css">
-		html {
-			font-size:62.5%;
-		}
-		.clear {
-			clear:both;
-		}
-		body {
-			width:100%;
-			margin:0;
-			padding:0;
-			font-family:Helvetica,Arial,sans-serif;
-			font-size:1.5rem;
-			color:#FFF;
-			background:#3B3A37;
-		}
-		a {
-			text-decoration:none;
-			font-weight:bold;
-			color:#FFF;
-		}
-		h1 {
-			margin:20px 0 0;
-			font-family:Georgia,Lucida,serif;
-			font-style:italic;
-		}
-		h1 a {
-			color:#E63D24;
-		}
-		body > header {
-			padding:1px;
-			text-align:center;
-		}
-		#container,
-		#innerheader {
-			margin:0 auto;
-			max-width:<% gallery_width %>;
-		}
-		#container header {
-			padding:2rem 0;
-		}
-		img {
-			border:none;
-		}
-		nav {
-			padding-top:15px;
-			font-size:1.3em;
-		}
-		body > nav {
-			text-align:center;
-		}
-		#folder_comment {
-			margin-bottom:10px;
-		}
-		#folder_comment a {
-			text-decoration:none;
-			color:#FFCC11;
-		}
-		#gallery {
-			margin:0;
-			padding:0;
-			list-style:none;
-		}
-		#gallery li,
-		#gallery li img {
-			border-radius:4px;
-		}
-		#gallery li {
-			float:left;
-			position:relative;
-			margin:.5%;
-		}
-		#gallery li img {
-			width:100%;
-			border-radius:100%;
-			-webkit-box-shadow:0 0 2px -1px #000;
-			box-shadow:0 0 2px -1px #000;
-		}
-		#gallery li:hover img {
-			-webkit-box-shadow:0 0 5px 0 #000;
-			box-shadow:0 0 5px 0 #000;
-		}
-		#gallery li:hover img,
-		#gallery li img,
-		#gallery li em,
-		#gallery li:hover em {
-			-webkit-transition:all .2s ease-in;
-			-ms-transition:all .2s ease-in;
-			-o-transition:all .2s ease-in;
-			transition:all .2s ease-in;
-		}
-		#gallery em {
-			position:absolute;
-			top:-1px;
-			bottom:-1px;
-			zoom:1;
-			width:100%;
-			margin:-0.5px 0 0 -0.5px;
-			padding:40% 0;
-			border:1px solid #000;
-			border-radius:100%;
-			text-align:center;
-			font-family:Georgia,Lucida,serif;
-			font-size:2.5rem;
-			font-style:italic;
-			color:#FFF;
-			opacity:0;
-			background:#000;
-			filter:alpha(opacity=0);
-		}
-		#gallery li:hover em {
-			zoom:1;
-			opacity:1;
-			filter:alpha(opacity=1);
-		}
-		footer {
-			margin:25px 0;
-			text-align:center;
-		}
-		footer a {
-			text-decoration:none;
-			color:#666;
-		}
-		/*----responsive----*/
-		#gallery li {
-			width:24%;
-			height:0;
-			padding-bottom:24%;
-		}
-		@media(max-width:1000px) {
-			#gallery li {
-				width:32%;
-				padding-bottom:32%;
+		<style type="text/css">
+			html {
+				font-size:62.5%;
 			}
-		}
-		@media(max-width:800px) {
-			#gallery li {
-				width:48%;
-				padding-bottom:48%;
+			.clear {
+				clear:both;
 			}
-		}
-		@media(max-width:450px) {
-			#gallery li {
+			body {
 				width:100%;
-				padding-bottom:100%;
+				margin:0;
+				padding:0;
+				font-family:Helvetica,Arial,sans-serif;
+				font-size:1.5rem;
+				color:#FFF;
+				background:#3B3A37;
 			}
-		}
-	</style>
-</head>
+			a {
+				text-decoration:none;
+				font-weight:bold;
+				color:#FFF;
+			}
+			h1 {
+				margin:20px 0 0;
+				font-family:Georgia,Lucida,serif;
+				font-style:italic;
+			}
+			h1 a {
+				color:#E63D24;
+			}
+			body > header {
+				padding:1px;
+				text-align:center;
+			}
+			#container,
+			#innerheader {
+				margin:0 auto;
+				max-width:<% gallery_width %>;
+			}
+			#container header {
+				padding:2rem 0;
+			}
+			img {
+				border:none;
+			}
+			nav {
+				padding-top:15px;
+				font-size:1.3em;
+			}
+			body > nav {
+				text-align:center;
+			}
+			#folder_comment {
+				margin-bottom:10px;
+			}
+			#folder_comment a {
+				text-decoration:none;
+				color:#FFCC11;
+			}
+			#gallery {
+				margin:0;
+				padding:0;
+				list-style:none;
+			}
+			#gallery li,
+			#gallery li img {
+				border-radius:4px;
+			}
+			#gallery li {
+				float:left;
+				position:relative;
+				margin:.5%;
+			}
+			#gallery li img {
+				width:100%;
+				border-radius:100%;
+				-webkit-box-shadow:0 0 2px -1px #000;
+				box-shadow:0 0 2px -1px #000;
+			}
+			#gallery li:hover img {
+				-webkit-box-shadow:0 0 5px 0 #000;
+				box-shadow:0 0 5px 0 #000;
+			}
+			#gallery li:hover img,
+			#gallery li img,
+			#gallery li em,
+			#gallery li:hover em {
+				-webkit-transition:all .2s ease-in;
+				-ms-transition:all .2s ease-in;
+				-o-transition:all .2s ease-in;
+				transition:all .2s ease-in;
+			}
+			#gallery em {
+				position:absolute;
+				top:-1px;
+				bottom:-1px;
+				zoom:1;
+				width:100%;
+				margin:-0.5px 0 0 -0.5px;
+				padding:40% 0;
+				border:1px solid #000;
+				border-radius:100%;
+				text-align:center;
+				font-family:Georgia,Lucida,serif;
+				font-size:2.5rem;
+				font-style:italic;
+				color:#FFF;
+				opacity:0;
+				background:#000;
+				filter:alpha(opacity=0);
+			}
+			#gallery li:hover em {
+				zoom:1;
+				opacity:1;
+				filter:alpha(opacity=1);
+			}
+			footer {
+				margin:25px 0;
+				text-align:center;
+			}
+			footer a {
+				text-decoration:none;
+				color:#666;
+			}
+			/*----lazyloading---*/
+			.loader{
+				background: url('images/loader.gif') center center no-repeat;
+			}
+			.b-lazy {
+				-webkit-transition: opacity 100ms ease-in-out 10ms;
+				-moz-transition: opacity 100ms ease-in-out 10ms;
+				-o-transition: opacity 100ms ease-in-out 10ms;
+				transition: opacity 100ms ease-in-out 10ms;
+				opacity: 0;
+			}
+			.b-lazy.b-loaded {
+				opacity: 1;
+			}
+			/*----responsive----*/
+			#gallery li {
+				width:24%;
+				height:0;
+				padding-bottom:24%;
+			}
+			@media(max-width:1000px) {
+				#gallery li {
+					width:32%;
+					padding-bottom:32%;
+				}
+			}
+			@media(max-width:800px) {
+				#gallery li {
+					width:48%;
+					padding-bottom:48%;
+				}
+			}
+			@media(max-width:450px) {
+				#gallery li {
+					width:100%;
+					padding-bottom:100%;
+				}
+			}
+		</style>
+	</head>
 
-<body>
-	<header  role="banner">
-		<div id="innerheader">
-			<h1><a href="<% gallery_root %>"><% title %></a></h1>
-			<% messages %>
-			<nav role="navigation"><% breadcrumb_navigation %></nav>
-		</div>
-	</header>
+	<body>
+		<header  role="banner">
+			<div id="innerheader">
+				<h1><a href="<% gallery_root %>"><% title %></a></h1>
+				<% messages %>
+				<nav role="navigation"><% breadcrumb_navigation %></nav>
+			</div>
+		</header>
 
-	<main id="container">
-		<header><% folder_comment %></header>
-		<ul id="gallery">
-			<% thumbnails %>
-		</ul>
-	</main>
+		<main id="container">
+			<header><% folder_comment %></header>
+			<ul id="gallery">
+				<% thumbnails %>
+			</ul>
+		</main>
 
-	<div class="clear"></div>
-	<nav role="navigation"><% page_navigation %></nav>
-	<!-- CREDITS - DO NOT REMOVE OR YOU WILL VOID MiniGal Nano TERMS OF USE -->
-	<footer role="contentinfo">
-		Gallery by <% author %>.
-		<a href="https://github.com/tmos/miniboardnano" title="Powered by MiniGal Nano" target="_blank">
-			Made with miniboardNano by Tom Canac.
-		</a>
-		<a href="http://tomcanac.com/miniboardnano/" title="Tom Canac" target="_blank">
-			Rounded theme by Tom Canac.
-		</a>
-		<a  title="<% title %> RSS" href="rss/" />
-			RSS
-		<a>
-	</footer>
-</body>
+		<div class="clear"></div>
+		<nav role="navigation"><% page_navigation %></nav>
+		<!-- CREDITS - DO NOT REMOVE OR YOU WILL VOID MiniGal Nano TERMS OF USE -->
+		<footer role="contentinfo">
+			Gallery by <% author %>.
+			<a href="https://github.com/tmos/miniboardnano" title="Powered by MiniGal Nano" target="_blank">
+				Made with miniboardNano by Tom Canac.
+			</a>
+			<a href="http://tomcanac.com/miniboardnano/" title="Tom Canac" target="_blank">
+				Rounded theme by Tom Canac.
+			</a>
+			<a  title="<% title %> RSS" href="rss/" />
+				RSS
+			<a>
+		</footer>
+	</body>
 </html>
