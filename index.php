@@ -103,14 +103,14 @@ function readEXIF($file) {
 		$emodel = $exif_idf0['Model'];
 
 		$efocal = $exif_idf0['FocalLength'];
-		list($x,$y) = split('/', $efocal);
+		list($x,$y) = preg_split('/', $efocal);
 		$efocal = round($x/$y,0);
 	   
 		$exif_exif = exif_read_data ($file,'EXIF' ,0 );
 		$eexposuretime = $exif_exif['ExposureTime'];
 	   
 		$efnumber = $exif_exif['FNumber'];
-		list($x,$y) = split('/', $efnumber);
+		list($x,$y) = preg_split('/', $efnumber);
 		$efnumber = round($x/$y,0);
 
 		$eiso = $exif_exif['ISOSpeedRatings'];
@@ -404,7 +404,7 @@ $comment_filepath = $currentdir . $file . "/comment.html";
 if (file_exists($comment_filepath))
 {
 	$fd = fopen($comment_filepath, "r");
-	$comment = utf8_encode(fread($fd,filesize ($comment_filepath))); // utf8_encode to convert from iso-8859 to UTF-8
+	$comment = fread($fd,filesize ($comment_filepath));
 	fclose($fd);
 }
 //PROCESS TEMPLATE FILE
