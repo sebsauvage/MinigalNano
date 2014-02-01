@@ -20,9 +20,6 @@
 			html {
 				font-size:62.5%;
 			}
-			.clear {
-				clear:both;
-			}
 			body {
 				width:100%;
 				margin:0;
@@ -42,7 +39,8 @@
 				font-family:Georgia,Lucida,serif;
 				font-style:italic;
 			}
-			h1 a {
+			h1 a,
+			a {
 				color:#E63D24;
 			}
 			body > header {
@@ -101,7 +99,11 @@
 			#gallery li:hover img,
 			#gallery li img,
 			#gallery li em,
-			#gallery li:hover em {
+			#gallery li:hover em
+			#backtop,
+			#backtop:hover,
+			#backtop:active,
+			.b-lazy {
 				-webkit-transition:all .2s ease-in;
 				-ms-transition:all .2s ease-in;
 				-o-transition:all .2s ease-in;
@@ -132,22 +134,33 @@
 				filter:alpha(opacity=1);
 			}
 			footer {
-				margin:25px 0;
-				text-align:center;
+				clear:both;
+				padding-top: 2rem;
+				margin: 25px 0px;
+				text-align: center;
 			}
 			footer a {
 				text-decoration:none;
-				color:#666;
+			}	
+			/*----Back to top button---*/
+			#backtop {
+				display: block;
+				position: fixed;
+				bottom: 0;
+				right: 0;
+				padding: 4rem;
+				background-color: #E63D24;
+				color: #FFF;
+				margin: 1rem;
+				border-radius: 100%;
+				-webkit-box-shadow:  0px 0px 2px -1px #000;
+				box-shadow:  0px 0px 2px -1px #000;
 			}
 			/*----lazyloading---*/
 			.loader{
 				background: url('images/loader.gif') center center no-repeat;
 			}
 			.b-lazy {
-				-webkit-transition: opacity 100ms ease-in-out 10ms;
-				-moz-transition: opacity 100ms ease-in-out 10ms;
-				-o-transition: opacity 100ms ease-in-out 10ms;
-				transition: opacity 100ms ease-in-out 10ms;
 				opacity: 0;
 			}
 			.b-lazy.b-loaded {
@@ -188,17 +201,15 @@
 				<nav role="navigation"><% breadcrumb_navigation %></nav>
 			</div>
 		</header>
-
+		<a href="#top" id="backtop">top</a>
 		<main id="container">
 			<header><% folder_comment %></header>
 			<ul id="gallery">
 				<% thumbnails %>
 			</ul>
 		</main>
-
-		<div class="clear"></div>
 		<nav role="navigation"><% page_navigation %></nav>
-		<!-- CREDITS - DO NOT REMOVE OR YOU WILL VOID MiniGal Nano TERMS OF USE -->
+		<a href="#top" id="backtop">top</a>
 		<footer role="contentinfo">
 			Gallery by <% author %>.
 			<a href="https://github.com/tmos/miniboardnano" title="Powered by MiniGal Nano" target="_blank">
