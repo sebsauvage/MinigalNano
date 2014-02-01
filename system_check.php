@@ -63,7 +63,7 @@
 	</style>
 </head>
 <body>
-	<h1>MiniGal Nano system check</h1>
+	<h1>MiniBoardNano system check</h1>
 	<div class="left">
 		PHP Version
 	</div>
