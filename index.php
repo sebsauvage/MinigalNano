@@ -55,7 +55,7 @@ $messages = "";
 $comment = "";
 $xmlrss="";
 $rssitems="";
-
+$rsslink="";
 
 //-----------------------
 // PHP ENVIRONMENT CHECK
@@ -152,7 +152,12 @@ if (!defined("GALLERY_ROOT")) define("GALLERY_ROOT", "");
 $rssMode = 0;
 if (!empty($_GET['rss'])) $rssMode = $_GET['rss'];
 $requestedDir = '';
-if (!empty($_GET['dir'])) $requestedDir = $_GET['dir'];
+if (!empty($_GET['dir']))
+{
+    $requestedDir = $_GET['dir'];
+    $rsslink="?rss=1&dir=".$requestedDir;
+}
+else $rsslink="?rss=1";
 $thumbdir = rtrim('photos/'.$requestedDir,'/');
 
 $thumbdir = str_replace('/..', '', $thumbdir); // Prevent directory traversal attacks.
@@ -476,6 +481,7 @@ else
         $template = preg_replace("/<% bgcolor %>/", "$backgroundcolor", $template);
         $template = preg_replace("/<% gallery_width %>/", "$gallery_width", $template);
         $template = preg_replace("/<% version %>/", "$version", $template);
+        $template = preg_replace("/<% rsslink %>/", "$rsslink", $template);
         echo "$template";
     }
 }
