@@ -33,10 +33,7 @@
 	left: 50%;
 	overflow: hidden;
 	background-color: #000;
-	-webkit-border-radius: 10px;
-	-khtml-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
+	border-radius: 4px;
 	-webkit-box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
 	-khtml-box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
 	-moz-box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
@@ -45,6 +42,9 @@
 	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=180, Color='#000000')";
 	/* For IE 5.5 - 7 */
 	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=180, Color='#000000');
+}
+#mbCenter img{
+	border-radius: 4px;
 }
 
 #mbCenter.mbLoading {
@@ -66,7 +66,6 @@
 
 		/*	Inline content styling	*/
 
-	font-family: Myriad, Verdana, Arial, Helvetica, sans-serif;
 	line-height: 20px;
 	font-size: 12px;
 	color: #fff;
@@ -79,13 +78,10 @@
 		/*	Title, Caption and Button styling	*/
 
 #mbBottom {
-	min-height: 20px;
-	font-family: Myriad, Verdana, Arial, Helvetica, sans-serif;
-	line-height: 20px;
-	font-size: 12px;
 	color: #999;
 	text-align: left;
 	padding: 0 10px 10px;
+	font-size: 1.5rem;
 }
 
 #mbTitle, #mbPrevLink, #mbNextLink, #mbCloseLink {
@@ -154,10 +150,7 @@
 	border: 10px solid #700;
 	padding: 10px 10px 10px;
 	margin: 20px;
-	-webkit-border-radius: 5px;
-	-khtml-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
+	border-radius: 4px;
 }
 
 #mbError a, #mbError a:link, #mbError a:visited, #mbError a:hover, #mbError a:active {

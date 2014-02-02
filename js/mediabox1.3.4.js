@@ -5,8 +5,11 @@
 	based on Slimbox v1.64 - The ultimate lightweight Lightbox clone
 		(c) 2007-2008 Christophe Beyls <http://www.digitalia.be>
 	MIT-style license.
-*/
 
+	MiniBoardNano modifications :
+	Tom Canac <http://tomcanac.com/>
+	Uncomment lines 208 and 866 to desactivate the rigth click (take care... it's a pain in the ass for the end-usernd don't protect you at all ! (maj+rigth click make it useless))
+*/
 var Mediabox;
 
 (function() {
@@ -205,7 +208,7 @@ var Mediabox;
 			var links = this;
 
 			links.addEvent('contextmenu', function(e){
-				if (this.toString().match(/\.gif|\.jpg|\.jpeg|\.png/i)) e.stop();
+				/*if (this.toString().match(/\.gif|\.jpg|\.jpeg|\.png/i)) e.stop();*/
 			});
 
 			links.removeEvents("click").addEvent("click", function() {
@@ -861,7 +864,7 @@ var Mediabox;
 					preload.width = mediaWidth;
 				}
 				if (Browser.Engine.trident) preload = document.id(preload);
-				preload.addEvent('mousedown', function(e){ e.stop(); }).addEvent('contextmenu', function(e){ e.stop(); });
+				/*preload.addEvent('mousedown', function(e){ e.stop(); }).addEvent('contextmenu', function(e){ e.stop(); });*/
 				image.setStyles({backgroundImage: "none", display: ""});
 				preload.inject(image);
 			}
