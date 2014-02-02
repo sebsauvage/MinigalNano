@@ -3,19 +3,17 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="author" content="<% author %>" />
-		<meta name="generator" content="MinigalNano SSE <% version %>" />
+		<meta name="generator" content="MinigalNano <% version %>" />
 		<title><% title %></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss/" /><link>	
+		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss/" /><link>
+		
 		<script src="<% gallery_root %>js/lazy.js"></script>
-		<script>
-			window.addEventListener('load', function(){
-				var bLazy = new Blazy;
-			}, false);
-		</script>
+		<script src="<% gallery_root %>js/script.js"></script>
 		<script src="<% gallery_root %>js/mootools.js"></script>
-		<script src="<% gallery_root %>js/mediaboxAdv-1.3.4b.js"></script>
-		<link rel="stylesheet" href="<% gallery_root %>css/mediaboxAdvWhite.css" type="text/css" media="screen" />
+		<script src="<% gallery_root %>js/mediabox1.3.4.js"></script>
+
+		<link rel="stylesheet" href="<% gallery_root %>css/mediaboxWhite.css" type="text/css" media="screen" />
 		<style type="text/css">
 			html{
 				font-size: 62.5%;
@@ -191,10 +189,10 @@
 		<a href="#top" id="backtop">top</a>
 		<footer role="contentinfo">
 			Gallery by <% author %>.
-			<a href="https://github.com/tmos/miniboardnano" title="Powered by MiniGal Nano" target="_blank">
-				Made with miniboardNano by Tom Canac.
+			<a href="https://github.com/sebsauvage/MinigalNano" title="Powered by MiniGal Nano" target="_blank">
+				Made with miniGal by sebsauvage.
 			</a>
-			<a href="http://tomcanac.com/miniboardnano/" title="Tom Canac" target="_blank">
+			<a href="http://tomcanac.com/minigal/" title="Tom Canac" target="_blank">
 				Board theme by Tom Canac.
 			</a>
 			<a  title="<% title %> RSS" href="rss/" />
