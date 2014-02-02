@@ -108,9 +108,9 @@
 	</div>
 
 	<footer role="contentinfo">
-		<a href="https://github.com/tmos/miniboardnano" title="Powered by MiniGal Nano" target="_blank">
-			Made with miniboardNano by Tom Canac.
-		</a>
+		<a href="https://github.com/sebsauvage/MinigalNano" title="Powered by MiniGal Nano" target="_blank">
+				Made with miniGal by sebsauvage.
+			</a>
 	</footer>
 </body>
 </html>
