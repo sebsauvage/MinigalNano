@@ -37,7 +37,7 @@ by Sébastien SAUVAGE.
 	$starttime = $mtime;
 */
 
-header('Content-Type: text/html; charset=utf-8'); // We use UTF-8 for proper international characters handling.
+header('Content-Type: text/html; charset=UTF-8'); // We use UTF-8 for proper international characters handling.
 $version = "0.3.7";
 ini_set("memory_limit","256M");
 
@@ -236,13 +236,13 @@ if (file_exists($currentdir ."/captions.txt"))
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
+				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=\"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==\" data-src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
 						} else {
 							$files[] = array (
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
+				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' title=\"".htmlentities($img_captions[$file])."\"><img  src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
 						}
 		  			}
 					// Other filetypes
@@ -356,7 +356,7 @@ if ($requestedDir != "")
 //Include hidden links for all images BEFORE current page so lightbox is able to browse images on different pages
 for ($y = 0; $y < $offset_start - sizeof($dirs); $y++)
 {	
-	$breadcrumb_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "' rel='lightbox[billeder]' class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
+	$breadcrumb_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "' class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
 }
 
 //-----------------------
@@ -389,7 +389,7 @@ for ($i = $offset_start - sizeof($dirs); $i < $offset_end && $offset_current < $
 if ($i<0) $i=1;
 for ($y = $i; $y < sizeof($files); $y++)
 {	
-	$page_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "' rel='lightbox[billeder]'  class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
+	$page_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "'  class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
 }
 
 //-----------------------
