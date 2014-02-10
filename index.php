@@ -53,6 +53,9 @@ $images = "";
 $exif_data = "";
 $messages = "";
 $comment = "";
+$xmlrss="";
+$rssitems="";
+$rsslink="";
 
 //-----------------------
 // PHP ENVIRONMENT CHECK
@@ -146,8 +149,18 @@ if (ini_get('allow_url_fopen') == "1") {
 */
 
 if (!defined("GALLERY_ROOT")) define("GALLERY_ROOT", "");
+//par défaut on n'est pas en mode rss -> 0
+$rssMode = 0;
+//on récupère le mode
+if (!empty($_GET['rss'])) $rssMode = $_GET['rss'];
 $requestedDir = '';
-if (!empty($_GET['dir'])) $requestedDir = $_GET['dir'];
+if (!empty($_GET['dir']))
+{
+    $requestedDir = $_GET['dir'];
+    //s'il y a un dossier le lien doit en tenir compte
+    $rsslink="?rss=1&dir=".$requestedDir;
+}
+else $rsslink="?rss=1";
 $thumbdir = rtrim('photos/'.$requestedDir,'/');
 
 $thumbdir = str_replace('/..', '', $thumbdir); // Prevent directory traversal attacks.
@@ -236,13 +249,17 @@ if (file_exists($currentdir ."/captions.txt"))
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
+				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>",
+                                                        //chaque item du flux rss
+                                                        "rss" => "<item><title>".$file."</title><link>".$gallery_link."/?dir=".$requestedDir."</link><description><img  src='" . $gallery_link . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></description></item>\n");
 						} else {
 							$files[] = array (
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
+				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>",
+                                                        //chaque item du flux rss
+                                                        "rss" => "<item><title>".$file."</title><link>".$gallery_link."/?dir=".$requestedDir."</link><description><img src='" . $gallery_link . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></description></item>\n");
 						}
 		  			}
 					// Other filetypes
@@ -262,7 +279,9 @@ if (file_exists($currentdir ."/captions.txt"))
 		  					"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-			  				"html" => "<li><a href='" . $currentdir . "/" . $file . "' title='$file'><em-pdf>" . padstring($file, 20) . "</em-pdf><span></span><img src='" . GALLERY_ROOT . "images/filetype_" . $extension . ".png' width='$thumb_size' height='$thumb_size' alt='$file' /></a></li>");
+			  				"html" => "<li><a href='" . $currentdir . "/" . $file . "' title='$file'><em-pdf>" . padstring($file, 20) . "</em-pdf><span></span><img src='" . GALLERY_ROOT . "images/filetype_" . $extension . ".png' width='$thumb_size' height='$thumb_size' alt='$file' /></a></li>",
+                                                        //chaque item du flux rss
+                                                        "rss" => "<item><title>".$file."</title><link>".$gallery_link."/?dir=".$requestedDir."</link></item>\n");
 					}
 	 			}   		
 	}
@@ -285,17 +304,23 @@ if (sizeof($dirs) > 0)
 }
 if (sizeof($files) > 0)
 {
-	foreach ($files as $key => $row)
-	{
-		if($row["name"] == "") unset($files[$key]); //Delete empty array entries
-		$name[$key] = strtolower($row['name']);
-		$date[$key] = strtolower($row['date']);
-		$size[$key] = strtolower($row['size']);
-	}
-	if (strtoupper($sortdir_files) == "DESC") @array_multisort($$sorting_files, SORT_DESC, $name, SORT_ASC, $files);
-	else @array_multisort($$sorting_files, SORT_ASC, $name, SORT_ASC, $files);
+    foreach ($files as $key => $row)
+    {
+        if($row["name"] == "") unset($files[$key]); //Delete empty array entries
+        $name[$key] = strtolower($row['name']);
+        $date[$key] = strtolower($row['date']);
+        $size[$key] = strtolower($row['size']);
+    }
+    if ($rssMode>0) //si en mode flux on trie toujours par date decroissante
+    {
+        @array_multisort($date, SORT_DESC, $name, SORT_ASC, $files);
+    }
+    elseif (strtoupper($sortdir_files) == "DESC") @array_multisort($$sorting_files, SORT_DESC, $name, SORT_ASC, $files);
+    else @array_multisort($$sorting_files, SORT_ASC, $name, SORT_ASC, $files);
 }
-
+//calcul du nombre d'items par page qui ne concerne pas les flux
+if ($rssMode==0)
+{
 //-----------------------
 // OFFSET DETERMINATION
 //-----------------------
@@ -372,17 +397,28 @@ for ($x = $offset_start; $x < sizeof($dirs) && $x < $offset_end; $x++)
 	$offset_current++;
 	$thumbnails .= $dirs[$x]["html"];
 }
+}//fin du calcul qui ne concerne pas les flux
 
 //-----------------------
 // DISPLAY FILES
 //-----------------------
-for ($i = $offset_start - sizeof($dirs); $i < $offset_end && $offset_current < $offset_end; $i++)
+if ($rssMode==0)//en mode normal
 {
-	if ($i >= 0)
-	{
-		$offset_current++;
-		$thumbnails .= $files[$i]["html"];
-	}
+    for ($i = $offset_start - sizeof($dirs); $i < $offset_end && $offset_current < $offset_end; $i++)
+    {
+        if ($i >= 0)
+        {
+            $offset_current++;
+            $thumbnails .= $files[$i]["html"];
+        }
+    }
+}
+else //en mode flux
+{
+    for ($i = 0; $i < min(sizeof($files), $nb_items_rss); $i++) // on parcourt tous les fichiers (au plus nb_items_rss)
+    {
+        $rssitems .= $files[$i]["rss"];
+    }    
 }
 
 //Include hidden links for all images AFTER current page so lightbox is able to browse images on different pages
@@ -408,33 +444,57 @@ if (file_exists($comment_filepath))
 	fclose($fd);
 }
 //PROCESS TEMPLATE FILE
-	if(GALLERY_ROOT != "") $templatefile = GALLERY_ROOT . "templates/integrate.html";
-	else $templatefile = "templates/" . $templatefile . ".html";
-	if(!$fd = fopen($templatefile, "r"))
-	{
-		echo "Template ".htmlspecialchars(stripslashes($templatefile))." not found!";
-		exit();
-	}
-	else
-	{
-		$template = fread ($fd, filesize ($templatefile));
-		fclose ($fd);
-		$template = stripslashes($template);
-		$template = preg_replace("/<% title %>/", $title, $template);
-		$template = preg_replace("/<% messages %>/", $messages, $template);
-		$template = preg_replace("/<% author %>/", $author, $template);
-		$template = preg_replace("/<% gallery_root %>/", GALLERY_ROOT, $template);
-		$template = preg_replace("/<% images %>/", "$images", $template);
-		$template = preg_replace("/<% thumbnails %>/", "$thumbnails", $template);
-		$template = preg_replace("/<% breadcrumb_navigation %>/", "$breadcrumb_navigation", $template);
-		$template = preg_replace("/<% page_navigation %>/", "$page_navigation", $template);
-		$template = preg_replace("/<% folder_comment %>/", "$comment", $template);
-		$template = preg_replace("/<% bgcolor %>/", "$backgroundcolor", $template);
-		$template = preg_replace("/<% gallery_width %>/", "$gallery_width", $template);
-		$template = preg_replace("/<% version %>/", "$version", $template);
-		echo "$template";
-	}
+if(GALLERY_ROOT != "") $templatefile = GALLERY_ROOT . "templates/integrate.html";
+else $templatefile = "templates/" . $templatefile . ".html";
 
+if($rssMode>0) 
+{
+// A terme un switch/case sur le numero 1 rss, 2 atom, etc. ?
+
+//on construit l'entete
+$xmlrss="<?xml version=\"1.0\"?>\n";
+$xmlrss.="<rss version=\"2.0\">\n";
+$xmlrss.="  <channel>\n";
+$xmlrss.="    <title>".$title."</title>\n";
+$xmlrss.="    <link>".$gallery_link."</link>\n";
+$xmlrss.="    <description>".$description."</description>\n";
+//on ajoute tous les items
+$xmlrss.=$rssitems;
+//on ferme les balises
+$xmlrss.="  </channel>\n";
+$xmlrss.="</rss>";
+
+//on "produit" le rss
+echo $xmlrss;
+}
+else
+{
+    if(!$fd = fopen($templatefile, "r"))
+    {
+        echo "Template ".htmlspecialchars(stripslashes($templatefile))." not found!";
+        exit();
+    }
+    else
+    {
+        $template = fread ($fd, filesize ($templatefile));
+        fclose ($fd);
+        $template = stripslashes($template);
+        $template = preg_replace("/<% title %>/", $title, $template);
+        $template = preg_replace("/<% messages %>/", $messages, $template);
+        $template = preg_replace("/<% author %>/", $author, $template);
+        $template = preg_replace("/<% gallery_root %>/", GALLERY_ROOT, $template);
+        $template = preg_replace("/<% images %>/", "$images", $template);
+        $template = preg_replace("/<% thumbnails %>/", "$thumbnails", $template);
+        $template = preg_replace("/<% breadcrumb_navigation %>/", "$breadcrumb_navigation", $template);
+        $template = preg_replace("/<% page_navigation %>/", "$page_navigation", $template);
+        $template = preg_replace("/<% folder_comment %>/", "$comment", $template);
+        $template = preg_replace("/<% bgcolor %>/", "$backgroundcolor", $template);
+        $template = preg_replace("/<% gallery_width %>/", "$gallery_width", $template);
+        $template = preg_replace("/<% version %>/", "$version", $template);
+        $template = preg_replace("/<% rsslink %>/", "$rsslink", $template);
+        echo "$template";
+    }
+}
 //-----------------------
 //Debug stuff
 //-----------------------
