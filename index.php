@@ -236,14 +236,12 @@ if (file_exists($currentdir ."/captions.txt"))
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=\"data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==\" data-src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
-						} else {
+				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");						} else {
 							$files[] = array (
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' title=\"".htmlentities($img_captions[$file])."\"><img  src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");
-						}
+				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a></li>");						}
 		  			}
 					// Other filetypes
 					$extension = "";
