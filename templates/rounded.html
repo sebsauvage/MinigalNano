@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
@@ -6,12 +6,7 @@
 		<meta name="generator" content="MinigalNano <% version %>" />
 		<title><% title %></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss/" /><link>
-		
-		<script src="<% gallery_root %>js/lazy.js"></script>
-		<script src="<% gallery_root %>js/script.js"></script>
-		<script src="<% gallery_root %>js/mootools.js"></script>
-		<script src="<% gallery_root %>js/mediabox1.3.4.js"></script>
+		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss/" />
 
 		<link rel="stylesheet" href="<% gallery_root %>css/mediaboxWhite.css" type="text/css" media="screen" />
 		<style type="text/css">
@@ -103,7 +98,6 @@
 			#backtop:active,
 			.b-lazy {
 				-webkit-transition:all .2s ease-in;
-				-ms-transition:all .2s ease-in;
 				-o-transition:all .2s ease-in;
 				transition:all .2s ease-in;
 			}
@@ -111,7 +105,6 @@
 				position:absolute;
 				top:-1px;
 				bottom:-1px;
-				zoom:1;
 				width:100%;
 				margin:-0.5px 0 0 -0.5px;
 				padding:40% 0;
@@ -124,12 +117,9 @@
 				color:#FFF;
 				opacity:0;
 				background:#000;
-				filter:alpha(opacity=0);
 			}
 			#gallery li:hover em {
-				zoom:1;
 				opacity:1;
-				filter:alpha(opacity=1);
 			}
 			footer {
 				clear:both;
@@ -189,17 +179,20 @@
 				}
 			}
 		</style>
+		
+		<script src="<% gallery_root %>js/lazy.js"></script>
+		<script src="<% gallery_root %>js/script.js"></script>
+		<script src="<% gallery_root %>js/mootools.js"></script>
+		<script src="<% gallery_root %>js/mediabox1.3.4.js"></script>
 	</head>
-
 	<body>
-		<header  role="banner">
+		<header id="top" role="banner">
 			<div id="innerheader">
 				<h1><a href="<% gallery_root %>"><% title %></a></h1>
 				<% messages %>
 				<nav role="navigation"><% breadcrumb_navigation %></nav>
 			</div>
 		</header>
-		<a href="#top" id="backtop">top</a>
 		<main id="container">
 			<header><% folder_comment %></header>
 			<ul id="gallery">
@@ -216,9 +209,9 @@
 			<a href="http://tomcanac.com/minigal/" title="Tom Canac" target="_blank">
 				Rounded theme by Tom Canac
 			</a> /
-			<a  title="<% title %> RSS" href="rss/" />
+			<a  title="<% title %> RSS" href="rss/">
 				RSS
-			<a>
+			</a>
 		</footer>
 	</body>
 </html>

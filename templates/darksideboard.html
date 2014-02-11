@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
@@ -6,12 +6,7 @@
 		<meta name="generator" content="MinigalNano <% version %>" />
 		<title><% title %></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss/" /><link>
-		
-		<script src="<% gallery_root %>js/lazy.js"></script>
-		<script src="<% gallery_root %>js/script.js"></script>
-		<script src="<% gallery_root %>js/mootools.js"></script>
-		<script src="<% gallery_root %>js/mediabox1.3.4.js"></script>
+		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss/" />
 
 		<link rel="stylesheet" href="<% gallery_root %>css/mediaboxWhite.css" type="text/css" media="screen" />
 		<style type="text/css">
@@ -79,7 +74,6 @@
 			#backtop:active,
 			.b-lazy {
 				-webkit-transition:all .2s ease-in;
-				-ms-transition:all .2s ease-in;
 				-o-transition:all .2s ease-in;
 				transition:all .2s ease-in;
 			}
@@ -169,10 +163,14 @@
 				}
 			}
 		</style>
+		
+		<script src="<% gallery_root %>js/lazy.js"></script>
+		<script src="<% gallery_root %>js/script.js"></script>
+		<script src="<% gallery_root %>js/mootools.js"></script>
+		<script src="<% gallery_root %>js/mediabox1.3.4.js"></script>
 	</head>
-
 	<body>
-		<header  role="banner">
+		<header id="top" role="banner">
 			<div id="innerheader">
 				<h1><a href="<% gallery_root %>"><% title %></a></h1>
 				<% messages %>
@@ -180,13 +178,11 @@
 				<aside><% folder_comment %></aside>
 			</div>
 		</header>
-		
 		<main id="container">
 			<ul id="gallery">
 				<% thumbnails %>
 			</ul>
 		</main>
-
 		<nav class="clear" role="navigation"><% page_navigation %></nav>
 		<a href="#top" id="backtop">top</a>
 		<footer role="contentinfo">
