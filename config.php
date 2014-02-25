@@ -38,7 +38,7 @@ $label_noimages 		= "No images"; //Empty folder text
 $label_loading 			= "Loading..."; //Thumbnail loading text
 
 //RSS SETTINGS
-$gallery_link			= "http://localhost/work/fred";
+$gallery_link			= "http://yougalleryadress.domain/folder";
 $description			= "Description of the John Doe Gallery";
 $nb_items_rss			= 25;
 //ADVANCED SETTINGS
