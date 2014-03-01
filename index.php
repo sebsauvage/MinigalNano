@@ -103,15 +103,17 @@ function readEXIF($file) {
 		$emodel = $exif_idf0['Model'];
 
 		$efocal = $exif_idf0['FocalLength'];
-		list($x,$y) = preg_split('/', $efocal);
-		$efocal = round($x/$y,0);
+		//Next is only cosmectic need but give an error due to division by zero		
+		//list($x,$y) = preg_split('/', $efocal);
+		//$efocal = round($x/$y,0);
 	   
 		$exif_exif = exif_read_data ($file,'EXIF' ,0 );
 		$eexposuretime = $exif_exif['ExposureTime'];
 	   
 		$efnumber = $exif_exif['FNumber'];
-		list($x,$y) = preg_split('/', $efnumber);
-		$efnumber = round($x/$y,0);
+		//Next is only cosmectic need but give an error due to division by zero
+		//list($x,$y) = preg_split('/', $efnumber);
+		//$efnumber = round($x/$y,0);
 
 		$eiso = $exif_exif['ISOSpeedRatings'];
 			   
@@ -190,7 +192,7 @@ $dirs = array();
 							$dirs[] = array(
 								"name" => $file,
 								"date" => filemtime($currentdir . "/" . $file),
-								"html" => "<li><a href='?dir=" . ltrim($requestedDir . "/" . $file, "/") . "'><em>" . padstring($file) . "</em><span></span><img src='" . GALLERY_ROOT . "images/folder_" . strtolower($folder_color) . ".png' width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>");
+								"html" => "<li><a href='?dir=" . ltrim($requestedDir . "/" . $file, "/") . "'><em>" . padstring($file, $label_max_length) . "</em><span></span><img src='" . GALLERY_ROOT . "images/folder_" . strtolower($folder_color) . ".png' width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>");
 						}
 					}
 				}
@@ -221,15 +223,23 @@ if (file_exists($currentdir ."/captions.txt"))
 		  			if (preg_match("/.jpg$|.gif$|.png$/i", $file))
 		  			{
 						//Read EXIF
-						if ($display_exif == 1) $img_captions[$file] .= readEXIF($currentdir . "/" . $file);
-
+						if ($display_exif == 1)
+						{
+							$exifReaden= readEXIF($currentdir . "/" . $file);
+							//Add to the caption all the EXIF information
+							$img_captions[$file] = $file.$exifReaden;
+						}
+						else
+						{
+							//If no EXIF, just use the filename as caption
+							$img_captions[$file] = $file;
+						}
 						// Read the optionnal image title and caption in html file (image.jpg --> image.jpg.html)
 						// Format: title::caption
 						// Example: My cat::My cat like to <i>roll</i> on the floor.
 						// If file is not provided, image filename will be used instead.
 						checkpermissions($currentdir . "/" . $file);
 
-						$img_captions[$file] = $file;
 						if (is_file($currentdir.'/'.$file.'.html')) { $img_captions[$file] = $file.'::'.htmlspecialchars(file_get_contents($currentdir.'/'.$file.'.html'),ENT_QUOTES); }
 						if ($lazyload) {
 							$files[] = array (
