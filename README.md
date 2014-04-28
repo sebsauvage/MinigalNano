@@ -17,7 +17,7 @@ Installation
 
 * Place all the files in a directory on your server.
 * Customize `config.php`
-* Create the "photos" subdirectory and upload your photos.
+* Upload your photos to the `photos/` subdirectory.
 
 Adding your photos
 ==================
