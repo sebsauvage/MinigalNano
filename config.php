@@ -38,8 +38,8 @@ $label_noimages 		= "No images"; //Empty folder text
 $label_loading 			= "Loading..."; //Thumbnail loading text
 
 //RSS SETTINGS
-$gallery_link			= "http://yougalleryadress.domain/folder";
-$description			= "Description of the John Doe Gallery";
+$gallery_link			= "./";
+$description			= "MiniGal Nano";
 $nb_items_rss			= 25;
 //ADVANCED SETTINGS
 $thumb_size 			= 320; //Thumbnail height/width (square thumbs). Changing this will most likely require manual altering of the template file to make it look properly! 
