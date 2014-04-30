@@ -38,13 +38,13 @@ $label_noimages 		= "No images"; //Empty folder text
 $label_loading 			= "Loading..."; //Thumbnail loading text
 
 //RSS SETTINGS
-$gallery_link			= "./";
+$gallery_link			= "./"; //don't forget the final / !
 $description			= "MiniGal Nano";
-$nb_items_rss			= 25;
-$SkipExts				= array('html', 'txt', 'php'); //Files with one of this extension will not be displayed on the RSS feed
+$nb_items_rss			= 25; //number ef elements to display in the feed. If you add a lot of pictures at the time, consider increasing this number
+$SkipExts				= array('html', 'txt', 'php', "gitignore"); //Files with one of this extension will not be displayed on the RSS feed
 $SkipObjects			= array('UnDossier', 'UnFichier'); //Those files and folders will not be displayed on the RSS feed
 //ADVANCED SETTINGS
 $thumb_size 			= 320; //Thumbnail height/width (square thumbs). Changing this will most likely require manual altering of the template file to make it look properly! 
 $label_max_length 		= 40; //Maximum chars of a folder name that will be displayed on the folder thumbnail  
-$display_exif			= 0; //Take care, even if not diplayed EXIF are still readable for visitors. May be a good idea to erase EXIF datas...
+$display_exif			= 0; //Take care, even if not diplayed EXIF are still readable for visitors. May be a good idea to erase EXIF data...
 ?>

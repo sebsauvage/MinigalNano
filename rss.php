@@ -2,7 +2,7 @@
 /*===================*/
 /*Functions*/
 /*===================*/
-	# Hardly inspired from here : codes-sources.commentcamarche.net/source/35937-creation-d-une-arborescenceI
+	# Hardly inspired from here : codes-sources.commentcamarche.net/source/35937-creation-d-une-arborescenceI
 	# Listing all files of a folder and sub folders. 
 	function ListFiles($gallery_link, &$content, $Folder, $SkipFileExts, $SkipObjects)
 	{
@@ -29,7 +29,7 @@
 		return $content;
 	}
 
-	# Paul's Simple Diff Algorithm v 0.1 : http://paulbutler.org/archives/a-simple-diff-algorithm-in-php/
+	# Paul's Simple Diff Algorithm v 0.1 : http://paulbutler.org/archives/a-simple-diff-algorithm-in-php/
 	function diff($old, $new){
 		$matrix = array();
 		$maxlen = 0;
@@ -77,7 +77,7 @@
 /*===================*/
 /*Computing*/
 /*===================*/
-	#Todo : ajouter une condition : dois-je regénérer le flux ou utiliser les anciens fichiers ?
+	#Todo : ajouter une condition : dois-je regénérer le flux ou utiliser les anciens fichiers ?
 
 	// Load the list from files.
 	$old_files_list_content = explode("\n", file_get_contents($old_files_list));
@@ -115,7 +115,7 @@
 			<link>".$gallery_link."</link>
 			<description>".$description."</description>
 		";
-		for ($i=0; $i <= $nb_items_rss; $i++) { 
+		for ($i=0; $i < $nb_items_rss; $i++) { 
 			$pieceOfTitle = strrchr ($temp[$i] , "/");
 			$titleLenght = strlen($pieceOfTitle) - strlen(strrchr($pieceOfTitle, "."));
 			echo
@@ -127,6 +127,8 @@
 					</description>
 				</item>"
 			;
+			if ($temp[$i+1] == NULL)
+				break;
 		}
 		echo"
 			</channel>
