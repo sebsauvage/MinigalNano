@@ -41,8 +41,8 @@ $label_loading 			= "Loading..."; //Thumbnail loading text
 $gallery_link			= "./";
 $description			= "MiniGal Nano";
 $nb_items_rss			= 25;
-$SkipExts = array('html', 'txt', 'php'); //Files with one of this extension will not be displayed on the RSS feed
-$SkipObjects = array('UnDossier', 'UnFichier'); //Those files and folders will not be displayed on the RSS feed
+$SkipExts				= array('html', 'txt', 'php'); //Files with one of this extension will not be displayed on the RSS feed
+$SkipObjects			= array('UnDossier', 'UnFichier'); //Those files and folders will not be displayed on the RSS feed
 //ADVANCED SETTINGS
 $thumb_size 			= 320; //Thumbnail height/width (square thumbs). Changing this will most likely require manual altering of the template file to make it look properly! 
 $label_max_length 		= 40; //Maximum chars of a folder name that will be displayed on the folder thumbnail  

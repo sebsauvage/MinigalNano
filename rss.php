@@ -106,7 +106,8 @@
 /*XML Gen*/
 /*===================*/
 	$temp = explode("\n", $temp);
-
+	$pieceOfTitle;
+	$titleLenght;
 	echo "
 		<rss version=\"2.0\">
 			<channel>
@@ -115,9 +116,11 @@
 			<description>".$description."</description>
 		";
 		for ($i=0; $i <= $nb_items_rss; $i++) { 
+			$pieceOfTitle = strrchr ($temp[$i] , "/");
+			$titleLenght = strlen($pieceOfTitle) - strlen(strrchr($pieceOfTitle, "."));
 			echo
 				"<item>
-					<title>" . $temp[$i] . "</title>
+					<title>" . substr($pieceOfTitle, 1, $titleLenght-1) . "</title>
 					<link>". $temp[$i] . "</link>
 					<description>
 						<![CDATA[ <img src=\"" . $temp[$i] . "\"> ]]>
