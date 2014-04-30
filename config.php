@@ -38,8 +38,8 @@ $label_noimages 		= "No images"; //Empty folder text
 $label_loading 			= "Loading..."; //Thumbnail loading text
 
 //RSS SETTINGS
-$gallery_link			= "http://yougalleryadress.domain/folder";
-$description			= "Description of the John Doe Gallery";
+$gallery_link			= "./";
+$description			= "MiniGal Nano";
 $nb_items_rss			= 25;
 $SkipExts = array('html', 'txt', 'php'); //Files with one of this extension will not be displayed on the RSS feed
 $SkipObjects = array('UnDossier', 'UnFichier'); //Those files and folders will not be displayed on the RSS feed
