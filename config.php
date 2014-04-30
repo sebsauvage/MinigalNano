@@ -38,7 +38,7 @@ $label_noimages 		= "No images"; //Empty folder text
 $label_loading 			= "Loading..."; //Thumbnail loading text
 
 //RSS SETTINGS
-$gallery_link			= "./"; //don't forget the final / !
+$gallery_link			= "http://you.minigal.adress/"; //don't forget the final / !
 $description			= "MiniGal Nano";
 $nb_items_rss			= 25; //number ef elements to display in the feed. If you add a lot of pictures at the time, consider increasing this number
 $SkipExts				= array('html', 'txt', 'php', "gitignore"); //Files with one of this extension will not be displayed on the RSS feed
