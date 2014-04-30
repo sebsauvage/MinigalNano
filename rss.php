@@ -66,8 +66,6 @@
 	$new_files_list  = "new_files_list";
 	$db_feed_source = "db_feed_source";
 	$Folder =  'photos';
-	$SkipExts = array('html', 'txt', 'php');
-	$SkipObjects = array('UnDossier', 'UnFichier');
 	$content = ListFiles($gallery_link, $content, $Folder, $SkipExts, $SkipObjects);
 	$to_store = "";
 	// Init files
