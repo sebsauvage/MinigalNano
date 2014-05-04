@@ -98,9 +98,11 @@
 			#gallery li:hover em {
 				top:0;
 			}
+			.clear {
+				clear:both;
+			}
 			footer {
 				font-weight: bold;
-				clear:both;
 				padding-top: 2rem;
 				margin: 25px 0px;
 				text-align: center;
@@ -177,7 +179,7 @@
 				<% thumbnails %>
 			</ul>
 		</main>
-		<nav role="navigation"><% page_navigation %></nav>
+		<nav class="clear" role="navigation"><% page_navigation %></nav>
 		<a href="#top" id="backtop">top</a>
 		<footer role="contentinfo">
 			Gallery by <% author %> /
