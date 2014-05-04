@@ -69,38 +69,49 @@
 	$to_store = "";
 	// Init files
 	if (!file_exists($old_files_list))
+	{
 		file_put_contents($old_files_list, "");
+	}
 	if (!file_exists($db_feed_source))
+	{
 		file_put_contents($db_feed_source, "");
+	}
 
 /*===================*/
 /*Computing*/
 /*===================*/
 	#Todo : ajouter une condition : dois-je regénérer le flux ou utiliser les anciens fichiers ?
-
-	// Load the list from files.
-	$old_files_list_content = explode("\n", file_get_contents($old_files_list));
-	$new_files_list_content = explode("\n", $content); #debug 
-	
-	// Generate and stock new elements
-	$differences = diff($old_files_list_content, $new_files_list_content);
-	for ($i=0; $i < count($differences); $i++) { 
-		if (is_array($differences[$i])){
-			for ($j=0; $j < count($differences[$i]["i"]); $j++) { 
-				if (strlen($differences[$i]["i"][$j]) > 2)
-					$to_store .= $differences[$i]["i"][$j] . "\n";
-			}	
-		}
-	}
-
-	//Add new elements at the top of the feed's source
 	$temp = file_get_contents($db_feed_source);
-	$temp = $to_store . $temp;
-	file_put_contents($db_feed_source, $temp);
-
-	// Store the current file list for the next generation
-	file_put_contents($old_files_list, $content);
-
+	
+	//If the RSS generation is already launched, don't do à second generation at the same time
+	if (file_exists("rss.locker") == false)
+	{	
+		file_put_contents("rss.locker", "");
+		// Load the list from files.
+		$old_files_list_content = explode("\n", file_get_contents($old_files_list));
+		$new_files_list_content = explode("\n", $content); #debug 
+		// Generate and stock new elements
+		$differences = diff($old_files_list_content, $new_files_list_content);
+		for ($i=0; $i < count($differences); $i++)
+		{ 
+			if (is_array($differences[$i]))
+			{
+				for ($j=0; $j < count($differences[$i]["i"]); $j++)
+				{ 
+					if (strlen($differences[$i]["i"][$j]) > 2)
+					{
+						$to_store .= $differences[$i]["i"][$j] . "\n";
+					}
+				}	
+			}
+		}
+		//Add new elements at the top of the feed's source
+		$temp = $to_store . $temp;
+		file_put_contents($db_feed_source, $temp);
+		// Store the current file list for the next generation
+		file_put_contents($old_files_list, $content);
+		unlink("rss.locker");
+	}
 /*===================*/
 /*XML Gen*/
 /*===================*/
