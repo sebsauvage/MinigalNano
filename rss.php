@@ -62,8 +62,8 @@
 	require("config.php");
 	#$content = "";
 	$old_files_list  = "db_old_files"; //list of files in ./photos
-	$new_files_list  = "new_files_list";
 	$db_feed_source = "db_feed_source";
+	$db_rss_timestamp = "db_rss_timestamp";
 	$Folder =  'photos';
 	$content = ListFiles($gallery_link, $content, $Folder, $SkipExts, $SkipObjects);
 	$to_store = "";
@@ -76,17 +76,23 @@
 	{
 		file_put_contents($db_feed_source, "");
 	}
+	if (!file_exists($db_rss_timestamp))
+	{
+		file_put_contents($db_rss_timestamp, "");
+	}
 
 /*===================*/
 /*Computing*/
 /*===================*/
 	#Todo : ajouter une condition : dois-je regénérer le flux ou utiliser les anciens fichiers ?
 	$temp = file_get_contents($db_feed_source);
-	
-	//If the RSS generation is already launched, don't do à second generation at the same time
-	if (file_exists("rss.locker") == false)
+	$last_rss_gen = file_get_contents($db_rss_timestamp);
+	$current_time = time();
+	//If the RSS generation is already launched, don't do a second generation at the same time
+	if (($current_time - $last_rss_gen) > $rss_refresh_interval && file_exists("rss.locker") == false)
 	{	
 		file_put_contents("rss.locker", "");
+		file_put_contents($db_rss_timestamp, time());
 		// Load the list from files.
 		$old_files_list_content = explode("\n", file_get_contents($old_files_list));
 		$new_files_list_content = explode("\n", $content); #debug 

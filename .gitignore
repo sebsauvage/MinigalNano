@@ -2,5 +2,6 @@ photos/
 thumbs/
 db_feed_source
 db_old_files
+db_rss_timestamp
 rss.locker
 new_files_list
