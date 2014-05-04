@@ -20,7 +20,6 @@
 					$FileExt = strtolower(substr(strrchr($Current ,'.'),1));
 					if (in_array($FileExt, $SkipFileExts)===false) // Should we display this extension ?
 						$current_adress = $gallery_link . "/" . $Folder.'/'. $Current;
-						#debug echo "display current_adress : ". $current_adress . "<br>";
 						$content .=  $current_adress. "\n";
 				}
 			}
