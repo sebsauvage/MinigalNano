@@ -27,7 +27,7 @@ $sorting_folders		= "name"; // Sort folders by: [name][date]
 $sorting_files			= "name"; // Sort files by: [name][date][size]
 $sortdir_folders		= "ASC"; // Sort direction of folders: [ASC][DESC]
 $sortdir_files			= "ASC"; // Sort direction of files: [ASC][DESC]
-$lazyload				= 1; // 0 = pagination, 1 = display all pictures on one page.
+$lazyload				= 1; // 0 = pagination, 1 = display all pictures on one page
 
 //LANGUAGE STRINGS
 $label_home 			= "Home"; //Name of home link in breadcrumb navigation
@@ -37,8 +37,15 @@ $label_all 				= "All"; //Text used for link to display all images in one page
 $label_noimages 		= "No images"; //Empty folder text
 $label_loading 			= "Loading..."; //Thumbnail loading text
 
+//RSS SETTINGS
+$gallery_link			= substr("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], 0, strlen("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'])-7); // the -7 is to remove "rss.php"
+$description			= "MiniGal Nano";
+$nb_items_rss			= 25; //number ef elements to display in the feed. If you add a lot of pictures at the time, consider increasing this number
+$rss_refresh_interval	= 60;//time, in seconds, between two RSS refresh. for example, 3600 = 1update max per hour, 86400 = 1/day.
+$SkipExts				= array('html', 'txt', 'php', "gitignore"); //Files with one of this extension will not be displayed on the RSS feed
+$SkipObjects			= array('UnDossier', 'UnFichier'); //Those files and folders will not be displayed on the RSS feed
 //ADVANCED SETTINGS
 $thumb_size 			= 320; //Thumbnail height/width (square thumbs). Changing this will most likely require manual altering of the template file to make it look properly! 
 $label_max_length 		= 40; //Maximum chars of a folder name that will be displayed on the folder thumbnail  
-$display_exif			= 0; //Take care, even if not diplayed EXIF are still readable for visitors. May be a good idea to erase EXIF datas...
+$display_exif			= 0; //Take care, even if not diplayed EXIF are still readable for visitors. May be a good idea to erase EXIF data...
 ?>
