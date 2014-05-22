@@ -1,4 +1,13 @@
 <?php 
+/*==========================*/
+/*Gallery address definition*/
+/*==========================*/
+$gallery_protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+$gallery_domain = $_SERVER['HTTP_HOST'].'/';
+$gallery_path = dirname($_SERVER['REQUEST_URI']);
+$gallery_link = $gallery_protocol.$gallery_domain.$gallery_path;
+
+
 /*===================*/
 /*Functions*/
 /*===================*/
