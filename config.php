@@ -38,7 +38,6 @@ $label_noimages 		= "No images"; //Empty folder text
 $label_loading 			= "Loading..."; //Thumbnail loading text
 
 //RSS SETTINGS
-$gallery_link			= substr("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], 0, strlen("http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'])-7); // the -7 is to remove "rss.php"
 $description			= "MiniGal Nano";
 $nb_items_rss			= 25; //number ef elements to display in the feed. If you add a lot of pictures at the time, consider increasing this number
 $rss_refresh_interval	= 60;//time, in seconds, between two RSS refresh. for example, 3600 = 1update max per hour, 86400 = 1/day.
