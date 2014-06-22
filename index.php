@@ -152,7 +152,12 @@ $requestedDir = '';
 if (!empty($_GET['dir'])) $requestedDir = $_GET['dir'];
 $thumbdir = rtrim('photos/'.$requestedDir,'/');
 
-$thumbdir = str_replace('/..', '', $thumbdir); // Prevent directory traversal attacks.
+//$thumbdir = str_replace('/..', '', $thumbdir); // Prevent directory traversal attacks.
+if(strstr($thumbdir, '..') !== FALSE) {
+	$requestedDir = '';
+	$thumbdir = rtrim('photos/','/');
+}
+
 $currentdir = GALLERY_ROOT . $thumbdir;
 
 //-----------------------
