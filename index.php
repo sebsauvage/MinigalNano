@@ -211,6 +211,9 @@ if (file_exists($currentdir ."/captions.txt"))
 	while (!feof($file_handle) ) 
 	{	
 		$line_of_text = fgets($file_handle);
+		if (empty($line_of_text)) {
+			continue;
+		}
 		$parts = explode('/n', $line_of_text);
 		foreach($parts as $img_capts)
 		{
@@ -228,16 +231,18 @@ if (file_exists($currentdir ."/captions.txt"))
 		  			if (preg_match("/.jpg$|.gif$|.png$/i", $file))
 		  			{
 						//Read EXIF
-						if ($display_exif == 1)
-						{
-							$exifReaden= readEXIF($currentdir . "/" . $file);
-							//Add to the caption all the EXIF information
-							$img_captions[$file] = $file.$exifReaden;
-						}
-						else
-						{
-							//If no EXIF, just use the filename as caption
-							$img_captions[$file] = $file;
+						if (!array_key_exists($file, $img_captions)) {
+							if ($display_exif == 1)
+							{
+								$exifReaden= readEXIF($currentdir . "/" . $file);
+								//Add to the caption all the EXIF information
+								$img_captions[$file] = $file.$exifReaden;
+							}
+							else
+							{
+								//If no EXIF, just use the filename as caption
+								$img_captions[$file] = $file;
+							}
 						}
 						// Read the optionnal image title and caption in html file (image.jpg --> image.jpg.html)
 						// Format: title::caption
