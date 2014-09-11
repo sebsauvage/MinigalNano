@@ -273,7 +273,9 @@ if (file_exists($currentdir ."/captions.txt"))
 					if (preg_match("/.doc$|.docx$/i", $file)) $extension = "DOCX"; // Word
 					if (preg_match("/.ppt$|.pptx$/i", $file)) $extension = "PPTX"; //Powerpoint
 					if (preg_match("/.xls$|.xlsx$/i", $file)) $extension = "XLXS"; // Excel
-					if (preg_match("/.ogv$/i", $file)) $extension = "OGV"; // OGV video
+					if (preg_match("/.ogv$|.mp4$|.mpg$|.mpeg$|.mov$|.avi$|.wmv$|.flv$|.webm$/i", $file)) $extension = "VIDEO"; // video files
+					if (preg_match("/.aiff$|.aif$|.wma$|.aac$|.flac$|.mp3$|.ogg$|.m4a$/i", $file)) $extension = "AUDIO"; // audio files
+
 
 					if ($extension != "")
 			  		{
