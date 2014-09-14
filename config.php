@@ -47,4 +47,5 @@ $SkipObjects			= array('UnDossier', 'UnFichier'); //Those files and folders will
 $thumb_size 			= 320; //Thumbnail height/width (square thumbs). Changing this will most likely require manual altering of the template file to make it look properly! 
 $label_max_length 		= 40; //Maximum chars of a folder name that will be displayed on the folder thumbnail  
 $display_exif			= 0; //Take care, even if not diplayed EXIF are still readable for visitors. May be a good idea to erase EXIF data...
+$display_filename		= 0; //Show file names below the pictures
 ?>
