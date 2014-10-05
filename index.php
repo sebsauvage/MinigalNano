@@ -103,20 +103,20 @@ function readEXIF($file) {
 		$emodel = $exif_idf0['Model'];
 
 		$efocal = $exif_idf0['FocalLength'];
-		//Next is only cosmectic need but give an error due to division by zero		
+		//Next is only cosmectic need but give an error due to division by zero
 		//list($x,$y) = preg_split('/', $efocal);
 		//$efocal = round($x/$y,0);
-	   
+
 		$exif_exif = exif_read_data ($file,'EXIF' ,0 );
 		$eexposuretime = $exif_exif['ExposureTime'];
-	   
+
 		$efnumber = $exif_exif['FNumber'];
 		//Next is only cosmectic need but give an error due to division by zero
 		//list($x,$y) = preg_split('/', $efnumber);
 		//$efnumber = round($x/$y,0);
 
 		$eiso = $exif_exif['ISOSpeedRatings'];
-			   
+
 		$exif_date = exif_read_data ($file,'IFD0' ,0 );
 		$edate = $exif_date['DateTime'];
 		if (strlen($emodel) > 0 OR strlen($efocal) > 0 OR strlen($eexposuretime) > 0 OR strlen($efnumber) > 0 OR strlen($eiso) > 0) $exif_data .= "::";
@@ -171,7 +171,7 @@ $dirs = array();
 	{
 // 1. LOAD FOLDERS
 		if (is_directory($currentdir . "/" . $file))
-			{ 
+			{
 				if ($file != "." && $file != ".." )
 				{
 					checkpermissions($currentdir . "/" . $file); // Check for correct file permission
@@ -201,15 +201,15 @@ $dirs = array();
 						}
 					}
 				}
-			}	
+			}
 
 // 2. LOAD CAPTIONS
 $img_captions['']='';
 if (file_exists($currentdir ."/captions.txt"))
 {
 	$file_handle = fopen($currentdir ."/captions.txt", "rb");
-	while (!feof($file_handle) ) 
-	{	
+	while (!feof($file_handle) )
+	{
 		$line_of_text = fgets($file_handle);
 		if (empty($line_of_text)) {
 			continue;
@@ -217,7 +217,7 @@ if (file_exists($currentdir ."/captions.txt"))
 		$parts = explode('/n', $line_of_text);
 		foreach($parts as $img_capts)
 		{
-			list($img_filename, $img_caption) = explode('|', $img_capts);	
+			list($img_filename, $img_caption) = explode('|', $img_capts);
 			$img_captions[$img_filename] = $img_caption;
 		}
 	}
@@ -280,8 +280,10 @@ if (file_exists($currentdir ."/captions.txt"))
 					if (preg_match("/.doc$|.docx$/i", $file)) $extension = "DOCX"; // Word
 					if (preg_match("/.ppt$|.pptx$/i", $file)) $extension = "PPTX"; //Powerpoint
 					if (preg_match("/.xls$|.xlsx$/i", $file)) $extension = "XLXS"; // Excel
-					if (preg_match("/.ogv$/i", $file)) $extension = "OGV"; // OGV video
-										
+					if (preg_match("/.ogv$|.mp4$|.mpg$|.mpeg$|.mov$|.avi$|.wmv$|.flv$|.webm$/i", $file)) $extension = "VIDEO"; // video files
+					if (preg_match("/.aiff$|.aif$|.wma$|.aac$|.flac$|.mp3$|.ogg$|.m4a$/i", $file)) $extension = "AUDIO"; // audio files
+
+
 					if ($extension != "")
 			  		{
 		  				$files[] = array (
@@ -290,7 +292,7 @@ if (file_exists($currentdir ."/captions.txt"))
 							"size" => filesize($currentdir . "/" . $file),
 			  				"html" => "<li><a href='" . $currentdir . "/" . $file . "' title='$file'><em-pdf>" . padstring($file, 20) . "</em-pdf><span></span><img src='" . GALLERY_ROOT . "images/filetype_" . $extension . ".png' width='$thumb_size' height='$thumb_size' alt='$file' /></a>" . $filename_caption . "</li>");
 					}
-	 			}   		
+	 			}
 	}
   closedir($handle);
   } else die("ERROR: Could not open ".htmlspecialchars(stripslashes($currentdir))." for reading!");
@@ -298,14 +300,14 @@ if (file_exists($currentdir ."/captions.txt"))
 //-----------------------
 // SORT FILES AND FOLDERS
 //-----------------------
-if (sizeof($dirs) > 0) 
+if (sizeof($dirs) > 0)
 {
 	foreach ($dirs as $key => $row)
 	{
 		if($row["name"] == "") unset($dirs[$key]); //Delete empty array entries
 		$name[$key] = strtolower($row['name']);
 		$date[$key] = strtolower($row['date']);
-	}	
+	}
 	if (strtoupper($sortdir_folders) == "DESC") array_multisort($$sorting_folders, SORT_DESC, $name, SORT_DESC, $dirs);
 	else array_multisort($$sorting_folders, SORT_ASC, $name, SORT_ASC, $dirs);
 }
@@ -381,7 +383,7 @@ if ($requestedDir != "")
 
 //Include hidden links for all images BEFORE current page so lightbox is able to browse images on different pages
 for ($y = 0; $y < $offset_start - sizeof($dirs); $y++)
-{	
+{
 	$breadcrumb_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "' class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
 }
 
@@ -414,7 +416,7 @@ for ($i = $offset_start - sizeof($dirs); $i < $offset_end && $offset_current < $
 //Include hidden links for all images AFTER current page so lightbox is able to browse images on different pages
 if ($i<0) $i=1;
 for ($y = $i; $y < sizeof($files); $y++)
-{	
+{
 	$page_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "'  class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
 }
 
