@@ -178,26 +178,71 @@ $dirs = array();
 					// Set thumbnail to folder.jpg if found:
 					if (file_exists($currentdir. '/' . $file . '/folder.jpg'))
 					{
+						$linkParams = http_build_query(
+							array('dir' => ltrim("$requestedDir/$file", '/')),
+							'',
+							'&amp;'
+						);
+						$linkUrl = "?$linkParams";
+
+						$imgParams = http_build_query(
+							array(
+								'filename' => "$currentdir/$file/folder.jpg",
+								'size' => $thumb_size
+							),
+							'',
+							'&amp;'
+						);
+						$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
+
 						$dirs[] = array(
 							"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file . "/folder.jpg"),
-							"html" => "<li><a href='?dir=" .ltrim($requestedDir . "/" . $file, "/") . "'><em>" . padstring($file, $label_max_length) . "</em><span></span><img src='" . GALLERY_ROOT . "createthumb.php?filename=$currentdir/" . $file . "/folder.jpg&amp;size=$thumb_size'  alt='$label_loading' /></a></li>");
-					}  else
-					{
+							"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\"  alt=\"$label_loading\" /></a></li>"
+						);
+					}  else {
 					// Set thumbnail to first image found (if any):
 						unset ($firstimage);
 						$firstimage = getfirstImage("$currentdir/" . $file);
+
 						if ($firstimage != "") {
-						$dirs[] = array(
-							"name" => $file,
-							"date" => filemtime($currentdir . "/" . $file),
-							"html" => "<li><a href='?dir=" . ltrim($requestedDir . "/" . $file, "/") . "'><em>" . padstring($file, $label_max_length) . "</em><span></span><img src='" . GALLERY_ROOT . "createthumb.php?filename=$thumbdir/" . $file . "/" . $firstimage . "&amp;size=$thumb_size'  alt='$label_loading' /></a></li>");
-						} else {
-						// If no folder.jpg or image is found, then display default icon:
+							$linkParams = http_build_query(
+								array('dir' => ltrim("$requestedDir/$file", '/')),
+								'',
+								'&amp;'
+							);
+							$linkUrl = "?$linkParams";
+
+							$imgParams = http_build_query(
+								array(
+									'filename' => "$thumbdir/$file/$firstimage",
+									'size' => $thumb_size
+								),
+								'',
+								'&amp;'
+							);
+							$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
+
 							$dirs[] = array(
 								"name" => $file,
 								"date" => filemtime($currentdir . "/" . $file),
-								"html" => "<li><a href='?dir=" . ltrim($requestedDir . "/" . $file, "/") . "'><em>" . padstring($file, $label_max_length) . "</em><span></span><img src='" . GALLERY_ROOT . "images/folder_" . strtolower($folder_color) . ".png' width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>");
+								"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\"  alt='$label_loading' /></a></li>"
+							);
+						} else {
+						// If no folder.jpg or image is found, then display default icon:
+							$linkParams = http_build_query(
+								array('dir' => ltrim("$requestedDir/$file", '/')),
+								'',
+								'&amp;'
+							);
+							$linkUrl = "?$linkParams";
+							$imgUrl = GALLERY_ROOT . 'images/folder_' . strtolower($folder_color) . '.png';
+
+							$dirs[] = array(
+								"name" => $file,
+								"date" => filemtime($currentdir . "/" . $file),
+								"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\" width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>"
+							);
 						}
 					}
 				}
@@ -258,17 +303,39 @@ if (file_exists($currentdir ."/captions.txt"))
 
 						if (is_file($currentdir.'/'.$file.'.html')) { $img_captions[$file] = $file.'::'.htmlspecialchars(file_get_contents($currentdir.'/'.$file.'.html'),ENT_QUOTES); }
 						if ($lazyload) {
+							$linkUrl = urlencode("$currentdir/$file");
+							$imgParams = http_build_query(
+								array(
+									'filename' => "$thumbdir/$file",
+									'size' => $thumb_size
+								),
+								'',
+								'&amp;'
+							);
+							$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
+
 							$files[] = array (
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-							"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a>" . $filename_caption . "</li>");
+							"html" => "<li><a href={$linkUrl} rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src=\"$imgUrl\" alt='$label_loading' /></a>" . $filename_caption . "</li>");
 						} else {
+							$linkUrl = urlencode("$currentdir/$file");
+							$imgParams = http_build_query(
+								array(
+									'filename' => "$thumbdir/$file",
+									'size' => $thumb_size
+								),
+								'',
+								'&amp;'
+							);
+							$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
+
 							$files[] = array (
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href='" . $currentdir . "/" . $file . "' rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src='" . GALLERY_ROOT . "createthumb.php?filename=" . $thumbdir . "/" . $file . "&amp;size=$thumb_size' alt='$label_loading' /></a>" . $filename_caption . "</li>");						}
+				  			"html" => "<li><a href=\"{$linkUrl}\" rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src=\"{$imgUrl}\" alt='$label_loading' /></a>" . $filename_caption . "</li>");						}
 		  			}
 					// Other filetypes
 					$extension = "";
