@@ -44,7 +44,7 @@
 }
 
 #mbCenter.mbLoading {
-	background: #000 url(../images/loading2.gif) no-repeat center;
+	background: #000 url(../images/loading-dark.gif) no-repeat center;
 		/*	This style is applied only during animation.	*/
 		/*	For example, the next lines turn off shadows	*/
 		/*	improving browser performance on slow systems.	*/
