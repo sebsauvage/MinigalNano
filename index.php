@@ -132,21 +132,6 @@ function checkpermissions($file) {
 	if (substr(decoct(fileperms($file)), -1, strlen(fileperms($file))) < 4 OR substr(decoct(fileperms($file)), -3,1) < 4) $messages = "At least one file or folder has wrong permissions. Learn how to <a href='http://minigal.dk/faq-reader/items/how-do-i-change-file-permissions-chmod.html' target='_blank'>set file permissions</a>";
 }
 
-//-----------------------
-// CHECK FOR NEW VERSION
-//-----------------------
-// New version check disabled because original author does not update it software anymore.
-/*
-if (ini_get('allow_url_fopen') == "1") {
-	$file = @fopen ("http://www.minigal.dk/minigalnano_version.php", "r");
-	$server_version = fgets ($file, 1024);
-	if (strlen($server_version) == 5 ) { //If string retrieved is exactly 5 chars then continue
-		if (version_compare($server_version, $version, '>')) $messages = "MiniGal Nano $server_version is available! <a href='http://www.minigal.dk/minigal-nano.html' target='_blank'>Get it now</a>";
-	}
-	fclose($file);
-}
-*/
-
 if (!defined("GALLERY_ROOT")) define("GALLERY_ROOT", "");
 $requestedDir = '';
 if (!empty($_GET['dir'])) $requestedDir = $_GET['dir'];
@@ -167,9 +152,9 @@ $files = array();
 $dirs = array();
  if (is_directory($currentdir) && $handle = opendir($currentdir))
  {
-	while (false !== ($file = readdir($handle)))
+	while (false !== ($file = readdir($handle)) && !in_array($file, $SkipObjects))
 	{
-// 1. LOAD FOLDERS
+		// 1. LOAD FOLDERS
 		if (is_directory($currentdir . "/" . $file))
 			{
 				if ($file != "." && $file != ".." )
@@ -248,28 +233,28 @@ $dirs = array();
 				}
 			}
 
-// 2. LOAD CAPTIONS
-$img_captions['']='';
-if (file_exists($currentdir ."/captions.txt"))
-{
-	$file_handle = fopen($currentdir ."/captions.txt", "rb");
-	while (!feof($file_handle) )
-	{
-		$line_of_text = fgets($file_handle);
-		if (empty($line_of_text)) {
-			continue;
-		}
-		$parts = explode('/n', $line_of_text);
-		foreach($parts as $img_capts)
+		// 2. LOAD CAPTIONS
+		$img_captions['']='';
+		if (file_exists($currentdir ."/captions.txt"))
 		{
-			list($img_filename, $img_caption) = explode('|', $img_capts);
-			$img_captions[$img_filename] = $img_caption;
+			$file_handle = fopen($currentdir ."/captions.txt", "rb");
+			while (!feof($file_handle) )
+			{
+				$line_of_text = fgets($file_handle);
+				if (empty($line_of_text)) {
+					continue;
+				}
+				$parts = explode('/n', $line_of_text);
+				foreach($parts as $img_capts)
+				{
+					list($img_filename, $img_caption) = explode('|', $img_capts);
+					$img_captions[$img_filename] = $img_caption;
+				}
+			}
+			fclose($file_handle);
 		}
-	}
-	fclose($file_handle);
-}
 
-// 3. LOAD FILES
+		// 3. LOAD FILES
 				if ($file != "." && $file != ".." && $file != "folder.jpg")
 		  		{
 					if($display_filename) {
@@ -301,7 +286,9 @@ if (file_exists($currentdir ."/captions.txt"))
 						// If file is not provided, image filename will be used instead.
 						checkpermissions($currentdir . "/" . $file);
 
-						if (is_file($currentdir.'/'.$file.'.html')) { $img_captions[$file] = $file.'::'.htmlspecialchars(file_get_contents($currentdir.'/'.$file.'.html'),ENT_QUOTES); }
+						if (is_file($currentdir.'/'.$file.'.html')) {
+							$img_captions[$file] = $file.'::'.htmlspecialchars(file_get_contents($currentdir.'/'.$file.'.html'),ENT_QUOTES);
+						}
 						if ($lazyload) {
 							$linkUrl = urlencode("$currentdir/$file");
 							$imgParams = http_build_query(
