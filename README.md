@@ -5,11 +5,7 @@ MinigalNano is a very simple image gallery. It adheres to the KISS principle and
 
 MinigalNano uses a javascript Lightbox (Use left/right arrows for navigation), but it degrades gracefully if javascript is disabled.
 
-MinigalNano is based on [Minigal Nano SSE by Sebsauvage](https://github.com/sebsauvage/MinigalNano), that is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandonned in 2010.
-
-It adds new themes and icons, use more modern html/css, updates JS libs, and wants to be more community pull-friendly for the future.
-
-Online demo: [http://boards.tomcanac.com/](http://boards.tomcanac.com/)
+MinigalNano is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandonned in 2010. It adds new themes and icons, use more modern html/css, updates JS libs, and wants to be more community pull-friendly for the future.
 
 Features
 ============
@@ -45,12 +41,10 @@ Adding a comment to an image
  * comment
  * title::comment
 
-
 Using a custom image for folders
 ================================
 
 * Create `folder.jpg` inside a folder: This image will be used as default image for folder.
-
 
 Thumbnails
 =========
@@ -64,4 +58,3 @@ MinigalNano is licensed under the Creative Commons Attribution-Share Alike licen
  * [Project contributors](humans.txt)
  * [Original discussion page (english)](http://sebsauvage.net/wiki/doku.php?id=minigal_nano_en)
  * [Original discussion page (french)](http://sebsauvage.net/wiki/doku.php?id=minigal_nano)
- * [List of modifications between 0.3.5 and 0.3.5 SSE2](http://sebsauvage.net/wiki/doku.php?id=minigal_nano_diff)
