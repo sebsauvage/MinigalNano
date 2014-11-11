@@ -26,7 +26,7 @@ $sorting_files			= "name"; // Sort files by: [name][date][size]
 $sortdir_folders		= "ASC"; // Sort direction of folders: [ASC][DESC]
 $sortdir_files			= "ASC"; // Sort direction of files: [ASC][DESC]
 $lazyload				= 1; // 0 is pagination, 1 is display all pictures on one page
-$SkipObjects			= array('aFolder', 'IMG_1612.JPG'); //Those files and folders will not be displayed (affects the page and the RSS feed)
+$SkipObjects			= array('aFolder', 'aFile.ext'); //Those files and folders will not be displayed (affects the page and the RSS feed)
 
 //LANGUAGE STRINGS
 $label_home 			= "Home"; // Name of home link in breadcrumb navigation
