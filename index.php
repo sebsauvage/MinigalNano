@@ -305,7 +305,7 @@ $dirs = array();
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-							"html" => "<li><a href={$linkUrl} rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src=\"$imgUrl\" alt='$label_loading' /></a>" . $filename_caption . "</li>");
+							"html" => "<li><a href=\"$currentdir/$file\" rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src=\"$imgUrl\" alt='$label_loading' /></a>" . $filename_caption . "</li>");
 						} else {
 							$linkUrl = urlencode("$currentdir/$file");
 							$imgParams = http_build_query(
@@ -322,7 +322,7 @@ $dirs = array();
 			  				"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href=\"{$linkUrl}\" rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src=\"{$imgUrl}\" alt='$label_loading' /></a>" . $filename_caption . "</li>");						}
+				  			"html" => "<li><a href=\"$currentdir/$file\" rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src=\"{$imgUrl}\" alt='$label_loading' /></a>" . $filename_caption . "</li>");						}
 		  			}
 					// Other filetypes
 					$extension = "";
