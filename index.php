@@ -289,7 +289,7 @@ $dirs = array();
 						if (is_file($currentdir.'/'.$file.'.html')) {
 							$img_captions[$file] = $file.'::'.htmlspecialchars(file_get_contents($currentdir.'/'.$file.'.html'),ENT_QUOTES);
 						}
-						$linkUrl = implode("/", array_map(rawurlencode, explode("/", "$currentdir/$file")));
+						$linkUrl = rawurlencode("$currentdir/$file");
 						$imgParams = http_build_query(
 							array(
 								'filename' => "$thumbdir/$file",
