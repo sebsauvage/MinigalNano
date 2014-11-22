@@ -289,41 +289,27 @@ $dirs = array();
 						if (is_file($currentdir.'/'.$file.'.html')) {
 							$img_captions[$file] = $file.'::'.htmlspecialchars(file_get_contents($currentdir.'/'.$file.'.html'),ENT_QUOTES);
 						}
+						$linkUrl = implode("/", array_map(rawurlencode, explode("/", "$currentdir/$file")));
+						$imgParams = http_build_query(
+							array(
+								'filename' => "$thumbdir/$file",
+								'size' => $thumb_size
+								),
+							'',
+							'&amp;'
+							);
+						$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
 						if ($lazyload) {
-							$linkUrl = urlencode("$currentdir/$file");
-							$imgParams = http_build_query(
-								array(
-									'filename' => "$thumbdir/$file",
-									'size' => $thumb_size
-								),
-								'',
-								'&amp;'
-							);
-							$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
-
-							$files[] = array (
-			  				"name" => $file,
-							"date" => filemtime($currentdir . "/" . $file),
-							"size" => filesize($currentdir . "/" . $file),
-							"html" => "<li><a href={$linkUrl} rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src=\"$imgUrl\" alt='$label_loading' /></a>" . $filename_caption . "</li>");
+							$imgopts = "class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src=\"$imgUrl\"";
 						} else {
-							$linkUrl = urlencode("$currentdir/$file");
-							$imgParams = http_build_query(
-								array(
-									'filename' => "$thumbdir/$file",
-									'size' => $thumb_size
-								),
-								'',
-								'&amp;'
-							);
-							$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
-
-							$files[] = array (
-			  				"name" => $file,
+							$imgopts = "src=\"{$imgUrl}\"";
+						}
+						$files[] = array (
+							"name" => $file,
 							"date" => filemtime($currentdir . "/" . $file),
 							"size" => filesize($currentdir . "/" . $file),
-				  			"html" => "<li><a href=\"{$linkUrl}\" rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img  src=\"{$imgUrl}\" alt='$label_loading' /></a>" . $filename_caption . "</li>");						}
-		  			}
+							"html" => "<li><a href=\"{$linkUrl}\" rel='lightbox[billeder]' title=\"".htmlentities($img_captions[$file])."\"><img $imgopts alt='$label_loading' /></a>" . $filename_caption . "</li>");
+					}
 					// Other filetypes
 					$extension = "";
 					if (preg_match("/.pdf$/i", $file)) $extension = "PDF"; // PDF
