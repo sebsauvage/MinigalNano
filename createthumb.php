@@ -83,7 +83,7 @@ function sanitize($name)
 }
 
 // Make sure the "thumbs" directory exists.
-if (!is_dir('thumbs'))
+if (!is_dir('thumbs') && is_writable('.'))
 {
 	mkdir('thumbs',0700);
 }
@@ -140,14 +140,18 @@ else // otherwise, generate thumbnail, send it and save it to file.
 		$height = $width;
 	}
 
+	$degrees = 0;
+	$flip = '';
 	// Rotate JPG pictures
 	if (preg_match("/.jpg$|.jpeg$/i", $_GET['filename']))
 	{
 		if (function_exists('exif_read_data') && function_exists('imagerotate'))
 		{
 			$exif = exif_read_data($_GET['filename'], 0, true);
-			$ort = $exif['IFD0']['Orientation'];
-			$degrees = 0;
+			if (isset($exif['IFD0']) && isset($exif['IFD0']['Orientation']))
+				$ort = $exif['IFD0']['Orientation'];
+			else
+				$ort = 0;
 			switch($ort)
 			{
 				case 3: // 180 rotate right
@@ -164,7 +168,7 @@ else // otherwise, generate thumbnail, send it and save it to file.
 				break;
 				// see http://www.daveperrett.com/articles/2012/07/28/exif-orientation-handling-is-a-ghetto/ for more info on orientation
 				case 7: // flipped
-                                        $degrees = 90;
+					$degrees = 90;
 					$flip = 'vertical';
 				break;
 				case 5: // flipped
@@ -215,20 +219,20 @@ else // otherwise, generate thumbnail, send it and save it to file.
 		flipVertical($target);
 		flipHorizontal($target);
 		flipVertical($target);
-		ImageJPEG($target,null,80);
-	} else {
-		ImageJPEG($target,null,80);
 	}
+	ImageJPEG($target,null,80);
 
 	imagedestroy($target);
 
 	$cachedImage = ob_get_contents(); // Get the buffer content.
 	ob_end_flush();// End buffering
-	$fd = fopen($thumbname, "w"); // Save buffer to disk
-	if ($fd)
-	{
-		fwrite($fd,$cachedImage);
-		fclose($fd);
+	if (is_writable(dirname($thumbname))) {
+		$fd = fopen($thumbname, "w"); // Save buffer to disk
+		if ($fd)
+		{
+			fwrite($fd,$cachedImage);
+			fclose($fd);
+		}
 	}
 }
 
