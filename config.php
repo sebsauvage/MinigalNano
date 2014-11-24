@@ -23,8 +23,8 @@ $author					= "John Doe";
 $folder_color 			= "black"; // Color of folder icons: blue / black / vista / purple / green / grey
 $sorting_folders		= "name"; // Sort folders by: [name][date]
 $sorting_files			= "name"; // Sort files by: [name][date][size]
-$sortdir_folders		= "ASC"; // Sort direction of folders: [ASC][DESC]
-$sortdir_files			= "ASC"; // Sort direction of files: [ASC][DESC]
+$sortdir_folders		= SORT_ASC; // Sort direction of folders: SORT_ASC / SORT_DESC
+$sortdir_files			= SORT_ASC; // Sort direction of files: SORT_ASC / SORT_DESC
 $lazyload				= 1; // 0 is pagination, 1 is display all pictures on one page
 $SkipObjects			= array('aFolder', 'aFile.ext'); //Those files and folders will not be displayed (affects the page and the RSS feed)
 
