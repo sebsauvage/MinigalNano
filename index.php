@@ -403,7 +403,7 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page)
 //-----------------------
 if ($requestedDir != "")
 {
-	$breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> > ";
+	$breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> $breadcrumb_separator ";
 	$navitems = explode("/", $_REQUEST['dir']);
 	for($i = 0; $i < sizeof($navitems); $i++)
 	{
@@ -416,7 +416,7 @@ if ($requestedDir != "")
 				$breadcrumb_navigation .= $navitems[$x];
 				if ($x < $i) $breadcrumb_navigation .= "/";
 			}
-			$breadcrumb_navigation .= "'>" . $navitems[$i] . "</a> > ";
+			$breadcrumb_navigation .= "'>" . $navitems[$i] . "</a> $breadcrumb_separator ";
 		}
 	}
 } else $breadcrumb_navigation .= $label_home;

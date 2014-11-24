@@ -35,6 +35,7 @@ $label_page 			= "Page"; // Text used for page navigation
 $label_all 				= "All"; // Text used for link to display all images in one page
 $label_noimages 		= "No images"; // Empty folder text
 $label_loading 			= "Loading..."; // Thumbnail loading text
+$breadcrumb_separator	= ">"; // Breadcrumb parts separator
 
 //RSS SETTINGS
 $description			= "MiniGal Nano";
