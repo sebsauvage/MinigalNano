@@ -344,24 +344,28 @@ if (sizeof($dirs) > 0)
 {
 	foreach ($dirs as $key => $row)
 	{
-		if($row["name"] == "") unset($dirs[$key]); //Delete empty array entries
+		if($row["name"] == "") {
+			unset($dirs[$key]); //Delete empty array entries
+			continue;
+		}
 		$name[$key] = strtolower($row['name']);
 		$date[$key] = strtolower($row['date']);
 	}
-	if (strtoupper($sortdir_folders) == "DESC") array_multisort($$sorting_folders, SORT_DESC, $name, SORT_DESC, $dirs);
-	else array_multisort($$sorting_folders, SORT_ASC, $name, SORT_ASC, $dirs);
+	@array_multisort($$sorting_folders, $sortdir_folders, $name, $sortdir_folders, $dirs);
 }
 if (sizeof($files) > 0)
 {
 	foreach ($files as $key => $row)
 	{
-		if($row["name"] == "") unset($files[$key]); //Delete empty array entries
+		if($row["name"] == "") {
+			unset($files[$key]); //Delete empty array entries
+			continue;
+		}
 		$name[$key] = strtolower($row['name']);
 		$date[$key] = strtolower($row['date']);
 		$size[$key] = strtolower($row['size']);
 	}
-	if (strtoupper($sortdir_files) == "DESC") @array_multisort($$sorting_files, SORT_DESC, $name, SORT_ASC, $files);
-	else @array_multisort($$sorting_files, SORT_ASC, $name, SORT_ASC, $files);
+	@array_multisort($$sorting_files, $sortdir_files, $name, SORT_ASC, $files);
 }
 
 //-----------------------
