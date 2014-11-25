@@ -68,7 +68,8 @@ $gallery_link = $gallery_protocol.$gallery_domain.$gallery_path;
 /*===================*/
 /*Variables*/
 /*===================*/
-	require("config.php");
+	require("config-default.php");
+	include("config.php");
 	#$content = "";
 	$old_files_list  = "db_old_files"; //list of files in ./photos
 	$db_feed_source = "db_feed_source";

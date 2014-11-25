@@ -41,7 +41,8 @@ header('Content-Type: text/html; charset=UTF-8'); // We use UTF-8 for proper int
 $version = "0.3.7";
 ini_set("memory_limit","256M");
 
-require("config.php");
+require("config-default.php");
+include("config.php");
 //-----------------------
 // DEFINE VARIABLES
 //-----------------------
