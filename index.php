@@ -47,7 +47,8 @@ $comment = "";
 //-----------------------
 // PHP ENVIRONMENT CHECK
 //-----------------------
-if (!function_exists('exif_read_data') && $display_exif == 1) {
+if (!function_exists('exif_read_data') && $display_exif == 1)
+{
 	$display_exif = 0;
 	$messages = "Error: PHP EXIF is not available. Set &#36;display_exif = 0; in config.php to remove this message";
 }
@@ -418,7 +419,8 @@ for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
 //-----------------------
 // DISPLAY FOLDERS
 //-----------------------
-if (count($dirs) + count($files) == 0) {
+if (count($dirs) + count($files) == 0)
+{
 	$thumbnails .= "<li>$label_noimages</li>"; //Display 'no images' text
 	if ($currentdir == "photos")
 		$messages = "It looks like you have just installed MiniGal Nano. Please run the <a href='system_check.php'>system check tool</a>";
