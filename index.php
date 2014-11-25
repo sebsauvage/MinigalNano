@@ -66,15 +66,6 @@ if (!function_exists('exif_read_data') && $display_exif == 1) {
 //-----------------------
 // FUNCTIONS
 //-----------------------
-function is_directory($filepath) {
-	// $filepath must be the entire system path to the file
-	if (!@opendir($filepath)) return FALSE;
-	else {
-		return TRUE;
-		closedir($filepath);
-	}
-}
-
 function padstring($name, $length) {
 	global $label_max_length;
 	if (!isset($length)) $length = $label_max_length;
@@ -151,12 +142,12 @@ $currentdir = GALLERY_ROOT . $thumbdir;
 //-----------------------
 $files = array();
 $dirs = array();
- if (is_directory($currentdir) && $handle = opendir($currentdir))
+ if (is_dir($currentdir) && $handle = opendir($currentdir))
  {
 	while (false !== ($file = readdir($handle)) && !in_array($file, $SkipObjects))
 	{
 		// 1. LOAD FOLDERS
-		if (is_directory($currentdir . "/" . $file))
+		if (is_dir($currentdir . "/" . $file))
 			{
 				if ($file != "." && $file != ".." )
 				{
