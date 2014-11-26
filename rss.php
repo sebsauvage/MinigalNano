@@ -122,33 +122,22 @@ if (($current_time - $last_rss_gen) > $rss_refresh_interval && file_exists("rss.
     file_put_contents($old_files_list, $content);
     unlink("rss.locker");
 }
+
 /*===================*/
 /* XML Gen           */
 /*===================*/
 $temp = explode("\n", $temp);
-$pieceOfTitle;
-$titleLenght;
-echo "
-    <rss version=\"2.0\">
-        <channel>
-        <title>".$title."</title>
-        <link>".$gallery_link."</link>
-        <description>".$description."</description>
-    ";
-for ($i=0; $i < $nb_items_rss; $i++) {
-    $pieceOfTitle = strrchr ($temp[$i] , "/");
-    $titleLenght = strlen($pieceOfTitle) - strlen(strrchr($pieceOfTitle, "."));
-    echo "<item>
-            <title>" . substr($pieceOfTitle, 1, $titleLenght-1) . "</title>
-            <link>". $temp[$i] . "</link>
-            <description>
-                <![CDATA[ <img src=\"" . $temp[$i] . "\"> ]]>
-            </description>
-        </item>";
-    if ($temp[$i+1] == NULL)
-        break;
+echo "<rss version='2.0'>\n<channel>";
+echo "<title>$title</title>";
+echo "<link>$gallery_link</link>";
+echo "<description>$description</description>\n";
+for ($i=0; $i < $nb_items_rss && $i < count($temp); $i++) {
+    if (empty($temp[$i]))
+        continue;
+    echo "<item>\n";
+    echo " <title>" . basename($temp[$i]) . "</title>\n";
+    echo " <link>". $temp[$i] . "</link>\n";
+    echo " <description><![CDATA[ <img src='" . $temp[$i] . "'> ]]></description>\n";
+    echo "</item>\n";
 }
-echo "
-        </channel>
-    </rss>
-";
+echo "</channel></rss>\n";
