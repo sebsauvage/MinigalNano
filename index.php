@@ -123,8 +123,13 @@ function readEXIF($file)
 function checkpermissions($file)
 {
     global $messages;
-    if (substr(decoct(fileperms($file)), -1, strlen(fileperms($file))) < 4 OR substr(decoct(fileperms($file)), -3, 1) < 4)
-        $messages = "At least one file or folder has wrong permissions. Learn how to <a href='http://minigal.dk/faq-reader/items/how-do-i-change-file-permissions-chmod.html' target='_blank'>set file permissions</a>";
+
+    if (!is_readable($file)) {
+        $messages = "At least one file or folder has wrong permissions. "
+            . "Learn how to <a href='http://minigal.dk/faq-reader/items/"
+            . "how-do-i-change-file-permissions-chmod.html' target='_blank'>"
+            . "set file permissions</a>";
+    }
 }
 
 if (!defined("GALLERY_ROOT"))
