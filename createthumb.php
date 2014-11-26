@@ -20,15 +20,18 @@ Version 0.3.5 modified by Sebastien SAUVAGE (sebsauvage.net):
 
 USAGE EXAMPLE:
 File: createthumb.php
-Example: <img src="createthumb.php?filename=photo.jpg&amp;width=100&amp;height=100">
+Example: <img src="createthumb.php?filename=photo.jpg&amp;size=100">
 */
-//	error_reporting(E_ALL);
-	error_reporting(0);
-/*
-if (preg_match("/.jpg$|.jpeg$/i", $_GET['filename'])) header('Content-type: image/jpeg');
-if (preg_match("/.gif$/i", $_GET['filename'])) header('Content-type: image/gif');
-if (preg_match("/.png$/i", $_GET['filename'])) header('Content-type: image/png');
-*/
+
+error_reporting(0);
+
+$get_filename = $_GET['filename'];
+$get_size = @$_GET['size'];
+if (empty($get_size)) $get_size = 120;
+
+if (preg_match("/.jpe?g$/i", $get_filename)) $get_filename_type = "JPG";
+if (preg_match("/.gif$/i", $get_filename)) $get_filename_type = "GIF";
+if (preg_match("/.png$/i", $get_filename)) $get_filename_type = "PNG";
 
 // flip functions from http://stackoverflow.com/questions/8232722/how-to-flip-part-of-an-image-horizontal-with-php-gd
 function flipVertical(&$img) {
@@ -90,150 +93,124 @@ if (!is_dir('thumbs') && is_writable('.'))
 
 // Thumbnail file name and path.
 // (We always put thumbnails in jpg for simplification)
-$thumbname = 'thumbs/'.sanitize($_GET['filename']).'.jpg';
+$thumbname = 'thumbs/'.sanitize($get_filename).'.jpg';
 
-if (file_exists($thumbname))// If thumbnail exists, serve it.
+if (file_exists($thumbname)) // If thumbnail exists, serve it.
 {
 	$fd = fopen($thumbname, "r");
-	$cacheContent = fread($fd,filesize ($thumbname));
+	$cacheContent = fread($fd, filesize($thumbname));
 	fclose($fd);
 	header('Content-type: image/jpeg');
 	echo($cacheContent);
+	exit;
 }
-else // otherwise, generate thumbnail, send it and save it to file.
+
+// Display error image if file isn't found
+if (!is_file($get_filename)) {
+	header('Content-type: image/jpeg');
+	$errorimage = imagecreatefromjpeg('images/questionmark.jpg');
+	imagejpeg($errorimage, null, 90);
+	imagedestroy($errorimage);
+	exit;
+}
+
+// Display error image if file exists, but can't be opened
+if (!is_readable($get_filename)) {
+	header('Content-type: image/jpeg');
+	$errorimage = imagecreatefromjpeg('images/cannotopen.jpg');
+	imagejpeg($errorimage, null, 90);
+	imagedestroy($errorimage);
+	exit;
+}
+
+// otherwise, generate thumbnail, send it and save it to file.
+
+$target = "";
+$xoord = 0;
+$yoord = 0;
+
+$imgsize = getimagesize($get_filename);
+$width = $imgsize[0];
+$height = $imgsize[1];
+if ($width > $height) // If the width is greater than the height it’s a horizontal picture
 {
+	$xoord = ceil(($width-$height)/2);
+	$width = $height; // Then we read a square frame that equals the width
+}
+else
+{
+	$yoord = ceil(($height-$width)/2);
+	$height = $width;
+}
 
-	// Display error image if file isn't found
-	if (!is_file($_GET['filename'])) {
-		header('Content-type: image/jpeg');
-		$errorimage = ImageCreateFromJPEG('images/questionmark.jpg');
-		ImageJPEG($errorimage,null,90);
-	}
-	
-	// Display error image if file exists, but can't be opened
-	if (substr(decoct(fileperms($_GET['filename'])), -1, strlen(fileperms($_GET['filename']))) < 4 OR substr(decoct(fileperms($_GET['filename'])), -3,1) < 4) {
-		header('Content-type: image/jpeg');
-		$errorimage = ImageCreateFromJPEG('images/cannotopen.jpg');
-		ImageJPEG($errorimage,null,90);
-	}
-	
-	// Define variables
-	$target = "";
-	$xoord = 0;
-	$yoord = 0;
-
-	if ($_GET['size'] == "")
+// Rotate JPG pictures
+$degrees = 0;
+$flip = '';
+if ($get_filename_type == "JPG")
+{
+	if (function_exists('exif_read_data') && function_exists('imagerotate'))
 	{
-		$_GET['size'] = 120;
-	}
-	$imgsize = GetImageSize($_GET['filename']);
-	$width = $imgsize[0];
-	$height = $imgsize[1];
-	if ($width > $height) // If the width is greater than the height it’s a horizontal picture
-	{
-		$xoord = ceil(($width-$height)/2);
-		$width = $height; // Then we read a square frame that equals the width
-	}
-	else
-	{
-		$yoord = ceil(($height-$width)/2);
-		$height = $width;
-	}
-
-	$degrees = 0;
-	$flip = '';
-	// Rotate JPG pictures
-	if (preg_match("/.jpg$|.jpeg$/i", $_GET['filename']))
-	{
-		if (function_exists('exif_read_data') && function_exists('imagerotate'))
-		{
-			$exif = exif_read_data($_GET['filename'], 0, true);
-			if (isset($exif['IFD0']) && isset($exif['IFD0']['Orientation']))
-				$ort = $exif['IFD0']['Orientation'];
-			else
-				$ort = 0;
-			switch($ort)
-			{
-				case 3: // 180 rotate right
-					$degrees = 180;
-				break;
-				case 6: // 90 rotate right
-					$degrees = 270;
-				break;
-				case 8:	// 90 rotate left
-					$degrees = 90;
-				break;
-				case 2: // flip vertical
-					$flip = 'vertical';
-				break;
-				// see http://www.daveperrett.com/articles/2012/07/28/exif-orientation-handling-is-a-ghetto/ for more info on orientation
-				case 7: // flipped
-					$degrees = 90;
-					$flip = 'vertical';
-				break;
-				case 5: // flipped
-					$degrees = 270;
-					$flip = 'vertical';
-				break;
-				case 4: // flipped
-					$degrees = 180;
-					$flip = 'vertical';
-				break;
-			}
-		}
-	}
-
-	$target = ImageCreatetruecolor($_GET['size'],$_GET['size']);
-
-	//if the picture can be transparent, add a white background instead a black
-	if (preg_match("/.gif$/i", $_GET['filename']) || preg_match("/.png$/i", $_GET['filename'])) 
-	{
-		$backgroundColor = imagecolorallocate($target, 255, 255, 255);
-		imagefill($target, 0, 0, $backgroundColor);
-	}
-
-
-	if (preg_match("/.jpg$/i", $_GET['filename'])) $source = ImageCreateFromJPEG($_GET['filename']);
-	if (preg_match("/.gif$/i", $_GET['filename'])) $source = ImageCreateFromGIF($_GET['filename']);
-	if (preg_match("/.png$/i", $_GET['filename'])) $source = ImageCreateFromPNG($_GET['filename']);
-	imagecopyresampled($target,$source,0,0,$xoord,$yoord,$_GET['size'],$_GET['size'],$width,$height);
-	imagedestroy($source);
-
-	//if (preg_match("/.jpg$/i", $_GET['filename'])) ImageJPEG($target,null,90);
-	//if (preg_match("/.gif$/i", $_GET['filename'])) ImageGIF($target,null,90);
-	//if (preg_match("/.png$/i", $_GET['filename'])) ImageJPEG($target,null,90); // Using ImageJPEG on purpose
-
-	//proper rotation by jan niggemann
-	if ($degrees != 0)
-	{
-		$target = imagerotate($target, $degrees, 0);
-	}
-
-	ob_start(); // Start output buffering.
-	header('Content-type: image/jpeg'); // We always render the thumbnail in JPEG even if the source is GIF or PNG.
-
-	//proper mirror (aka flip) by jan niggemann
-	if ($flip == 'vertical')
-	{
-		//only in php >= 5.5.0 ImageJPEG(imageflip($target, IMG_FLIP_VERTICAL),null,80);
-		flipVertical($target);
-		flipHorizontal($target);
-		flipVertical($target);
-	}
-	ImageJPEG($target,null,80);
-
-	imagedestroy($target);
-
-	$cachedImage = ob_get_contents(); // Get the buffer content.
-	ob_end_flush();// End buffering
-	if (is_writable(dirname($thumbname))) {
-		$fd = fopen($thumbname, "w"); // Save buffer to disk
-		if ($fd)
-		{
-			fwrite($fd,$cachedImage);
-			fclose($fd);
-		}
+		$exif = exif_read_data($get_filename, 0, true);
+		if (isset($exif['IFD0']) && isset($exif['IFD0']['Orientation']))
+			$ort = $exif['IFD0']['Orientation'];
+		else
+			$ort = 0;
+		// for more info on orientation see
+		// http://www.daveperrett.com/articles/2012/07/28/exif-orientation-handling-is-a-ghetto/
+		$ort2deg = array(3=>180, 4=>180, 5=>270, 6=>270, 7=>90, 8=>90);
+		$degrees = in_array($ort, $ort2deg) ? $ort2deg[$ort] : 0;
+		$ort2flip = array(2, 4, 5, 7);
+		$flip = in_array($ort, $flip2deg) ? 'vertical' : '';
 	}
 }
+
+$target = imagecreatetruecolor($get_size, $get_size);
+
+// if the picture can be transparent, add a white background instead a black
+if (in_array($get_filename_type, array("GIF", "PNG")))
+{
+	$backgroundColor = imagecolorallocate($target, 255, 255, 255);
+	imagefill($target, 0, 0, $backgroundColor);
+}
+
+
+if ($get_filename_type == "JPG") $source = imagecreatefromjpeg($get_filename);
+if ($get_filename_type == "GIF") $source = imagecreatefromgif($get_filename);
+if ($get_filename_type == "PNG") $source = imagecreatefrompng($get_filename);
+imagecopyresampled($target, $source, 0, 0, $xoord, $yoord, $get_size, $get_size, $width, $height);
+imagedestroy($source);
+
+//proper rotation by jan niggemann
+if ($degrees != 0)
+{
+	$target = imagerotate($target, $degrees, 0);
+}
+
+//proper mirror (aka flip) by jan niggemann
+if ($flip == 'vertical')
+{
+	//only in php >= 5.5.0 ImageJPEG(imageflip($target, IMG_FLIP_VERTICAL),null,80);
+	flipVertical($target);
+	flipHorizontal($target);
+	flipVertical($target);
+}
+
+ob_start(); // Start output buffering.
+header('Content-type: image/jpeg'); // We always render the thumbnail in JPEG even if the source is GIF or PNG.
+imagejpeg($target, null, 80);
+imagedestroy($target);
+$cachedImage = ob_get_contents(); // Get the buffer content.
+ob_end_flush(); // End buffering
+
+if (is_writable(dirname($thumbname)))
+{
+	$fd = fopen($thumbname, "w"); // Save buffer to disk
+	if ($fd)
+	{
+		fwrite($fd,$cachedImage);
+		fclose($fd);
+	}
+}
+
 
 ?>
