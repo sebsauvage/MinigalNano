@@ -58,25 +58,34 @@ if (!function_exists('exif_read_data') && $display_exif == 1) {
 function padstring($name, $length)
 {
     global $label_max_length;
-    if (!isset($length))
+    if (!isset($length)) {
         $length = $label_max_length;
-    if (strlen($name) > $length)
+    }
+    if (strlen($name) > $length) {
         return substr($name, 0, $length) . "...";
+    }
     return $name;
 }
 
 function getfirstImage($dirname)
 {
     $imageName = false;
-    $ext = array("jpg", "png", "jpeg", "gif", "JPG", "PNG", "GIF", "JPEG");
+    $extensions = array("jpg", "png", "jpeg", "gif");
     if ($handle = opendir($dirname)) {
         while(false !== ($file = readdir($handle))) {
-            $lastdot = strrpos($file, '.');
-            $extension = substr($file, $lastdot + 1);
-            if ($file[0] != '.' && in_array($extension, $ext))
+            if ($file[0] == '.') {
+                continue;
+            }
+            $pathinfo = pathinfo($file);
+            if (empty($pathinfo['extension'])) {
+                continue;
+            }
+            $ext = strtolower($pathinfo['extension']);
+            if (in_array($ext, $extensions)) {
+                $imageName = $file;
                 break;
+            }
         }
-        $imageName = $file;
         closedir($handle);
     }
     return $imageName;
