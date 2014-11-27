@@ -91,42 +91,54 @@ function getfirstImage($dirname)
     return $imageName;
 }
 
+function parse_fraction($v, $round=0)
+{
+    list($x, $y) = array_map('intval', explode('/', $v));
+    if (empty($x) || empty($y)) {
+        return $v;
+    }
+    if ($x % $y == 0) {
+        return $x/$y;
+    }
+    if ($y % $x == 0) {
+        return "1/" . $y/$x;
+    }
+    return round($x/$y, $round);
+}
+
 function readEXIF($file)
 {
-        $exif_data = "";
-        $exif_idf0 = exif_read_data($file, 'IFD0', 0);
-        $emodel = $exif_idf0['Model'];
+    $exif_arr = array();
+    $exif_data = exif_read_data($file);
 
-        $efocal = $exif_idf0['FocalLength'];
-        //Next is only cosmectic need but give an error due to division by zero
-        //list($x, $y) = preg_split('/', $efocal);
-        //$efocal = round($x/$y, 0);
+    $exif_val = $exif_data['Model'];
+    if (!empty($exif_val)) {
+        $exif_arr[] = $exif_val;
+    }
 
-        $exif_exif = exif_read_data($file, 'EXIF', 0);
-        $eexposuretime = $exif_exif['ExposureTime'];
+    $exif_val = $exif_data['FocalLength'];
+    if (!empty($exif_val)) {
+        $exif_arr[] = parse_fraction($exif_val) . "mm";
+    }
 
-        $efnumber = $exif_exif['FNumber'];
-        //Next is only cosmectic need but give an error due to division by zero
-        //list($x, $y) = preg_split('/', $efnumber);
-        //$efnumber = round($x/$y, 0);
+    $exif_val = $exif_data['ExposureTime'];
+    if (!empty($exif_val)) {
+        $exif_arr[] = parse_fraction($exif_val, 2) . "s";
+    }
 
-        $eiso = $exif_exif['ISOSpeedRatings'];
+    $exif_val = $exif_data['FNumber'];
+    if (!empty($exif_val)) {
+        $exif_arr[] = "f" . parse_fraction($exif_val);
+    }
 
-        $exif_date = exif_read_data($file, 'IFD0', 0);
-        $edate = $exif_date['DateTime'];
-        if (strlen($emodel . $efocal . $eexposuretime . $efnumber . $eiso) > 0)
-            $exif_data .= "::";
-        if (strlen($emodel) > 0)
-            $exif_data .= "$emodel";
-        if ($efocal > 0)
-            $exif_data .= " | $efocal" . "mm";
-        if (strlen($eexposuretime) > 0)
-            $exif_data .= " | $eexposuretime" . "s";
-        if ($efnumber > 0)
-            $exif_data .= " | f$efnumber";
-        if (strlen($eiso) > 0)
-            $exif_data .= " | ISO $eiso";
-        return $exif_data;
+    $exif_val = $exif_data['ISOSpeedRatings'];
+    if (!empty($exif_val)) {
+        $exif_arr[] = "ISO " . $exif_val;
+    }
+
+    if (count($exif_arr) > 0) {
+        return "::" . implode(" | ", $exif_arr);
+    }
 }
 
 function checkpermissions($file)
