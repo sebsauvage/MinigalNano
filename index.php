@@ -111,27 +111,27 @@ function readEXIF($file)
     $exif_arr = array();
     $exif_data = exif_read_data($file);
 
-    $exif_val = $exif_data['Model'];
+    $exif_val = @$exif_data['Model'];
     if (!empty($exif_val)) {
         $exif_arr[] = $exif_val;
     }
 
-    $exif_val = $exif_data['FocalLength'];
+    $exif_val = @$exif_data['FocalLength'];
     if (!empty($exif_val)) {
         $exif_arr[] = parse_fraction($exif_val) . "mm";
     }
 
-    $exif_val = $exif_data['ExposureTime'];
+    $exif_val = @$exif_data['ExposureTime'];
     if (!empty($exif_val)) {
         $exif_arr[] = parse_fraction($exif_val, 2) . "s";
     }
 
-    $exif_val = $exif_data['FNumber'];
+    $exif_val = @$exif_data['FNumber'];
     if (!empty($exif_val)) {
         $exif_arr[] = "f" . parse_fraction($exif_val);
     }
 
-    $exif_val = $exif_data['ISOSpeedRatings'];
+    $exif_val = @$exif_data['ISOSpeedRatings'];
     if (!empty($exif_val)) {
         $exif_arr[] = "ISO " . $exif_val;
     }
