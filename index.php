@@ -173,9 +173,25 @@ $currentdir = GALLERY_ROOT . $thumbdir;
 //-----------------------
 $files = array();
 $dirs = array();
+$img_captions = array();
 if (is_dir($currentdir) && $handle = opendir($currentdir)) {
+    // 1. LOAD CAPTIONS
+    $caption_filename = "$currentdir/captions.txt";
+    if (is_readable($caption_filename)) {
+        $caption_handle = fopen($caption_filename, "rb");
+        while (!feof($caption_handle)) {
+            $caption_line = fgetss($caption_handle);
+            if (empty($caption_line)) {
+                continue;
+            }
+            list($img_file, $img_text) = explode('|', $caption_line);
+            $img_captions[$img_file] = trim($img_text);
+        }
+        fclose($caption_handle);
+    }
+
     while (false !== ($file = readdir($handle)) && !in_array($file, $SkipObjects)) {
-        // 1. LOAD FOLDERS
+        // 2. LOAD FOLDERS
         if (is_dir($currentdir . "/" . $file)) {
             if ($file != "." && $file != "..") {
                 checkpermissions($currentdir . "/" . $file); // Check for correct file permission
@@ -249,23 +265,6 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
                     }
                 }
             }
-        }
-
-        // 2. LOAD CAPTIONS
-        $img_captions[''] = '';
-        if (file_exists($currentdir ."/captions.txt")) {
-            $file_handle = fopen($currentdir ."/captions.txt", "rb");
-            while (!feof($file_handle)) {
-                $line_of_text = fgets($file_handle);
-                if (empty($line_of_text))
-                    continue;
-                $parts = explode('/n', $line_of_text);
-                foreach($parts as $img_capts) {
-                    list($img_filename, $img_caption) = explode('|', $img_capts);
-                    $img_captions[$img_filename] = $img_caption;
-                }
-            }
-            fclose($file_handle);
         }
 
         // 3. LOAD FILES
