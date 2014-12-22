@@ -152,6 +152,7 @@ if (is_writeable(".")) {
 /*===================*/
 /* XML Gen           */
 /*===================*/
+header('Content-Type: text/xml');
 $temp = explode("\n", $content);
 echo "<?xml version='1.0' encoding='UTF-8 '?>\n";
 echo "<rss version='2.0'>\n<channel>";
