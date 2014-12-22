@@ -165,6 +165,7 @@ for ($i=0; $i < $nb_items_rss && $i < count($temp); $i++) {
     echo "<item>\n";
     echo " <title>" . basename($temp[$i]) . "</title>\n";
     echo " <link>". $temp[$i] . "</link>\n";
+    echo " <guid>". $temp[$i] . "</guid>\n";
     echo " <description><![CDATA[ <img src='" . $temp[$i] . "'> ]]></description>\n";
     echo "</item>\n";
 }
