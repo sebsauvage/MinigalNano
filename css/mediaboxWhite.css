@@ -42,10 +42,17 @@
 
 #mbCenter img{
 	border-radius: 4px;
+        image-orientation: from-image;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 #mbCenter.mbLoading {
-	background: #fff url(../images/loading-light.gif) no-repeat center;
+	background: #fff url(../images/WhiteLoading.gif) no-repeat center;
 		/*	This style is applied only during animation.	*/
 		/*	For example, the next lines turn off shadows	*/
 		/*	improving browser performance on slow systems.	*/
