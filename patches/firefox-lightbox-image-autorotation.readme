@@ -1,0 +1,11 @@
+You access your MinigalNano exclusively with firefox >v26 (for example 
+on your home server)?
+
+If you apply this patch, the images in the lightbox are properly rotated 
+by the browser itself using the information from the EXIF data.
+
+To fit the images, I made the lightbox squared so there are white 
+stripes either on the sides or the top and the bottom.
+
+Jan
+(jn@hz6.de)
