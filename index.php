@@ -312,16 +312,16 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
             }
             // Other filetypes
             $extension = "";
-            if (preg_match("/.pdf$/i", $file)) $extension = "PDF"; // PDF
-            if (preg_match("/.zip$/i", $file)) $extension = "ZIP"; // ZIP archive
-            if (preg_match("/.rar$|.r[0-9]{2,}/i", $file)) $extension = "RAR"; // RAR Archive
-            if (preg_match("/.tar$/i", $file)) $extension = "TAR"; // TARball archive
-            if (preg_match("/.gz$/i", $file)) $extension = "GZ"; // GZip archive
-            if (preg_match("/.doc$|.docx$/i", $file)) $extension = "DOCX"; // Word
-            if (preg_match("/.ppt$|.pptx$/i", $file)) $extension = "PPTX"; //Powerpoint
-            if (preg_match("/.xls$|.xlsx$/i", $file)) $extension = "XLXS"; // Excel
-            if (preg_match("/.ogv$|.mp4$|.mpg$|.mpeg$|.mov$|.avi$|.wmv$|.flv$|.webm$/i", $file)) $extension = "VIDEO"; // video files
-            if (preg_match("/.aiff$|.aif$|.wma$|.aac$|.flac$|.mp3$|.ogg$|.m4a$/i", $file)) $extension = "AUDIO"; // audio files
+            if (preg_match("/\.pdf$/i", $file)) $extension = "PDF"; // PDF
+            if (preg_match("/\.zip$/i", $file)) $extension = "ZIP"; // ZIP archive
+            if (preg_match("/\.rar$|\.r[0-9]{2,}/i", $file)) $extension = "RAR"; // RAR Archive
+            if (preg_match("/\.tar$/i", $file)) $extension = "TAR"; // TARball archive
+            if (preg_match("/\.gz$/i", $file)) $extension = "GZ"; // GZip archive
+            if (preg_match("/\.doc$|\.docx$/i", $file)) $extension = "DOCX"; // Word
+            if (preg_match("/\.ppt$|\.pptx$/i", $file)) $extension = "PPTX"; //Powerpoint
+            if (preg_match("/\.xls$|\.xlsx$/i", $file)) $extension = "XLXS"; // Excel
+            if (preg_match("/\.ogv$|\.mp4$|\.mpg$|\.mpeg$|\.mov$|\.avi$|\.wmv$|\.flv$|\.webm$/i", $file)) $extension = "VIDEO"; // video files
+            if (preg_match("/\.aiff$|\.aif$|\.wma$|\.aac$|\.flac$|\.mp3$|\.ogg$|\.m4a$/i", $file)) $extension = "AUDIO"; // audio files
 
             if ($extension != "") {
                 $files[] = array(
