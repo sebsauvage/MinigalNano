@@ -124,23 +124,41 @@ else
 }
 
 // Rotate JPG pictures
+// for more info on orientation see
+// http://www.daveperrett.com/articles/2012/07/28/exif-orientation-handling-is-a-ghetto/
+
 $degrees = 0;
 $flip = '';
-if ($get_filename_type == "JPG")
-{
-	if (function_exists('exif_read_data') && function_exists('imagerotate'))
-	{
-		$exif = exif_read_data($get_filename, 0, true);
-		if (isset($exif['IFD0']) && isset($exif['IFD0']['Orientation']))
-			$ort = $exif['IFD0']['Orientation'];
-		else
-			$ort = 0;
-		// for more info on orientation see
-		// http://www.daveperrett.com/articles/2012/07/28/exif-orientation-handling-is-a-ghetto/
-		$ort2deg = array(3=>180, 4=>180, 5=>270, 6=>270, 7=>90, 8=>90);
-		$degrees = in_array($ort, $ort2deg) ? $ort2deg[$ort] : 0;
-		$ort2flip = array(2, 4, 5, 7);
-		$flip = in_array($ort, $flip2deg) ? 'vertical' : '';
+if (preg_match("/.jpg$|.jpeg$/i", $_GET['filename'])) {
+	if (function_exists('exif_read_data') && function_exists('imagerotate')) {
+        	$exif = exif_read_data($_GET['filename'], 0, true);
+                $ort = $exif['IFD0']['Orientation'];
+                switch ($ort) {
+			case 3: // 180 rotate right
+                        	$degrees = 180;
+                                break;
+                        case 6: // 90 rotate right
+                                $degrees = 270;
+                                break;
+                        case 8: // 90 rotate left
+                                $degrees = 90;
+                                break;
+                        case 2: // flip vertical
+                                $flip = 'vertical';
+                                break;
+                        case 7: // flipped
+                                $degrees = 90;
+                                $flip = 'vertical';
+                                break;
+                        case 5: // flipped
+                                $degrees = 270;
+                                $flip = 'vertical';
+                                break;
+                        case 4: // flipped
+                                $degrees = 180;
+                                $flip = 'vertical';
+                                break;
+		}
 	}
 }
 

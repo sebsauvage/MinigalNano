@@ -9,7 +9,7 @@ Copyright (c) 2014 Alda Marteau-Hardi <alda@leetchee.fr>
 Copyright (c) 2014 bitbybit <crigon+github@crigon.name>
 Copyright (c) 2014 cyberic99 <cyberic99@users.noreply.github.com>
 Copyright (c) 2014 iGormilhit <igormilhit@mailoo.org>
-Copyright (c) 2014 Jan <jn@hz6.de>
+Copyright (c) 2014, 2015 Jan Niggemann <jn@hz6.de>
 Copyright (c) 2014 Lucas Cimon <lucas.cimon@gmail.com>
 Copyright (c) 2014 nodiscc <nodiscc@gmail.com>
 Copyright (c) 2014 Orangina Rouge <eric.watson-doqguhmm@yopmail.com>
