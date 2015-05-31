@@ -33,20 +33,20 @@ $gallery_link = $g_protocol . '://' . $g_host . $g_port . $g_path;
 /*===================*/
 # Hardly inspired from here : codes-sources.commentcamarche.net/source/35937-creation-d-une-arborescenceI
 # Listing all files of a folder and sub folders. 
-function ListFiles($gallery_link, &$content, $Folder, $SkipFileExts, $SkipObjects)
+function listFiles(&$content, $Folder, $SkipFileExts, $SkipObjects)
 {
     $dir = opendir($Folder);
     // Loop on all contained on the folder
     while (false !== ($Current = readdir($dir))) {
         if ($Current !='.' && $Current != '..' && in_array($Current, $SkipObjects) === false) {
             if (is_dir($Folder.'/'.$Current)) {
-                ListFiles($gallery_link, $content, $Folder . '/' . $Current, $SkipFileExts, $SkipObjects);
+                ListFiles($content, $Folder . '/' . $Current, $SkipFileExts, $SkipObjects);
             } else {
                 $FileExt = strtolower(substr(strrchr($Current, '.'), 1));
                 // Should we display this extension ?
                 if (in_array($FileExt, $SkipFileExts) === false) {
-                    $current_adress = $gallery_link . "/" . $Folder.'/'. $Current;
-                    $content .= $current_adress. "\n";
+                    $current_adress = $Folder.'/'. $Current;
+                    array_push($content, $current_adress);
                 }
             }
         }
@@ -80,22 +80,16 @@ function diff($old, $new)
         diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
 }
 
-function print_array($array_to_display)
-{
-    echo '<pre>';
-    print_r($array_to_display);
-    echo '</pre>';
-}
-
 /*===================*/
 /* Variables         */
 /*===================*/
 require("config-default.php");
 include("config.php");
-
-$content = "";
 $folder = "photos";
-$content = listFiles($gallery_link, $content, $folder, $SkipExts, $SkipObjects);
+
+$content = array();
+$content = listFiles($content, $folder, $SkipExts, $SkipObjects);
+usort($content, function ($a, $b) { return filemtime($a) < filemtime($b); });
 
 if (is_writeable(".")) {
     $to_store = "";
@@ -127,7 +121,7 @@ if (is_writeable(".")) {
         file_put_contents($db_rss_timestamp, time());
         // Load the list from files.
         $old_files_list_content = explode("\n", file_get_contents($old_files_list));
-        $new_files_list_content = explode("\n", $content); #debug
+        $new_files_list_content = $content; #debug
         // Generate and stock new elements
         $differences = diff($old_files_list_content, $new_files_list_content);
         for ($i=0; $i < count($differences); $i++) {
@@ -143,30 +137,31 @@ if (is_writeable(".")) {
         $temp = $to_store . $temp;
         file_put_contents($db_feed_source, $temp);
         // Store the current file list for the next generation
-        file_put_contents($old_files_list, $content);
+        file_put_contents($old_files_list, join("/n", $content));
         unlink("rss.locker");
     }
-    $content = $temp;
+    $content = explode("\n", $temp);
 }
 
 /*===================*/
 /* XML Gen           */
 /*===================*/
 header('Content-Type: text/xml');
-$temp = explode("\n", $content);
-echo "<?xml version='1.0' encoding='UTF-8 '?>\n";
+echo "<?xml version='1.0' encoding='UTF-8'?>\n";
 echo "<rss version='2.0'>\n<channel>";
 echo "<title>$title</title>";
 echo "<link>$gallery_link</link>";
 echo "<description>$description</description>\n";
-for ($i=0; $i < $nb_items_rss && $i < count($temp); $i++) {
-    if (empty($temp[$i]))
+for ($i=0; $i < $nb_items_rss && $i < count($content); $i++) {
+    if (empty($content[$i]))
         continue;
+    $link = $gallery_link . '/' . $content[$i];
     echo "<item>\n";
-    echo " <title>" . basename($temp[$i]) . "</title>\n";
-    echo " <link>". $temp[$i] . "</link>\n";
-    echo " <guid>". $temp[$i] . "</guid>\n";
-    echo " <description><![CDATA[ <img src='" . $temp[$i] . "'> ]]></description>\n";
+    echo " <title>" . basename($link) . "</title>\n";
+    echo " <link>". $link . "</link>\n";
+    echo " <guid>". $link . "</guid>\n";
+    echo " <description><![CDATA[ <img src='" . $link . "'> ]]></description>\n";
+    echo " <pubDate>" . date ("D, j M Y H:i:s O", filemtime($content[$i])) . "</pubDate>";
     echo "</item>\n";
 }
 echo "</channel></rss>\n";
