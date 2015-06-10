@@ -815,16 +815,6 @@ var Mediabox;
 		if (mediaType == "img"){
 			mediaWidth = preload.width;
 			mediaHeight = preload.height;
-
-		// Hack jn@hz6.de: make lightbox squared to make room for the image (that will be properly rotated by the browser [at least FF since v26])
-		if (mediaWidth >= mediaHeight) {
-                	mediaHeight = mediaWidth
-		}
-
-                if (mediaWidth < mediaHeight) {
-                	mediaWidth = mediaHeight
-		}
-
 			if (options.imgBackground) {
 				media.setStyles({backgroundImage: "url("+URL+")", display: ""});
 			} else {	// Thanks to Dusan Medlin for fixing large 16x9 image errors in a 4x3 browser
@@ -839,9 +829,7 @@ var Mediabox;
 				}
 				if (Browser.ie) preload = document.id(preload);
 				if (options.clickBlock) preload.addEvent('mousedown', function(e){ e.stop(); }).addEvent('contextmenu', function(e){ e.stop(); });
-
-				// Hack jn@hz6.de: Make position relative to work together with centered image (which is absolutely placed)
-				media.setStyles({backgroundImage: "none", display: "", position: "relative"});
+				media.setStyles({backgroundImage: "none", display: ""});
 				preload.inject(media);
 			}
 //			mediaWidth += "px";
