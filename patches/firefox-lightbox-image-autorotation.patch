@@ -1,65 +1,58 @@
-From 3fc42c02b31accf49aae8f1b5e4ecc2ac3b7355f Mon Sep 17 00:00:00 2001
-From: Jan Niggemann <jn@hz6.de>
-Date: Mon, 23 Feb 2015 16:34:25 +0100
-Subject: [PATCH 1/2] adds lightbox image autorotation (FF >v26) Firefox
- respects the CSS3 property "image-rotation". This makes
- the lightbox squared and centeres the browser-rotated
- image therein.
-
----
- css/mediaboxBlack.css |    9 ++++++++-
- css/mediaboxWhite.css |    9 ++++++++-
- js/mediabox1.5.4.js   |   16 ++++++++++++++--
- 3 files changed, 30 insertions(+), 4 deletions(-)
-
 diff --git a/css/mediaboxBlack.css b/css/mediaboxBlack.css
-index 9213688..e4e7fde 100644
+index 9213688..752c704 100644
 --- a/css/mediaboxBlack.css
 +++ b/css/mediaboxBlack.css
-@@ -41,10 +41,17 @@
+@@ -38,9 +38,21 @@
+ 	-khtml-box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
+ 	-moz-box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
+ 	box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
++	width: 100%;
++	height: 100%;
  }
  #mbCenter img{
++	width:auto;
++	height:auto;
++	max-width:100%;
++	max-height:95%;
  	border-radius: 4px;
-+        image-orientation: from-image;
-+        position: absolute;
-+        margin: auto;
-+        top: 0;
-+        left: 0;
-+        right: 0;
-+        bottom: 0;
- }
- 
- #mbCenter.mbLoading {
--	background: #000 url(../images/loading-dark.gif) no-repeat center;
-+	background: #000 url(../images/loading2.gif) no-repeat center;
- 		/*	This style is applied only during animation.	*/
- 		/*	For example, the next lines turn off shadows	*/
- 		/*	improving browser performance on slow systems.	*/
-diff --git a/css/mediaboxWhite.css b/css/mediaboxWhite.css
-index de9d439..7a62a90 100644
---- a/css/mediaboxWhite.css
-+++ b/css/mediaboxWhite.css
-@@ -42,10 +42,17 @@
- 
- #mbCenter img{
- 	border-radius: 4px;
-+        image-orientation: from-image;
++	image-orientation: from-image;
 +	position: absolute;
 +	margin: auto;
 +	top: 0;
 +	left: 0;
 +	right: 0;
-+	bottom: 0;
  }
  
  #mbCenter.mbLoading {
--	background: #fff url(../images/loading-light.gif) no-repeat center;
-+	background: #fff url(../images/WhiteLoading.gif) no-repeat center;
- 		/*	This style is applied only during animation.	*/
- 		/*	For example, the next lines turn off shadows	*/
- 		/*	improving browser performance on slow systems.	*/
+diff --git a/css/mediaboxWhite.css b/css/mediaboxWhite.css
+index de9d439..832911e 100644
+--- a/css/mediaboxWhite.css
++++ b/css/mediaboxWhite.css
+@@ -38,10 +38,22 @@
+ 	-khtml-box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
+ 	-moz-box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
+ 	box-shadow: 0px 5px 20px rgba(0,0,0,0.50);
++	width: 100%;
++	height: 100%;
+ }
+ 
+ #mbCenter img{
++	width:auto;
++	height:auto;
++	max-width:100%;
++	max-height:95%;
+ 	border-radius: 4px;
++	image-orientation: from-image;
++	position: absolute;
++	margin: auto;
++	top: 0;
++	left: 0;
++	right: 0;
+ }
+ 
+ #mbCenter.mbLoading {
 diff --git a/js/mediabox1.5.4.js b/js/mediabox1.5.4.js
-index 821e599..9e1f04f 100644
+index 821e599..e47a138 100644
 --- a/js/mediabox1.5.4.js
 +++ b/js/mediabox1.5.4.js
 @@ -815,6 +815,16 @@ var Mediabox;
@@ -68,7 +61,7 @@ index 821e599..9e1f04f 100644
  			mediaHeight = preload.height;
 +
 +		// Hack jn@hz6.de: make lightbox squared to make room for the image (that will be properly rotated by the browser [at least FF since v26])
-+		if (mediaWidth >= mediaHeight) {
++		if (mediaWidth > mediaHeight) {
 +                	mediaHeight = mediaWidth
 +		}
 +
@@ -79,64 +72,25 @@ index 821e599..9e1f04f 100644
  			if (options.imgBackground) {
  				media.setStyles({backgroundImage: "url("+URL+")", display: ""});
  			} else {	// Thanks to Dusan Medlin for fixing large 16x9 image errors in a 4x3 browser
-@@ -829,7 +839,9 @@ var Mediabox;
+@@ -827,11 +837,14 @@ var Mediabox;
+ 					mediaHeight = preload.height = parseInt((mediaWidth/preload.width)*mediaHeight, 10);
+ 					preload.width = mediaWidth;
  				}
++
  				if (Browser.ie) preload = document.id(preload);
  				if (options.clickBlock) preload.addEvent('mousedown', function(e){ e.stop(); }).addEvent('contextmenu', function(e){ e.stop(); });
--				media.setStyles({backgroundImage: "none", display: ""});
 +
-+				// Hack jn@hz6.de: Make position relative to work together with centered image (which is absolutely placed)
-+				media.setStyles({backgroundImage: "none", display: "", position: "relative"});
+ 				media.setStyles({backgroundImage: "none", display: ""});
  				preload.inject(media);
  			}
++
  //			mediaWidth += "px";
-@@ -973,4 +985,4 @@ Mediabox.scanPage = function() {
+ //			mediaHeight += "px";
+ 		} else if (mediaType == "inline") {
+@@ -973,4 +986,4 @@ Mediabox.scanPage = function() {
  	});
  };
  
 -window.addEvents({domready: Mediabox.scanPage, resize: Mediabox.recenter}); // to recenter the overlay while scrolling, add "scroll: Mediabox.recenter" to the object
 \ No newline at end of file
 +window.addEvents({domready: Mediabox.scanPage, resize: Mediabox.recenter}); // to recenter the overlay while scrolling, add "scroll: Mediabox.recenter" to the object
--- 
-1.7.10.4
-
-
-From 7a11265131c002dbef0940d036105e05b07b9311 Mon Sep 17 00:00:00 2001
-From: Jan Niggemann <jn@hz6.de>
-Date: Mon, 23 Feb 2015 16:39:33 +0100
-Subject: [PATCH 2/2] fixes spinner filenames
-
----
- css/mediaboxBlack.css |    2 +-
- css/mediaboxWhite.css |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/css/mediaboxBlack.css b/css/mediaboxBlack.css
-index e4e7fde..95963cd 100644
---- a/css/mediaboxBlack.css
-+++ b/css/mediaboxBlack.css
-@@ -51,7 +51,7 @@
- }
- 
- #mbCenter.mbLoading {
--	background: #000 url(../images/loading2.gif) no-repeat center;
-+	background: #000 url(../images/loading-dark.gif) no-repeat center;
- 		/*	This style is applied only during animation.	*/
- 		/*	For example, the next lines turn off shadows	*/
- 		/*	improving browser performance on slow systems.	*/
-diff --git a/css/mediaboxWhite.css b/css/mediaboxWhite.css
-index 7a62a90..3d9f2d4 100644
---- a/css/mediaboxWhite.css
-+++ b/css/mediaboxWhite.css
-@@ -52,7 +52,7 @@
- }
- 
- #mbCenter.mbLoading {
--	background: #fff url(../images/WhiteLoading.gif) no-repeat center;
-+	background: #fff url(../images/loading-light.gif) no-repeat center;
- 		/*	This style is applied only during animation.	*/
- 		/*	For example, the next lines turn off shadows	*/
- 		/*	improving browser performance on slow systems.	*/
--- 
-1.7.10.4
-
