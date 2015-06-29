@@ -434,7 +434,10 @@ for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
 if (count($dirs) + count($files) == 0) {
     $thumbnails .= "<div class=\"Empty\">$label_noimages</div> <div class=\"EmptyAdvice\">$label_noimages_advice</div>"; //Display 'no images' text
     if ($currentdir == "photos") {
-        $messages = "It looks like you have just installed MiniGal Nano. Please run the <a href='system_check.php'>system check tool</a>";
+        $messages = 
+            "It looks like you have just installed MiniGal Nano.
+            Please run the <a href='system_check.php'>system check tool</a>. <br>
+            And why not have a look to config.php and customize some values ?";
     }
 }
 $offset_current = $offset_start;
