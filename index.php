@@ -433,8 +433,9 @@ for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
 //-----------------------
 if (count($dirs) + count($files) == 0) {
     $thumbnails .= "<li>$label_noimages</li>"; //Display 'no images' text
-    if ($currentdir == "photos")
+    if ($currentdir == "photos") {
         $messages = "It looks like you have just installed MiniGal Nano. Please run the <a href='system_check.php'>system check tool</a>";
+    }
 }
 $offset_current = $offset_start;
 for ($x = $offset_start; $x < sizeof($dirs) && $x < $offset_end; $x++) {
@@ -463,7 +464,7 @@ for ($y = $i; $y < sizeof($files); $y++) {
 // OUTPUT MESSAGES
 //-----------------------
 if ($messages != "") {
-    $messages = "<div id=\"topbar\">" . $messages . " <a href=\"#\" onclick=\"document.getElementById('topbar').style.display = 'none';\";><img src=\"images/close.png\" /></a></div>";
+    $messages = $messages . " <a id=\"closeMessage\" class=\"closeMessage\" href=\"#\"><img src=\"images/close.png\" /></a>";
 }
 
 // Read folder comment.

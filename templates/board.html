@@ -40,9 +40,20 @@
 				padding: 1px 0 0 0;
 				margin-bottom: 1rem;
 			}
-			#container, #innerheader{
+			#container,
+			#innerheader,
+			.Message {
 				max-width: <% gallery_width %>;
 				margin: 0px auto;
+			}
+			.Message {
+				padding: 1rem;
+				background-color: #f1c40f;
+				border-radius: 2px;
+			}
+			.closeMessage {
+				float: right;
+				padding: 2px;
 			}
 			header aside{
 				padding: 2rem 0;
@@ -163,21 +174,20 @@
 				}
 			}
 		</style>
-		
-		<script src="<% gallery_root %>js/lazy.js"></script>
-		<script src="<% gallery_root %>js/script.js"></script>
-		<script src="<% gallery_root %>js/mootools1.5.0.js"></script>
-		<script src="<% gallery_root %>js/mediabox1.5.4.js"></script>
 	</head>
 	<body>
 		<header id="top" role="banner">
 			<div id="innerheader">
 				<h1><a href="<% gallery_root %>"><% title %></a></h1>
-				<% messages %>
 				<nav role="navigation"><% breadcrumb_navigation %></nav>
 				<aside><% folder_comment %></aside>
 			</div>
+			<div id="Message" class="Message">
+				<% messages %>
+			</div>
+			<br>
 		</header>	
+
 		<main id="container">
 			<ul id="gallery">
 				<% thumbnails %>
@@ -197,5 +207,9 @@
 				RSS
 			</a>
 		</footer>
+		<script src="<% gallery_root %>js/lazy.js"></script>
+		<script src="<% gallery_root %>js/script.js"></script>
+		<script src="<% gallery_root %>js/mootools1.5.0.js"></script>
+		<script src="<% gallery_root %>js/mediabox1.5.4.js"></script>
 	</body>
 </html>
