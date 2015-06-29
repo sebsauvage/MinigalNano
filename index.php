@@ -406,7 +406,7 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
 if ($requestedDir != "" && $requestedDir != "photos") {
     $breadcrumb_navigation = "<div class=\"NavWrapper\">";
     $breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> $breadcrumb_separator ";
-    $navitems = explode("/", $_REQUEST['dir']);
+    $navitems = explode("/", htmlspecialchars($_REQUEST['dir']));
     for ($i = 0; $i < sizeof($navitems); $i++) {
         if ($i == sizeof($navitems)-1) {
             $breadcrumb_navigation .= $navitems[$i];
