@@ -155,7 +155,7 @@ echo "<description>$description</description>\n";
 for ($i=0; $i < $nb_items_rss && $i < count($content); $i++) {
     if (empty($content[$i]))
         continue;
-    $link = $gallery_link . '/' . $content[$i];
+    $link = $gallery_link . '/' . str_replace(' ', '%20', $content[$i]);
     echo "<item>\n";
     echo " <title>" . basename($link) . "</title>\n";
     echo " <link>". $link . "</link>\n";

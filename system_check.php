@@ -4,6 +4,7 @@
 	$gd = "No";
 	if (function_exists('exif_read_data')) $exif = "Yes";
 	if (extension_loaded('gd') && function_exists('gd_info')) $gd = "Yes";
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,7 +64,7 @@
 	</style>
 </head>
 <body>
-	<h1>MiniBoardNano system check</h1>
+	<h1>MiniGal Nano system check</h1>
 	<div class="left">
 		PHP Version
 	</div>
