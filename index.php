@@ -403,7 +403,8 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
 //-----------------------
 // BREADCRUMB NAVIGATION
 //-----------------------
-if ($requestedDir != "") {
+if ($requestedDir != "" && $requestedDir != "photos") {
+    $breadcrumb_navigation = "<div class=\"NavWrapper\">";
     $breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> $breadcrumb_separator ";
     $navitems = explode("/", $_REQUEST['dir']);
     for ($i = 0; $i < sizeof($navitems); $i++) {
@@ -419,8 +420,7 @@ if ($requestedDir != "") {
             $breadcrumb_navigation .= "'>" . $navitems[$i] . "</a> $breadcrumb_separator ";
         }
     }
-} else {
-    $breadcrumb_navigation .= $label_home;
+    $breadcrumb_navigation .= "</div>";
 }
 
 //Include hidden links for all images BEFORE current page so lightbox is able to browse images on different pages
@@ -467,14 +467,14 @@ for ($y = $i; $y < sizeof($files); $y++) {
 // OUTPUT MESSAGES
 //-----------------------
 if ($messages != "") {
-    $messages = $messages . " <a id=\"closeMessage\" class=\"closeMessage\" href=\"#\"><img src=\"images/close.png\" /></a>";
+    $messages = $messages . "<div><a id=\"closeMessage\" class=\"closeMessage\" href=\"#\"><img src=\"images/close.png\" /></a><div>";
 }
 
 // Read folder comment.
 $comment_filepath = $currentdir . $file . "/comment.html";
 if (file_exists($comment_filepath)) {
     $fd = fopen($comment_filepath, "r");
-    $comment = fread($fd, filesize($comment_filepath));
+    $comment = "<div class=\"Comment\">" . fread($fd, filesize($comment_filepath)) . "</div>";
     fclose($fd);
 }
 
