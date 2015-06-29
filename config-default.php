@@ -33,7 +33,8 @@ $label_home 			= "Home"; // Name of home link in breadcrumb navigation
 $label_new 				= "New"; // Text to display for new images. Use with $display_new variable
 $label_page 			= "Page"; // Text used for page navigation
 $label_all 				= "All"; // Text used for link to display all images in one page
-$label_noimages 		= "No images"; // Empty folder text
+$label_noimages 		= "No images... yet !"; // Empty folder text
+$label_noimages_advice	= "Use your FTP to upload some picture !";
 $label_loading 			= "Loading..."; // Thumbnail loading text
 $breadcrumb_separator	= ">"; // Breadcrumb parts separator
 

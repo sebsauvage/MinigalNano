@@ -432,7 +432,7 @@ for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
 // DISPLAY FOLDERS
 //-----------------------
 if (count($dirs) + count($files) == 0) {
-    $thumbnails .= "<li>$label_noimages</li>"; //Display 'no images' text
+    $thumbnails .= "<div class=\"Empty\">$label_noimages</div> <div class=\"EmptyAdvice\">$label_noimages_advice</div>"; //Display 'no images' text
     if ($currentdir == "photos") {
         $messages = "It looks like you have just installed MiniGal Nano. Please run the <a href='system_check.php'>system check tool</a>";
     }
