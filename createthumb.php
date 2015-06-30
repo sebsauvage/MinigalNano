@@ -28,7 +28,7 @@ error_reporting(0);
 $get_filename = $_GET['filename'];
 $get_size = @$_GET['size'];
 if (empty($get_size)) $get_size = 120;
-
+if (preg_match("/^\/.*/i", $get_filename)) die("Unauthorized access !");
 if (preg_match("/.jpe?g$/i", $get_filename)) $get_filename_type = "JPG";
 if (preg_match("/.gif$/i", $get_filename)) $get_filename_type = "GIF";
 if (preg_match("/.png$/i", $get_filename)) $get_filename_type = "PNG";
@@ -164,13 +164,12 @@ if (preg_match("/.jpg$|.jpeg$/i", $_GET['filename'])) {
 
 $target = imagecreatetruecolor($get_size, $get_size);
 
-// if the picture can be transparent, add a white background instead a black
+// if the picture can be transparent, add a white background
 if (in_array($get_filename_type, array("GIF", "PNG")))
 {
 	$backgroundColor = imagecolorallocate($target, 255, 255, 255);
 	imagefill($target, 0, 0, $backgroundColor);
 }
-
 
 if ($get_filename_type == "JPG") $source = imagecreatefromjpeg($get_filename);
 if ($get_filename_type == "GIF") $source = imagecreatefromgif($get_filename);
@@ -209,6 +208,3 @@ if (is_writable(dirname($thumbname)))
 		fclose($fd);
 	}
 }
-
-
-?>
