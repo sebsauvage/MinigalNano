@@ -33,7 +33,10 @@ if (preg_match("/.jpe?g$/i", $get_filename)) $get_filename_type = "JPG";
 if (preg_match("/.gif$/i", $get_filename)) $get_filename_type = "GIF";
 if (preg_match("/.png$/i", $get_filename)) $get_filename_type = "PNG";
 
-// flip functions from http://stackoverflow.com/questions/8232722/how-to-flip-part-of-an-image-horizontal-with-php-gd
+/**
+ * Vertical flip
+ * @author http://stackoverflow.com/questions/8232722/how-to-flip-part-of-an-image-horizontal-with-php-gd
+ */
 function flipVertical(&$img) {
 	$size_x = imagesx($img);
 	$size_y = imagesy($img);
@@ -47,6 +50,10 @@ function flipVertical(&$img) {
 	}
 }
 
+/**
+ * Horizontal flip
+ * @author http://stackoverflow.com/questions/8232722/how-to-flip-part-of-an-image-horizontal-with-php-gd
+ */
 function flipHorizontal(&$img) {
 	$size_x = imagesx($img);
 	$size_y = imagesy($img);
@@ -60,8 +67,10 @@ function flipHorizontal(&$img) {
 	}
 }
 
+/**
+ * Sanitizing (this allows for collisions)
+ */
 function sanitize($name) {
-// note: this allows for collisions
 	return preg_replace("/[^[:alnum:]_.-]/", "_", $name);
 }
 
