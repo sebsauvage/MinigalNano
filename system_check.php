@@ -2,9 +2,10 @@
 	ini_set("memory_limit","256M");
 	$exif = "No";
 	$gd = "No";
+	$thumbs = "No";
 	if (function_exists('exif_read_data')) $exif = "Yes";
 	if (extension_loaded('gd') && function_exists('gd_info')) $gd = "Yes";
-
+	if (is_dir('thumbs') && is_writable('thumbs')) $thumbs = "Yes";
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,7 +73,7 @@
 		<?php echo phpversion(); ?>
 	</div>
 	<div class="right">
-		<a href="http://www.php.net/" target="_blank">PHP</a> scripting language version 4.0 or greater is needed
+		<a href="http://www.php.net/" target="_blank">PHP</a> scripting language version 4.0 or greater is needed.
 	</div>
 	<br />
 
@@ -83,7 +84,7 @@
 		<?php echo $gd; ?>
 	</div>
 	<div class="right">
-		<a href="http://www.boutell.com/gd/" target="_blank">GD image manipulation</a> library is used to create thumbnails. Bundled since PHP 4.3
+		<a href="http://www.boutell.com/gd/" target="_blank">GD image manipulation</a> library is used to create thumbnails. Bundled since PHP 4.3.
 	</div>
 	<br />
 
@@ -94,7 +95,18 @@
 		<?php echo $exif; ?>
 	</div>
 	<div class="right">
-		Ability to extract and display <a href="http://en.wikipedia.org/wiki/Exif" target="_blank">EXIF information</a>. The script will work without it, but not display image information
+		Ability to extract and display <a href="http://en.wikipedia.org/wiki/Exif" target="_blank">EXIF information</a>. The script will work without it, but not display image information.
+	</div>
+	<br />
+
+	<div class="left">
+		Thumbnails caching
+	</div>
+	<div class="<?php if($thumbs == "Yes") echo 'middle-yes'; else echo 'middle-neutral' ?>">
+		<?php echo $thumbs; ?>
+	</div>
+	<div class="right">
+		You should let php create and use the 'thumbs" directory. MiniGal will be <b>much</b> faster.
 	</div>
 	<br />
 
@@ -105,8 +117,10 @@
 		<?php echo ini_get("memory_limit"); ?>
 	</div>
 	<div class="right">
-		Memory is needed to create thumbnails. Bigger images uses more memory	
+		Memory is needed to create thumbnails. Bigger images uses more memory.
 	</div>
+	
+
 
 	<footer role="contentinfo">
 		<a href="https://github.com/sebsauvage/MinigalNano" title="Powered by MiniGal Nano" target="_blank">
