@@ -151,7 +151,7 @@ if (is_dir('thumbs') && is_writable('thumbs')) {
 
 	<footer role="contentinfo">
 		<a href="https://github.com/sebsauvage/MinigalNano" title="Powered by MiniGal Nano" target="_blank">
-				Made with miniGal by sebsauvage.
+				Made with miniGal by the community.
 			</a>
 	</footer>
 </body>

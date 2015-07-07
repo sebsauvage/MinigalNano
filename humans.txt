@@ -1,16 +1,17 @@
 MinigalNano is licensed under the Creative Commons Attribution-Share Alike license (http://creativecommons.org/licenses/by-sa/3.0/)
+You can check github's contributors list : https://github.com/sebsauvage/MinigalNano/graphs/contributors
 
-Copyright (c) 2014 Thomas Rybak <http://www.minigal.dk/minigal-nano.html>
-Copyright (c) 2014 Sébastien Sauvage <http://sebsauvage.net/>
-Copyright (c) 2014 Aldarone <http://aldarone.fr/>
-Copyright (c) 2014 Sylvhem <http://lepubdelobservateur.fr/>
-Copyright (c) 2014 Tom Canac <http://tomcanac.com/>
-Copyright (c) 2014 Alda Marteau-Hardi <alda@leetchee.fr>
-Copyright (c) 2014 bitbybit <crigon+github@crigon.name>
-Copyright (c) 2014 cyberic99 <cyberic99@users.noreply.github.com>
-Copyright (c) 2014 iGormilhit <igormilhit@mailoo.org>
-Copyright (c) 2014, 2015 Jan Niggemann <jn@hz6.de>
-Copyright (c) 2014 Lucas Cimon <lucas.cimon@gmail.com>
-Copyright (c) 2014 nodiscc <nodiscc@gmail.com>
-Copyright (c) 2014 Orangina Rouge <eric.watson-doqguhmm@yopmail.com>
-Copyright (c) 2014 Nitrux Project <http://store.nitrux.in/>
+Copyright (c) Thomas Rybak <http://www.minigal.dk/minigal-nano.html> (2014)
+Copyright (c) Sébastien Sauvage <http://sebsauvage.net/> (2014)
+Copyright (c) Aldarone <http://aldarone.fr/> (2014)
+Copyright (c) Sylvhem <http://lepubdelobservateur.fr/> (2014)
+Copyright (c) Tom Canac <http://tomcanac.com/> (2014, 2015)
+Copyright (c) Alda Marteau-Hardi <alda@leetchee.fr> (2014)
+Copyright (c) bitbybit <crigon+github@crigon.name> (2014)
+Copyright (c) cyberic99 <cyberic99@users.noreply.github.com> (2014)
+Copyright (c) iGormilhit <igormilhit@mailoo.org> (2014)
+Copyright (c) Jan Niggemann <jn@hz6.de> (2014, 2015)
+Copyright (c) Lucas Cimon <lucas.cimon@gmail.com> (2014)
+Copyright (c) nodiscc <nodiscc@gmail.com> (2014, 2015)
+Copyright (c) Orangina Rouge <eric.watson-doqguhmm@yopmail.com> (2014)
+Copyright (c) Nitrux Project <http://store.nitrux.in/> (2014)

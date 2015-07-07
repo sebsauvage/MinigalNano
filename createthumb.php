@@ -1,26 +1,13 @@
 <?php
 /*
-MINIGAL NANO
-- A PHP/HTML/CSS based image gallery script
-
-This script and included files are subject to licensing from Creative Commons (http://creativecommons.org/licenses/by-sa/2.5/)
-You may use, edit and redistribute this script, as long as you pay tribute to the original author by NOT removing the linkback to www.minigal.dk ("Powered by MiniGal Nano x.x.x")
-
-MiniGal Nano is created by Thomas Rybak
-
-Copyright 2010 by Thomas Rybak
-Support: www.minigal.dk
-Community: www.minigal.dk/forum
-
-Please enjoy this free script!
-
-Version 0.3.5 modified by Sebastien SAUVAGE (sebsauvage.net):
-- Added thumbnail cache (reduces server CPU load, server bandwith and speeds up client page display).
-- Thumbnails are now always in JPEG even if the source image is PNG or GIF.
-
-USAGE EXAMPLE:
-File: createthumb.php
-Example: <img src="createthumb.php?filename=photo.jpg&amp;size=100">
+ * MinigalNano, a PHP/HTML/CSS KISS image gallery
+ *
+ * Licence : This script and included files are subject to licensing from
+ *           Creative Commons (http://creativecommons.org/licenses/by-sa/3.0/)).
+ * Authors : Based on the original work of Tomas Rybak (2010, www.minigal.dk),
+ *           this current version is hosted at https://github.com/sebsauvage/MinigalNano
+ *           and is maintained by the MinigalNano community.
+ * Usage   : <img src="createthumb.php?filename=photo.jpg&amp;size=100">
  */
 
 error_reporting(0);

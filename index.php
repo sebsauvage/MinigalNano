@@ -1,24 +1,13 @@
 <?php
 
 /*
-MINIGAL NANO
-- A PHP/HTML/CSS based image gallery script
-
-This script and included files are subject to licensing from Creative Commons (http://creativecommons.org/licenses/by-sa/2.5/)
-You may use, edit and redistribute this script, as long as you pay tribute to the original author by NOT removing the linkback to www.minigal.dk ("Powered by MiniGal Nano x.x.x")
-
-MiniGal Nano is created by Thomas Rybak
-
-Copyright 2010 by Thomas Rybak
-Support: www.minigal.dk
-Community: www.minigal.dk/forum
-
-Please enjoy this free script!
-
-
-Upgraded to https://github.com/sebsauvage/MinigalNano
-by Sébastien SAUVAGE.
-
+ * MinigalNano, a PHP/HTML/CSS KISS image gallery
+ *
+ * Licence : This script and included files are subject to licensing from
+ *           Creative Commons (http://creativecommons.org/licenses/by-sa/3.0/)).
+ * Authors : Based on the original work of Tomas Rybak (2010, www.minigal.dk),
+ *           this current version is hosted at https://github.com/sebsauvage/MinigalNano
+ *           and is maintained by the MinigalNano community.
  */
 
 error_reporting(-1);
