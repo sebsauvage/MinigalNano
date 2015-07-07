@@ -15,7 +15,7 @@ error_reporting(-1);
 // Do not edit below this section unless you know what you are doing!
 
 header('Content-Type: text/html; charset=UTF-8'); // We use UTF-8 for proper international characters handling.
-$version = "0.3.7";
+$version = "0.4.0";
 ini_set("memory_limit", "256M");
 
 require "config-default.php";
