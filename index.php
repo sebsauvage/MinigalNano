@@ -146,15 +146,14 @@ if (!empty($_GET['dir'])) {
 	$requestedDir = $_GET['dir'];
 }
 
+$photoRoot = GALLERY_ROOT . 'photos/';
 $thumbdir = rtrim('photos/' . $requestedDir, '/');
-
-//$thumbdir = str_replace('/..', '', $thumbdir); // Prevent directory traversal attacks.
-if (strstr($thumbdir, '..') !== false) {
-	$requestedDir = '';
-	$thumbdir = rtrim('photos/', '/');
-}
-
 $currentdir = GALLERY_ROOT . $thumbdir;
+
+$thumbdirIsInPhotoRoot = strpos(realpath($thumbdir), realpath($photoRoot));
+if ($thumbdirIsInPhotoRoot === false) {
+	die("ERROR: Could not open " . htmlspecialchars(stripslashes($currentdir)) . " for reading!");
+}
 
 //-----------------------
 // READ FILES AND FOLDERS
