@@ -137,6 +137,20 @@ function checkpermissions($file) {
 	}
 }
 
+function guardAgainstDirectoryTraversal($path) {
+    /*
+     * I don't like regexes but this matches
+     * any attemp of directory traversal I could think of
+     * without forbidding « .. » in directory names.
+     */
+    $pattern = "/^(.*\/)?(\.\.)(\/.*)?$/";
+    $directoryTraversal = preg_match($pattern, $path);
+
+    if ($directoryTraversal === 1) {
+        die("ERROR: Could not open " . htmlspecialchars(stripslashes($currentdir)) . " for reading!");
+    }
+}
+
 if (!defined("GALLERY_ROOT")) {
 	define("GALLERY_ROOT", "");
 }
@@ -150,10 +164,7 @@ $photoRoot = GALLERY_ROOT . 'photos/';
 $thumbdir = rtrim('photos/' . $requestedDir, '/');
 $currentdir = GALLERY_ROOT . $thumbdir;
 
-$thumbdirIsInPhotoRoot = strpos(realpath($thumbdir), realpath($photoRoot));
-if ($thumbdirIsInPhotoRoot === false) {
-	die("ERROR: Could not open " . htmlspecialchars(stripslashes($currentdir)) . " for reading!");
-}
+guardAgainstDirectoryTraversal($currentdir);
 
 //-----------------------
 // READ FILES AND FOLDERS
