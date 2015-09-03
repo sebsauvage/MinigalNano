@@ -53,8 +53,14 @@ If some thumbnails are wrong, you can purge this directory: Thumbnails will be a
 
 ------------------------------------------------------------
 
-MinigalNano is licensed under the Creative Commons Attribution-Share Alike license (http://creativecommons.org/licenses/by-sa/3.0/)
+License
+=======
 
- * [Project contributors](humans.txt)
+MinigalNano is licensed under the GNU AFFERO GENERAL PUBLIC LICENSE v3 (https://gnu.org/licenses/agpl-3.0.txt).
+
+Icons used are from the Nitrux project and licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives International 
+4.0 License (https://creativecommons.org/licenses/by-nc-nd/4.0/).
+
+ * [Project contributors](AUTHORS)
  * [Original discussion page (english)](http://sebsauvage.net/wiki/doku.php?id=minigal_nano_en)
  * [Original discussion page (french)](http://sebsauvage.net/wiki/doku.php?id=minigal_nano)
