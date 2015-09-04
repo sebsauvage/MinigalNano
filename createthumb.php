@@ -1,13 +1,10 @@
 <?php
 /*
- * MinigalNano, a PHP/HTML/CSS KISS image gallery
+ * This file is part of MinigalNano: https://github.com/sebsauvage/MinigalNano
  *
- * Licence : This script and included files are subject to licensing from
- *           Creative Commons (http://creativecommons.org/licenses/by-sa/3.0/)).
- * Authors : Based on the original work of Tomas Rybak (2010, www.minigal.dk),
- *           this current version is hosted at https://github.com/sebsauvage/MinigalNano
- *           and is maintained by the MinigalNano community.
- * Usage   : <img src="createthumb.php?filename=photo.jpg&amp;size=100">
+ * MiniGal Nano is based on an original work by Thomas Rybak (© 2010)
+ *
+ * MinigalNano is licensed under the AGPL v3 (https://gnu.org/licenses/agpl-3.0.txt).
  */
 
 error_reporting(0);
