@@ -7,8 +7,11 @@
  * MinigalNano is licensed under the AGPL v3 (https://gnu.org/licenses/agpl-3.0.txt).
  */
 
-// INSERT HERE YOUR CUSTOMIZED SETTINGS
-// for the list of possible options, peruse config-default.php
+/*
+ * INSERT HERE YOUR CUSTOMIZED SETTINGS
+ * for the list of options, check config-default.php
+ */
+
 $title = "Your Own MiniGal Nano";
-// END
+
 ?>

@@ -41,18 +41,18 @@ $gallery_link = $g_protocol . '://' . $g_host . $g_port . $g_path;
 /*===================*/
 # Hardly inspired from here : codes-sources.commentcamarche.net/source/35937-creation-d-une-arborescenceI
 # Listing all files of a folder and sub folders.
-function listFiles(&$content, $Folder, $SkipFileExts, $SkipObjects) {
-	$dir = opendir($Folder);
+function listFiles(&$content, $folder, $keep_extensions, $SkipObjects) {
+	$dir = opendir($folder);
 	// Loop on all contained on the folder
-	while (false !== ($Current = readdir($dir))) {
-		if ($Current != '.' && $Current != '..' && in_array($Current, $SkipObjects) === false) {
-			if (is_dir($Folder . '/' . $Current)) {
-				ListFiles($content, $Folder . '/' . $Current, $SkipFileExts, $SkipObjects);
+	while (false !== ($current = readdir($dir))) {
+		if ($current != '.' && $current != '..' && in_array($current, $SkipObjects) === false) {
+			if (is_dir($folder . '/' . $current)) {
+				ListFiles($content, $folder . '/' . $current, $keep_extensions, $SkipObjects);
 			} else {
-				$FileExt = strtolower(substr(strrchr($Current, '.'), 1));
+				$file_ext = strtolower(substr(strrchr($current, '.'), 1));
 				// Should we display this extension ?
-				if (in_array($FileExt, $SkipFileExts) === false) {
-					$current_adress = $Folder . '/' . $Current;
+				if (in_array($file_ext, $keep_extensions)) {
+					$current_adress = $folder . '/' . $current;
 					array_push($content, $current_adress);
 				}
 			}
@@ -96,7 +96,7 @@ include "config.php";
 $folder = "photos";
 
 $content = array();
-$content = listFiles($content, $folder, $SkipExts, $SkipObjects);
+$content = listFiles($content, $folder, $keep_extensions, $skip_objects);
 usort($content, function ($a, $b) {return filemtime($a) < filemtime($b);});
 
 if (is_writeable(".")) {
