@@ -122,6 +122,8 @@ function readEXIF($file) {
 	if (count($exif_arr) > 0) {
 		return "::" . implode(" | ", $exif_arr);
 	}
+
+	return $exif_arr;
 }
 
 function checkpermissions($file) {
@@ -136,16 +138,11 @@ function checkpermissions($file) {
 }
 
 function guardAgainstDirectoryTraversal($path) {
-    /*
-     * I don't like regexes but this matches
-     * any attemp of directory traversal I could think of
-     * without forbidding « .. » in directory names.
-     */
     $pattern = "/^(.*\/)?(\.\.)(\/.*)?$/";
-    $directoryTraversal = preg_match($pattern, $path);
+    $directory_traversal = preg_match($pattern, $path);
 
-    if ($directoryTraversal === 1) {
-        die("ERROR: Could not open " . htmlspecialchars(stripslashes($currentdir)) . " for reading!");
+    if ($directory_traversal === 1) {
+        die("ERROR: Could not open " . htmlspecialchars(stripslashes($current_dir)) . " for reading!");
     }
 }
 
@@ -158,11 +155,11 @@ if (!empty($_GET['dir'])) {
 	$requestedDir = $_GET['dir'];
 }
 
-$photoRoot = GALLERY_ROOT . 'photos/';
+$photo_root = GALLERY_ROOT . 'photos/';
 $thumbdir = rtrim('photos/' . $requestedDir, '/');
-$currentdir = GALLERY_ROOT . $thumbdir;
+$current_dir = GALLERY_ROOT . $thumbdir;
 
-guardAgainstDirectoryTraversal($currentdir);
+guardAgainstDirectoryTraversal($current_dir);
 
 //-----------------------
 // READ FILES AND FOLDERS
@@ -170,9 +167,9 @@ guardAgainstDirectoryTraversal($currentdir);
 $files = array();
 $dirs = array();
 $img_captions = array();
-if (is_dir($currentdir) && $handle = opendir($currentdir)) {
+if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 	// 1. LOAD CAPTIONS
-	$caption_filename = "$currentdir/captions.txt";
+	$caption_filename = "$current_dir/captions.txt";
 	if (is_readable($caption_filename)) {
 		$caption_handle = fopen($caption_filename, "rb");
 		while (!feof($caption_handle)) {
@@ -186,13 +183,13 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 		fclose($caption_handle);
 	}
 
-	while (false !== ($file = readdir($handle)) && !in_array($file, $SkipObjects)) {
+	while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) {
 		// 2. LOAD FOLDERS
-		if (is_dir($currentdir . "/" . $file)) {
+		if (is_dir($current_dir . "/" . $file)) {
 			if ($file != "." && $file != "..") {
-				checkpermissions($currentdir . "/" . $file); // Check for correct file permission
+				checkpermissions($current_dir . "/" . $file); // Check for correct file permission
 				// Set thumbnail to folder.jpg if found:
-				if (file_exists($currentdir . '/' . $file . '/folder.jpg')) {
+				if (file_exists($current_dir . '/' . $file . '/folder.jpg')) {
 					$linkParams = http_build_query(
 						array('dir' => ltrim("$requestedDir/$file", '/')),
 						'',
@@ -202,7 +199,7 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 
 					$imgParams = http_build_query(
 						array(
-							'filename' => "$currentdir/$file/folder.jpg",
+							'filename' => "$current_dir/$file/folder.jpg",
 							'size' => $thumb_size,
 						),
 						'',
@@ -212,13 +209,13 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 
 					$dirs[] = array(
 						"name" => $file,
-						"date" => filemtime($currentdir . "/" . $file . "/folder.jpg"),
+						"date" => filemtime($current_dir . "/" . $file . "/folder.jpg"),
 						"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\"  alt=\"$label_loading\" /></a></li>",
 					);
 				} else {
 					// Set thumbnail to first image found (if any):
 					unset($firstimage);
-					$firstimage = getfirstImage("$currentdir/" . $file);
+					$firstimage = getfirstImage("$current_dir/" . $file);
 
 					if ($firstimage != "") {
 						$linkParams = http_build_query(
@@ -240,7 +237,7 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 
 						$dirs[] = array(
 							"name" => $file,
-							"date" => filemtime($currentdir . "/" . $file),
+							"date" => filemtime($current_dir . "/" . $file),
 							"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\"  alt='$label_loading' /></a></li>",
 						);
 					} else {
@@ -255,7 +252,7 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 
 						$dirs[] = array(
 							"name" => $file,
-							"date" => filemtime($currentdir . "/" . $file),
+							"date" => filemtime($current_dir . "/" . $file),
 							"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\" width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>",
 						);
 					}
@@ -276,7 +273,7 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 				//Read EXIF
 				if (!array_key_exists($file, $img_captions)) {
 					if ($display_exif == 1) {
-						$exifReaden = readEXIF($currentdir . "/" . $file);
+						$exifReaden = readEXIF($current_dir . "/" . $file);
 						//Add to the caption all the EXIF information
 						$img_captions[$file] = $file . $exifReaden;
 					} else {
@@ -288,13 +285,13 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 				// Format: title::caption
 				// Example: My cat::My cat like to <i>roll</i> on the floor.
 				// If file is not provided, image filename will be used instead.
-				checkpermissions($currentdir . "/" . $file);
+				checkpermissions($current_dir . "/" . $file);
 
-				if (is_file($currentdir . '/' . $file . '.html')) {
-					$img_captions[$file] = $file . '::' . htmlspecialchars(file_get_contents($currentdir . '/' . $file . '.html'), ENT_QUOTES);
+				if (is_file($current_dir . '/' . $file . '.html')) {
+					$img_captions[$file] = $file . '::' . htmlspecialchars(file_get_contents($current_dir . '/' . $file . '.html'), ENT_QUOTES);
 				}
 
-				$linkUrl = str_replace('%2F', '/', rawurlencode("$currentdir/$file"));
+				$linkUrl = str_replace('%2F', '/', rawurlencode("$current_dir/$file"));
 				$imgParams = http_build_query(
 					array('filename' => "$thumbdir/$file", 'size' => $thumb_size),
 					'',
@@ -308,8 +305,8 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 
 				$files[] = array(
 					"name" => $file,
-					"date" => filemtime($currentdir . "/" . $file),
-					"size" => filesize($currentdir . "/" . $file),
+					"date" => filemtime($current_dir . "/" . $file),
+					"size" => filesize($current_dir . "/" . $file),
 					"html" => "<li><a href=\"{$linkUrl}\" rel='lightbox[billeder]' title=\"" . htmlentities($img_captions[$file]) . "\"><img $imgopts alt='$label_loading' /></a>" . $filename_caption . "</li>");
 			}
 			// Other filetypes
@@ -358,15 +355,15 @@ if (is_dir($currentdir) && $handle = opendir($currentdir)) {
 			if ($extension != "") {
 				$files[] = array(
 					"name" => $file,
-					"date" => filemtime($currentdir . "/" . $file),
-					"size" => filesize($currentdir . "/" . $file),
-					"html" => "<li><a href='$currentdir/$file' title='$file'><em-pdf>" . padstring($file, 20) . "</em-pdf><span></span><img src='" . GALLERY_ROOT . "images/filetype_" . $extension . ".png' width='$thumb_size' height='$thumb_size' alt='$file' /></a>$filename_caption</li>");
+					"date" => filemtime($current_dir . "/" . $file),
+					"size" => filesize($current_dir . "/" . $file),
+					"html" => "<li><a href='$current_dir/$file' title='$file'><em-pdf>" . padstring($file, 20) . "</em-pdf><span></span><img src='" . GALLERY_ROOT . "images/filetype_" . $extension . ".png' width='$thumb_size' height='$thumb_size' alt='$file' /></a>$filename_caption</li>");
 			}
 		}
 	}
 	closedir($handle);
 } else {
-	die("ERROR: Could not open " . htmlspecialchars(stripslashes($currentdir)) . " for reading!");
+	die("ERROR: Could not open " . htmlspecialchars(stripslashes($current_dir)) . " for reading!");
 }
 
 //-----------------------
@@ -468,7 +465,7 @@ if ($requestedDir != "" && $requestedDir != "photos") {
 
 //Include hidden links for all images BEFORE current page so lightbox is able to browse images on different pages
 for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
-	$breadcrumb_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "' class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
+	$breadcrumb_navigation .= "<a href='" . $current_dir . "/" . $files[$y]["name"] . "' class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
 }
 
 //-----------------------
@@ -476,7 +473,7 @@ for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
 //-----------------------
 if (count($dirs) + count($files) == 0) {
 	$thumbnails .= "<div class=\"Empty\">$label_noimages</div> <div class=\"EmptyAdvice\">$label_noimages_advice</div>"; //Display 'no images' text
-	if ($currentdir == "photos") {
+	if ($current_dir == "photos") {
 		$messages =
 		"It looks like you have just installed MiniGal Nano.
             Please run the <a href='system_check.php'>system check tool</a>. <br>
@@ -505,7 +502,7 @@ if ($i < 0) {
 }
 
 for ($y = $i; $y < sizeof($files); $y++) {
-	$page_navigation .= "<a href='" . $currentdir . "/" . $files[$y]["name"] . "'  class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
+	$page_navigation .= "<a href='" . $current_dir . "/" . $files[$y]["name"] . "'  class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
 }
 
 //-----------------------
@@ -516,7 +513,7 @@ if ($messages != "") {
 }
 
 // Read folder comment.
-$comment_filepath = $currentdir . $file . "/comment.html";
+$comment_filepath = $current_dir . $file . "/comment.html";
 if (file_exists($comment_filepath)) {
 	$fd = fopen($comment_filepath, "r");
 	$comment = "<div class=\"Comment\">" . fread($fd, filesize($comment_filepath)) . "</div>";

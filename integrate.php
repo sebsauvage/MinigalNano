@@ -7,9 +7,9 @@
  * MinigalNano is licensed under the AGPL v3 (https://gnu.org/licenses/agpl-3.0.txt).
  */
 
-$path_to_minigalnano = "minigalnano/"; //     <- Enter RELATIVE path to MiniGal Nano here (eg. "subfolder/minigalnano") - DO NOT END WITH /
+// Enter relativepath to MiniGal Nano here (eg. "subfolder/minigalnano") - No trailing /
+$path_to_minigalnano = "minigalnano/";
 
-// DO NOT EDIT BELOW THIS LINE!
 define("GALLERY_ROOT", $path_to_minigalnano);
 require GALLERY_ROOT . "index.php";
 ?>
