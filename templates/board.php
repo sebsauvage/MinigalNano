@@ -2,13 +2,11 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<meta name="author" content="<% author %>" />
-		<meta name="generator" content="MinigalNano <% version %>" />
-		<title><% title %></title>
+		<meta name="author" content="<? echo $author ?>" />
+		<meta name="generator" content="MinigalNano <? echo $version ?>" />
+		<title><? echo title ?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss.php" />
-
-		<link rel="stylesheet" href="<% gallery_root %>css/mediaboxWhite.css" type="text/css" media="screen" />
 		<style type="text/css">
 			html{
 				font-size: 62.5%;
@@ -199,13 +197,19 @@
 	<body>
 		<header id="top" role="banner">
 			<div id="innerheader">
-				<h1><a href="<% gallery_root %>"><% title %></a></h1>
-				<nav role="navigation"><% breadcrumb_navigation %></nav>
-				<aside><% folder_comment %></aside>
+				<h1><a href="<? echo GALLERY_ROOT ?>"><? echo $title ?></a></h1>
+				<nav role="navigation"><? echo $breadcrumb_navigation?></nav>
+				<? if(count($comment) > 0) :?>
+				<aside><? echo $comment ?></aside>
+				<? endif; ?>
 			</div>
-			<div id="Message" class="Message">
-				<% messages %>
-			</div>
+			<? if(count($messages) > 0) :?>
+				<ul>
+				<? foreach ($messages as $message) : ?>
+					<li><? echo $messages; ?></li>
+				<? endforeach; ?>
+				</ul>
+			<? endif; ?>
 		</header>
 
 		<main id="container">
@@ -213,23 +217,23 @@
 				<% thumbnails %>
 			</ul>
 		</main>
-		<nav class="clear" role="navigation"><% page_navigation %></nav>
+		<nav class="clear" role="navigation"><? echo $page_navigation ?></nav>
 		<a href="#top" id="backtop">top</a>
 		<footer role="contentinfo">
-			Gallery by <% author %> /
+			Gallery by <? echo $author ?> /
 			<a href="https://github.com/sebsauvage/MinigalNano" title="Powered by MiniGal Nano" target="_blank">
-				Powered by MiniGal Nano <% version %>
+				Powered by MiniGal Nano <? $version ?>
 			</a> /
 			<a href="http://tomcanac.com/minigal/" title="Tom Canac" target="_blank">
 				Board theme by Tom Canac
 			</a> /
-			<a  title="<% title %> RSS" href="rss.php">
+			<a  title="<? echo $title ?> RSS" href="rss.php">
 				RSS
 			</a>
 		</footer>
-		<script src="<% gallery_root %>js/lazy.js"></script>
-		<script src="<% gallery_root %>js/script.js"></script>
-		<script src="<% gallery_root %>js/mootools1.5.0.js"></script>
-		<script src="<% gallery_root %>js/mediabox1.5.4.js"></script>
+		<script src="<? echo GALLERY_ROOT ?>js/lazy.js"></script>
+		<script src="<? echo GALLERY_ROOT ?>js/script.js"></script>
+		<script src="<? echo GALLERY_ROOT ?>js/mootools1.5.0.js"></script>
+		<script src="<? echo GALLERY_ROOT ?>js/mediabox1.5.4.js"></script>
 	</body>
 </html>

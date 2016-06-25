@@ -13,151 +13,46 @@ error_reporting(-1);
 // Do not edit below this section unless you know what you are doing!
 
 header('Content-Type: text/html; charset=UTF-8'); // We use UTF-8 for proper international characters handling.
-$version = "0.4.0";
+$version = "0.5.0";
 ini_set("memory_limit", "256M");
 
-require "config-default.php";
-include "config.php";
-
+require_once "config-default.php";
+require_once "config.php";
+require_once "functions.global.php";
+require_once "functions.index.php";
 //-----------------------
 // DEFINE VARIABLES
 //-----------------------
 $page_navigation = "";
 $breadcrumb_navigation = "";
-$thumbnails = "";
+$thumbnails = [];
 $new = "";
 $images = "";
 $exif_data = "";
-$messages = "";
+$messages = [];
 $comment = "";
+
+if (!defined("GALLERY_ROOT")) {
+	define("GALLERY_ROOT", "");
+}
 
 //-----------------------
 // PHP ENVIRONMENT CHECK
 //-----------------------
 if (!function_exists('exif_read_data') && $display_exif == 1) {
 	$display_exif = 0;
-	$messages = "Error: PHP EXIF is not available. Set &#36;display_exif = 0; in config.php to remove this message";
+	$messages[] = "Error: PHP EXIF is not available on your server. Set &#36;display_exif = 0; in config.php to remove this message";
 }
 
-//-----------------------
-// FUNCTIONS
-//-----------------------
-function padstring($name, $length) {
-	global $label_max_length;
-	if (!isset($length)) {
-		$length = $label_max_length;
-	}
-	if (strlen($name) > $length) {
-		return substr($name, 0, $length) . "...";
-	}
-	return $name;
-}
 
-function getfirstImage($dirname) {
-	$imageName = false;
-	$extensions = array("jpg", "png", "jpeg", "gif");
-	if ($handle = opendir($dirname)) {
-		while (false !== ($file = readdir($handle))) {
-			if ($file[0] == '.') {
-				continue;
-			}
-			$pathinfo = pathinfo($file);
-			if (empty($pathinfo['extension'])) {
-				continue;
-			}
-			$ext = strtolower($pathinfo['extension']);
-			if (in_array($ext, $extensions)) {
-				$imageName = $file;
-				break;
-			}
-		}
-		closedir($handle);
-	}
-	return $imageName;
-}
-
-function parse_fraction($v, $round = 0) {
-	list($x, $y) = array_map('intval', explode('/', $v));
-	if (empty($x) || empty($y)) {
-		return $v;
-	}
-	if ($x % $y == 0) {
-		return $x / $y;
-	}
-	if ($y % $x == 0) {
-		return "1/" . $y / $x;
-	}
-	return round($x / $y, $round);
-}
-
-function readEXIF($file) {
-	$exif_arr = array();
-	$exif_data = exif_read_data($file);
-
-	$exif_val = @$exif_data['Model'];
-	if (!empty($exif_val)) {
-		$exif_arr[] = $exif_val;
-	}
-
-	$exif_val = @$exif_data['FocalLength'];
-	if (!empty($exif_val)) {
-		$exif_arr[] = parse_fraction($exif_val) . "mm";
-	}
-
-	$exif_val = @$exif_data['ExposureTime'];
-	if (!empty($exif_val)) {
-		$exif_arr[] = parse_fraction($exif_val, 2) . "s";
-	}
-
-	$exif_val = @$exif_data['FNumber'];
-	if (!empty($exif_val)) {
-		$exif_arr[] = "f" . parse_fraction($exif_val);
-	}
-
-	$exif_val = @$exif_data['ISOSpeedRatings'];
-	if (!empty($exif_val)) {
-		$exif_arr[] = "ISO " . $exif_val;
-	}
-
-	if (count($exif_arr) > 0) {
-		return "::" . implode(" | ", $exif_arr);
-	}
-
-	return $exif_arr;
-}
-
-function checkpermissions($file) {
-	global $messages;
-
-	if (!is_readable($file)) {
-		$messages = "At least one file or folder has wrong permissions. "
-		. "Learn how to <a href='http://minigal.dk/faq-reader/items/"
-		. "how-do-i-change-file-permissions-chmod.html' target='_blank'>"
-		. "set file permissions</a>";
-	}
-}
-
-function guardAgainstDirectoryTraversal($path) {
-    $pattern = "/^(.*\/)?(\.\.)(\/.*)?$/";
-    $directory_traversal = preg_match($pattern, $path);
-
-    if ($directory_traversal === 1) {
-        die("ERROR: Could not open " . htmlspecialchars(stripslashes($current_dir)) . " for reading!");
-    }
-}
-
-if (!defined("GALLERY_ROOT")) {
-	define("GALLERY_ROOT", "");
-}
-
-$requestedDir = '';
+$requested_dir = '';
 if (!empty($_GET['dir'])) {
-	$requestedDir = $_GET['dir'];
+	$requested_dir = $_GET['dir'];
 }
 
 $photo_root = GALLERY_ROOT . 'photos/';
-$thumbdir = rtrim('photos/' . $requestedDir, '/');
-$current_dir = GALLERY_ROOT . $thumbdir;
+$thumb_dir = rtrim('photos/' . $requested_dir, '/');
+$current_dir = GALLERY_ROOT . $thumb_dir;
 
 guardAgainstDirectoryTraversal($current_dir);
 
@@ -169,6 +64,7 @@ $dirs = array();
 $img_captions = array();
 if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 	// 1. LOAD CAPTIONS
+	// TODO : find a better way
 	$caption_filename = "$current_dir/captions.txt";
 	if (is_readable($caption_filename)) {
 		$caption_handle = fopen($caption_filename, "rb");
@@ -190,14 +86,14 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 				checkpermissions($current_dir . "/" . $file); // Check for correct file permission
 				// Set thumbnail to folder.jpg if found:
 				if (file_exists($current_dir . '/' . $file . '/folder.jpg')) {
-					$linkParams = http_build_query(
-						array('dir' => ltrim("$requestedDir/$file", '/')),
+					$link_params = http_build_query(
+						array('dir' => ltrim("$requested_dir/$file", '/')),
 						'',
 						'&amp;'
 					);
-					$linkUrl = "?$linkParams";
+					$link_url = "?$link_params";
 
-					$imgParams = http_build_query(
+					$img_params = http_build_query(
 						array(
 							'filename' => "$current_dir/$file/folder.jpg",
 							'size' => $thumb_size,
@@ -205,55 +101,55 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 						'',
 						'&amp;'
 					);
-					$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
-
+					$img_url = GALLERY_ROOT . "createthumb.php?$img_params";
+					// TODO : do not return html, and setup proper php templating on the themes
 					$dirs[] = array(
 						"name" => $file,
 						"date" => filemtime($current_dir . "/" . $file . "/folder.jpg"),
-						"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\"  alt=\"$label_loading\" /></a></li>",
+						"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\"  alt=\"$label_loading\" /></a></li>",
 					);
 				} else {
 					// Set thumbnail to first image found (if any):
-					unset($firstimage);
-					$firstimage = getfirstImage("$current_dir/" . $file);
+					unset($first_image);
+					$first_image = getfirstImage("$current_dir/" . $file);
 
-					if ($firstimage != "") {
-						$linkParams = http_build_query(
-							array('dir' => ltrim("$requestedDir/$file", '/')),
+					if ($first_image != "") {
+						$link_params = http_build_query(
+							array('dir' => ltrim("$requested_dir/$file", '/')),
 							'',
 							'&amp;'
 						);
-						$linkUrl = "?$linkParams";
+						$link_url = "?$link_params";
 
-						$imgParams = http_build_query(
+						$img_params = http_build_query(
 							array(
-								'filename' => "$thumbdir/$file/$firstimage",
+								'filename' => "$thumb_dir/$file/$first_image",
 								'size' => $thumb_size,
 							),
 							'',
 							'&amp;'
 						);
-						$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
+						$img_url = GALLERY_ROOT . "createthumb.php?$img_params";
 
 						$dirs[] = array(
 							"name" => $file,
 							"date" => filemtime($current_dir . "/" . $file),
-							"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\"  alt='$label_loading' /></a></li>",
+							"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\"  alt='$label_loading' /></a></li>",
 						);
 					} else {
 						// If no folder.jpg or image is found, then display default icon:
-						$linkParams = http_build_query(
-							array('dir' => ltrim("$requestedDir/$file", '/')),
+						$link_params = http_build_query(
+							array('dir' => ltrim("$requested_dir/$file", '/')),
 							'',
 							'&amp;'
 						);
-						$linkUrl = "?$linkParams";
-						$imgUrl = GALLERY_ROOT . 'images/folder_' . strtolower($folder_color) . '.png';
+						$link_url = "?$link_params";
+						$img_url = GALLERY_ROOT . 'images/folder_' . strtolower($folder_color) . '.png';
 
 						$dirs[] = array(
 							"name" => $file,
 							"date" => filemtime($current_dir . "/" . $file),
-							"html" => "<li><a href=\"{$linkUrl}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$imgUrl}\" width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>",
+							"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\" width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>",
 						);
 					}
 				}
@@ -273,9 +169,9 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 				//Read EXIF
 				if (!array_key_exists($file, $img_captions)) {
 					if ($display_exif == 1) {
-						$exifReaden = readEXIF($current_dir . "/" . $file);
+						$exif_readen = readEXIF($current_dir . "/" . $file);
 						//Add to the caption all the EXIF information
-						$img_captions[$file] = $file . $exifReaden;
+						$img_captions[$file] = $file . $exif_readen;
 					} else {
 						//If no EXIF, just use the filename as caption
 						$img_captions[$file] = $file;
@@ -291,23 +187,23 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 					$img_captions[$file] = $file . '::' . htmlspecialchars(file_get_contents($current_dir . '/' . $file . '.html'), ENT_QUOTES);
 				}
 
-				$linkUrl = str_replace('%2F', '/', rawurlencode("$current_dir/$file"));
-				$imgParams = http_build_query(
-					array('filename' => "$thumbdir/$file", 'size' => $thumb_size),
+				$link_url = str_replace('%2F', '/', rawurlencode("$current_dir/$file"));
+				$img_params = http_build_query(
+					array('filename' => "$thumb_dir/$file", 'size' => $thumb_size),
 					'',
 					'&amp;');
-				$imgUrl = GALLERY_ROOT . "createthumb.php?$imgParams";
+				$img_url = GALLERY_ROOT . "createthumb.php?$img_params";
 				if ($lazyload) {
-					$imgopts = "class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src=\"$imgUrl\"";
+					$imgopts = "class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src=\"$img_url\"";
 				} else {
-					$imgopts = "src=\"{$imgUrl}\"";
+					$imgopts = "src=\"{$img_url}\"";
 				}
 
 				$files[] = array(
 					"name" => $file,
 					"date" => filemtime($current_dir . "/" . $file),
 					"size" => filesize($current_dir . "/" . $file),
-					"html" => "<li><a href=\"{$linkUrl}\" rel='lightbox[billeder]' title=\"" . htmlentities($img_captions[$file]) . "\"><img $imgopts alt='$label_loading' /></a>" . $filename_caption . "</li>");
+					"html" => "<li><a href=\"{$link_url}\" title=\"" . htmlentities($img_captions[$file]) . "\"><img $imgopts alt='$label_loading' /></a>" . $filename_caption . "</li>");
 			}
 			// Other filetypes
 			$extension = "";
@@ -351,7 +247,6 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 				$extension = "AUDIO";
 			}
 			// audio files
-
 			if ($extension != "") {
 				$files[] = array(
 					"name" => $file,
@@ -421,7 +316,7 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
 		if ($_GET["page"] == $i) {
 			$page_navigation .= "$i";
 		} else {
-			$page_navigation .= "<a href='?dir=" . $requestedDir . "&amp;page=" . ($i) . "'>" . $i . "</a>";
+			$page_navigation .= "<a href='?dir=" . $requested_dir . "&amp;page=" . ($i) . "'>" . $i . "</a>";
 		}
 
 		if ($i != ceil((sizeof($files) + sizeof($dirs)) / $thumbs_pr_page)) {
@@ -433,7 +328,7 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
 	if ($_GET["page"] == "all") {
 		$page_navigation .= " | $label_all";
 	} else {
-		$page_navigation .= " | <a href='?dir=" . $requestedDir . "&amp;page=all'>$label_all</a>";
+		$page_navigation .= " | <a href='?dir=" . $requested_dir . "&amp;page=all'>$label_all</a>";
 	}
 
 }
@@ -441,9 +336,9 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
 //-----------------------
 // BREADCRUMB NAVIGATION
 //-----------------------
-if ($requestedDir != "" && $requestedDir != "photos") {
+if ($requested_dir != "" && $requested_dir != "photos") {
 	$breadcrumb_navigation = "<div class=\"NavWrapper\">";
-	$breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> $breadcrumb_separator ";
+	$breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> ";
 	$navitems = explode("/", htmlspecialchars($_REQUEST['dir']));
 	for ($i = 0; $i < sizeof($navitems); $i++) {
 		if ($i == sizeof($navitems) - 1) {
@@ -474,7 +369,7 @@ for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
 if (count($dirs) + count($files) == 0) {
 	$thumbnails .= "<div class=\"Empty\">$label_noimages</div> <div class=\"EmptyAdvice\">$label_noimages_advice</div>"; //Display 'no images' text
 	if ($current_dir == "photos") {
-		$messages =
+		$messages[] =
 		"It looks like you have just installed MiniGal Nano.
             Please run the <a href='system_check.php'>system check tool</a>. <br>
             And why not have a look to config.php and customize some values ?";
@@ -508,43 +403,25 @@ for ($y = $i; $y < sizeof($files); $y++) {
 //-----------------------
 // OUTPUT MESSAGES
 //-----------------------
-if ($messages != "") {
-	$messages = $messages . "<div><a id=\"closeMessage\" class=\"closeMessage\" href=\"#\"><img src=\"images/close.png\" /></a><div>";
-}
 
 // Read folder comment.
 $comment_filepath = $current_dir . $file . "/comment.html";
 if (file_exists($comment_filepath)) {
 	$fd = fopen($comment_filepath, "r");
-	$comment = "<div class=\"Comment\">" . fread($fd, filesize($comment_filepath)) . "</div>";
+	$comment = fread($fd, filesize($comment_filepath));
 	fclose($fd);
 }
 
-//PROCESS TEMPLATE FILE
-if (GALLERY_ROOT != "") {
-	$templatefile = GALLERY_ROOT . "templates/integrate.html";
-} else {
-	$templatefile = "templates/" . $templatefile . ".html";
+// Process template file
+if (!$template_file) {
+	$template_file = "board";
 }
 
-if (!$fd = fopen($templatefile, "r")) {
-	echo "Template " . htmlspecialchars(stripslashes($templatefile)) . " not found!";
+$template_file = "templates/" . $template_file . ".php";
+
+if (!$fd = fopen($template_file, "r")) {
+	echo "Template " . htmlspecialchars(stripslashes($template_file)) . " not found!";
 	exit();
-} else {
-	$template = fread($fd, filesize($templatefile));
-	fclose($fd);
-	$template = stripslashes($template);
-	$template = preg_replace("/<% title %>/", $title, $template);
-	$template = preg_replace("/<% messages %>/", $messages, $template);
-	$template = preg_replace("/<% author %>/", $author, $template);
-	$template = preg_replace("/<% gallery_root %>/", GALLERY_ROOT, $template);
-	$template = preg_replace("/<% images %>/", "$images", $template);
-	$template = preg_replace("/<% thumbnails %>/", "$thumbnails", $template);
-	$template = preg_replace("/<% breadcrumb_navigation %>/", "$breadcrumb_navigation", $template);
-	$template = preg_replace("/<% page_navigation %>/", "$page_navigation", $template);
-	$template = preg_replace("/<% folder_comment %>/", "$comment", $template);
-	$template = preg_replace("/<% bgcolor %>/", "$backgroundcolor", $template);
-	$template = preg_replace("/<% gallery_width %>/", "$gallery_width", $template);
-	$template = preg_replace("/<% version %>/", "$version", $template);
-	echo "$template";
 }
+
+require_once $template_file;
