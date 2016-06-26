@@ -27,7 +27,9 @@ $images = [];
 $exif_data = "";
 $messages = [];
 $folder_comment = "";
+$exif = "";
 
+define("AMP", "&amp;");
 define("GALLERY_ROOT", "");
 define("THEME_ROOT", GALLERY_ROOT . "templates/" . $template_name . '/');
 
@@ -57,209 +59,137 @@ guardAgainstDirectoryTraversal($current_dir);
 $files = array();
 $dirs = array();
 $handle = opendir($current_dir);
-if (is_dir($current_dir) && $handle) {
-    while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) {
+
+// If not a directory or cannot opendir the directory
+if (!is_dir($current_dir) || !$handle) {
+    die("ERROR: Could not open " . htmlspecialchars(stripslashes($current_dir)) . " for reading!");
+}
+
+while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) {
+    // If we have a directory
+    if (is_dir($current_dir . "/" . $file)) {
         /**
          * 1. LOAD FOLDERS
-         * TODO : refactor this part to have no code replication
          */
-        if (is_dir($current_dir . "/" . $file)) {
-            if ($file != "." && $file != "..") {
-                // Check for correct file permission
-                checkpermissions($current_dir . "/" . $file);
-                // Set thumbnail to folder.jpg if found:
-                if (file_exists($current_dir . '/' . $file . '/folder.jpg')) {
-                    $link_params = http_build_query(
-                        array('dir' => ltrim("$requested_dir/$file", '/')),
-                        '',
-                        '&amp;'
-                    );
-                    $link_url = "?$link_params";
-
-                    $img_params = http_build_query(
-                        array(
-                            'filename' => "$current_dir/$file/folder.jpg",
-                            'size' => $thumb_size,
-                        ),
-                        '',
-                        '&amp;'
-                    );
-                    $img_url = GALLERY_ROOT . "createthumb.php?$img_params";
-                    // TODO : do not return html, and setup proper php templating on the themes
-                    $dirs[] = array(
-                        "type" => "dir",
-                        "name" => $file,
-                        "date" => filemtime($current_dir . "/" . $file . "/folder.jpg"),
-                        //"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\"  alt=\"$label_loading\" /></a></li>",
-                        "thumb_src" => $img_url,
-                        "link" => $link_url,
-                        "label" => padstring($file, $label_max_length),
-                    );
-                } else {
-                    // Set thumbnail to first image found (if any):
-                    unset($first_image);
-                    $first_image = getfirstImage("$current_dir/" . $file);
-
-                    if ($first_image != "") {
-                        $link_params = http_build_query(
-                            array('dir' => ltrim("$requested_dir/$file", '/')),
-                            '',
-                            '&amp;'
-                        );
-                        $link_url = "?$link_params";
-
-                        $img_params = http_build_query(
-                            array(
-                                'filename' => "$thumb_dir/$file/$first_image",
-                                'size' => $thumb_size,
-                            ),
-                            '',
-                            '&amp;'
-                        );
-                        $img_url = GALLERY_ROOT . "createthumb.php?$img_params";
-
-                        $dirs[] = array(
-                            "type" => "dir",
-                            "name" => $file,
-                            "date" => filemtime($current_dir . "/" . $file),
-                            //"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\"  alt='$label_loading' /></a></li>",
-                            "thumb_src" => $img_url,
-                            "link" => $link_url,
-                            "label" => padstring($file, $label_max_length),
-                        );
-                    } else {
-                        // If no folder.jpg or image is found, then display default icon:
-                        $link_params = http_build_query(
-                            array('dir' => ltrim("$requested_dir/$file", '/')),
-                            '',
-                            '&amp;'
-                        );
-                        $link_url = "?$link_params";
-                        $img_url = GALLERY_ROOT . 'images/' . strtolower($folder_icon);
-
-                        $dirs[] = array(
-                            "type" => "dir",
-                            "name" => $file,
-                            "date" => filemtime($current_dir . "/" . $file),
-                            //"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\" width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>",
-                            "thumb_src" => $img_url,
-                            "link" => $link_url,
-                            "label" => padstring($file, $label_max_length),
-                        );
-                    }
-                }
-            }
+        if ($file == "." || $file == "..") {
+            continue;
         }
 
+        $link_params = http_build_query(array('dir' => ltrim("$requested_dir/$file", '/')),'',AMP);
+        $link_url = "?$link_params";
+        $folder_jpg = $current_dir . "/" . $file . "/folder.jpg";
+
+        if (file_exists($folder_jpg)) {
+            // Folder.jpg
+            $img_params = http_build_query(
+                array(
+                    'filename' => $folder_jpg,
+                    'size' => $thumb_size,
+                ),
+                '',
+                AMP
+            );
+            $img_url = GALLERY_ROOT . "createthumb.php?$img_params";
+
+            $dirs[] = array(
+                "type" => "dir",
+                "name" => $file,
+                "date" => filemtime($folder_jpg),
+                "thumb_src" => $img_url,
+                "link" => $link_url,
+                "label" => padstring($file, $label_max_length),
+            );
+        } else {
+            // First image found
+            unset($first_image);
+            $first_image = getfirstImage("$current_dir/" . $file);
+
+            if ($first_image != "") {
+                // If there is an image in the folder
+
+                $img_params = http_build_query(
+                    array(
+                        'filename' => "$thumb_dir/$file/$first_image",
+                        'size' => $thumb_size,
+                    ),
+                    '',
+                    AMP
+                );
+                $img_url = GALLERY_ROOT . "createthumb.php?$img_params";
+
+                $dirs[] = array(
+                    "type" => "dir",
+                    "name" => $file,
+                    "date" => filemtime($current_dir . "/" . $file),
+                    "thumb_src" => $img_url,
+                    "link" => $link_url,
+                    "label" => padstring($file, $label_max_length),
+                );
+            } else {
+                // Default picture for empty folders
+
+                $img_url = GALLERY_ROOT . 'images/' . strtolower($folder_icon);
+
+                $dirs[] = array(
+                    "type" => "dir",
+                    "name" => $file,
+                    "date" => filemtime($current_dir . "/" . $file),
+                    "thumb_src" => $img_url,
+                    "link" => $link_url,
+                    "label" => padstring($file, $label_max_length),
+                );
+            }
+        }
+    } else if ($file != "." && $file != ".." && $file != "folder.jpg") {
         /**
          * 2. LOAD FILES
          */
-        if ($file != "." && $file != ".." && $file != "folder.jpg") {
-            if ($display_filename) {
-                $filename_caption = "<em>" . padstring($file, $label_max_length) . "</em>";
-            } else {
-                $filename_caption = "";
-            }
-
-            // JPG, GIF and PNG
-            if (preg_match("/.jpg$|.gif$|.png$/i", $file)) {
-                //Read EXIF
-                if (!array_key_exists($file, $img_captions)) {
-                    if ($display_exif == 1) {
-                        $exif_readen = readEXIF($current_dir . "/" . $file);
-                        //Add to the caption all the EXIF information
-                        $img_captions[$file] = $file . $exif_readen;
-                    } else {
-                        //If no EXIF, just use the filename as caption
-                        $img_captions[$file] = $file;
-                    }
-                }
-                // Read the optionnal image title and caption in html file (image.jpg --> image.jpg.html)
-                // Format: title::caption
-                // Example: My cat::My cat like to <i>roll</i> on the floor.
-                // If file is not provided, image filename will be used instead.
-                checkpermissions($current_dir . "/" . $file);
-
-                if (is_file($current_dir . '/' . $file . '.html')) {
-                    $img_captions[$file] = $file . '::' . htmlspecialchars(file_get_contents($current_dir . '/' . $file . '.html'), ENT_QUOTES);
-                }
-
-                $link_url = str_replace('%2F', '/', rawurlencode("$current_dir/$file"));
-                $img_params = http_build_query(
-                    array('filename' => "$thumb_dir/$file", 'size' => $thumb_size),
-                    '',
-                    '&amp;');
-                $img_url = GALLERY_ROOT . "createthumb.php?$img_params";
-                $imgopts = "src=\"$img_url\"";
-
-                $files[] = array(
-                    "name" => $file,
-                    "date" => filemtime($current_dir . "/" . $file),
-                    "size" => filesize($current_dir . "/" . $file),
-                    //"html" => "<li><a href=\"{$link_url}\" title=\"" . htmlentities($img_captions[$file]) . "\"><img $imgopts alt='$label_loading' /></a>" . $filename_caption . "</li>",
-                    "link" => $link_url,
-                    "thumb_src" => $img_url,
-                    "alt" => $label_loading,
-                    "label" => htmlentities($img_captions[$file]),
-                    "filename_caption" => $filename_caption
-
-                );
-            }
-            // Other filetypes
-            $extension = "";
-            if (preg_match("/\.pdf$/i", $file)) {
-                $extension = "PDF";
-            }
-            // PDF
-            if (preg_match("/\.zip$/i", $file)) {
-                $extension = "ZIP";
-            }
-            // ZIP archive
-            if (preg_match("/\.rar$|\.r[0-9]{2,}/i", $file)) {
-                $extension = "RAR";
-            }
-            // RAR Archive
-            if (preg_match("/\.tar$/i", $file)) {
-                $extension = "TAR";
-            }
-            // TARball archive
-            if (preg_match("/\.gz$/i", $file)) {
-                $extension = "GZ";
-            }
-            // GZip archive
-            if (preg_match("/\.doc$|\.docx$/i", $file)) {
-                $extension = "DOCX";
-            }
-            // Word
-            if (preg_match("/\.ppt$|\.pptx$/i", $file)) {
-                $extension = "PPTX";
-            }
-            //Powerpoint
-            if (preg_match("/\.xls$|\.xlsx$/i", $file)) {
-                $extension = "XLXS";
-            }
-            // Excel
-            if (preg_match("/\.ogv$|\.mp4$|\.mpg$|\.mpeg$|\.mov$|\.avi$|\.wmv$|\.flv$|\.webm$/i", $file)) {
-                $extension = "VIDEO";
-            }
-            // video files
-            if (preg_match("/\.aiff$|\.aif$|\.wma$|\.aac$|\.flac$|\.mp3$|\.ogg$|\.m4a$/i", $file)) {
-                $extension = "AUDIO";
-            }
-            // audio files
-            if ($extension != "") {
-                $files[] = array(
-                    "name" => $file,
-                    "date" => filemtime($current_dir . "/" . $file),
-                    "size" => filesize($current_dir . "/" . $file),
-                    "html" => "<li><a href='$current_dir/$file' title='$file'><em-pdf>" . padstring($file, 20) . "</em-pdf><span></span><img src='" . GALLERY_ROOT . "images/filetype_" . $extension . ".png' width='$thumb_size' height='$thumb_size' alt='$file' /></a>$filename_caption</li>");
-            }
+        if ($display_filename) {
+            $filename_caption = padstring($file, $label_max_length);
+        } else {
+            $filename_caption = "";
         }
+
+        // If not a picture, skip
+        if (!preg_match("/.jpg$|.gif$|.png$/i", $file)) {
+            continue;
+        }
+
+        // Read EXIF
+        if ($display_exif == 1) {
+            $exif = readEXIF($current_dir . "/" . $file);
+        }
+
+        // Read the optional image title and caption in html file (image.jpg --> image.jpg.html)
+        // Format: title::caption
+        // Example: My cat::My cat like to <i>roll</i> on the floor.
+        // If file is not provided, image filename will be used instead.
+        if (is_file($current_dir . '/' . $file . '.html')) {
+            $img_captions[$file] = $file . '::' . htmlspecialchars(file_get_contents($current_dir . '/' . $file . '.html'), ENT_QUOTES);
+        }
+
+
+        $link_url = str_replace('%2F', '/', rawurlencode("$current_dir/$file"));
+        $img_params = http_build_query(array('filename' => "$thumb_dir/$file", 'size' => $thumb_size),'',AMP);
+        $img_url = GALLERY_ROOT . "createthumb.php?$img_params";
+        $imgopts = "src=\"$img_url\"";
+
+        $files[] = array(
+            "name" => $file,
+            "date" => filemtime($current_dir . "/" . $file),
+            "size" => filesize($current_dir . "/" . $file),
+            "link" => $link_url,
+            "thumb_src" => $img_url,
+            "alt" => $label_loading,
+            "exif" => $exif,
+            "label" => htmlentities($img_captions[$file]),
+            "filename_caption" => $filename_caption,
+        );
+
     }
-    closedir($handle);
-} else {
-    die("ERROR: Could not open " . htmlspecialchars(stripslashes($current_dir)) . " for reading!");
 }
+
+closedir($handle);
 
 //-----------------------
 // SORT FILES AND FOLDERS
@@ -318,7 +248,7 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
         if ($_GET["page"] == $i) {
             $page_navigation .= "$i";
         } else {
-            $page_navigation .= "<a href='?dir=" . $requested_dir . "&amp;page=" . ($i) . "'>" . $i . "</a>";
+            $page_navigation .= "<a href='?dir=" . $requested_dir . AMP . "page=" . ($i) . "'>" . $i . "</a>";
         }
 
         if ($i != ceil((sizeof($files) + sizeof($dirs)) / $thumbs_pr_page)) {
@@ -330,7 +260,7 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
     if ($_GET["page"] == "all") {
         $page_navigation .= " | $label_all";
     } else {
-        $page_navigation .= " | <a href='?dir=" . $requested_dir . "&amp;page=all'>$label_all</a>";
+        $page_navigation .= " | <a href='?dir=" . $requested_dir . AMP ."page=all'>$label_all</a>";
     }
 
 }
@@ -339,7 +269,6 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
 // BREADCRUMB NAVIGATION
 //-----------------------
 if ($requested_dir != "" && $requested_dir != "photos") {
-    $breadcrumb_navigation = "<div class=\"NavWrapper\">";
     $breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> ";
     $navitems = explode("/", htmlspecialchars($_REQUEST['dir']));
     for ($i = 0; $i < sizeof($navitems); $i++) {
@@ -352,12 +281,10 @@ if ($requested_dir != "" && $requested_dir != "photos") {
                 if ($x < $i) {
                     $breadcrumb_navigation .= "/";
                 }
-
             }
-            $breadcrumb_navigation .= "'>" . $navitems[$i] . "</a> $breadcrumb_separator ";
+            $breadcrumb_navigation .= "'>" . $navitems[$i] . "</a>";
         }
     }
-    $breadcrumb_navigation .= "</div>";
 }
 
 //Include hidden links for all images BEFORE current page so lightbox is able to browse images on different pages
@@ -368,15 +295,12 @@ for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
 //-----------------------
 // DISPLAY FOLDERS
 //-----------------------
-if (count($dirs) + count($files) == 0) {
-    // empty folder
-    if ($current_dir == "photos") {
-        // empty root folder
-        $messages[] =
+if (count($dirs) + count($files) == 0 && $current_dir == "photos") {
+    // empty root folder
+    $messages[] =
         "It looks like you have just installed MiniGal Nano.
-            Please run the <a href='system_check.php'>system check tool</a>. <br>
-            And why not have a look to config.php and customize some values ?";
-    }
+        Please run the <a href='system_check.php'>system check tool</a>. <br>
+        And why not have a look to config.php and customize some values ?";
 }
 $offset_current = $offset_start;
 for ($x = $offset_start; $x < sizeof($dirs) && $x < $offset_end; $x++) {
