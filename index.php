@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of MinigalNano: https://github.com/sebsauvage/MinigalNano
  *
@@ -11,10 +10,9 @@
 error_reporting(-1);
 
 // Do not edit below this section unless you know what you are doing!
-
-header('Content-Type: text/html; charset=UTF-8'); // We use UTF-8 for proper international characters handling.
-$version = "0.5.0";
+header('Content-Type: text/html; charset=UTF-8');
 ini_set("memory_limit", "256M");
+$version = "0.5.0";
 
 require_once "config-default.php";
 require_once "config.php";
@@ -58,7 +56,8 @@ guardAgainstDirectoryTraversal($current_dir);
 //-----------------------
 $files = array();
 $dirs = array();
-if (is_dir($current_dir) && $handle = opendir($current_dir)) {
+$handle = opendir($current_dir);
+if (is_dir($current_dir) && $handle) {
     while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) {
         /**
          * 1. LOAD FOLDERS
@@ -66,7 +65,8 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
          */
         if (is_dir($current_dir . "/" . $file)) {
             if ($file != "." && $file != "..") {
-                checkpermissions($current_dir . "/" . $file); // Check for correct file permission
+                // Check for correct file permission
+                checkpermissions($current_dir . "/" . $file);
                 // Set thumbnail to folder.jpg if found:
                 if (file_exists($current_dir . '/' . $file . '/folder.jpg')) {
                     $link_params = http_build_query(
@@ -267,7 +267,8 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 if (sizeof($dirs) > 0) {
     foreach ($dirs as $key => $row) {
         if ($row["name"] == "") {
-            unset($dirs[$key]); //Delete empty array entries
+            //Delete empty array entries
+            unset($dirs[$key]);
             continue;
         }
         $name[$key] = strtolower($row['name']);
@@ -279,7 +280,8 @@ if (sizeof($dirs) > 0) {
 if (sizeof($files) > 0) {
     foreach ($files as $key => $row) {
         if ($row["name"] == "") {
-            unset($files[$key]); //Delete empty array entries
+            //Delete empty array entries
+            unset($files[$key]);
             continue;
         }
         $name[$key] = strtolower($row['name']);
