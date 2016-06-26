@@ -25,12 +25,10 @@ require_once "functions.index.php";
 //-----------------------
 $page_navigation = "";
 $breadcrumb_navigation = "";
-$thumbnails = "";
-$new = "";
-$images = "";
+$images = [];
 $exif_data = "";
 $messages = [];
-$comment = "";
+$folder_comment = "";
 
 define("GALLERY_ROOT", "");
 define("THEME_ROOT", GALLERY_ROOT . "templates/" . $template_name . '/');
@@ -60,29 +58,11 @@ guardAgainstDirectoryTraversal($current_dir);
 //-----------------------
 $files = array();
 $dirs = array();
-$img_captions = array();
 if (is_dir($current_dir) && $handle = opendir($current_dir)) {
-	/**
-	 * 1. LOAD CAPTIONS
-	 * TODO : find a better way
-	 */
-	$caption_filename = "$current_dir/captions.txt";
-	if (is_readable($caption_filename)) {
-		$caption_handle = fopen($caption_filename, "rb");
-		while (!feof($caption_handle)) {
-			$caption_line = fgetss($caption_handle);
-			if (empty($caption_line)) {
-				continue;
-			}
-			list($img_file, $img_text) = explode('|', $caption_line);
-			$img_captions[$img_file] = trim($img_text);
-		}
-		fclose($caption_handle);
-	}
-
 	while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) {
 		/**
-		 * 2. LOAD FOLDERS
+		 * 1. LOAD FOLDERS
+		 * TODO : refactor this part to have no code replication
 		 */
 		if (is_dir($current_dir . "/" . $file)) {
 			if ($file != "." && $file != "..") {
@@ -107,9 +87,13 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 					$img_url = GALLERY_ROOT . "createthumb.php?$img_params";
 					// TODO : do not return html, and setup proper php templating on the themes
 					$dirs[] = array(
+						"type" => "dir",
 						"name" => $file,
 						"date" => filemtime($current_dir . "/" . $file . "/folder.jpg"),
-						"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\"  alt=\"$label_loading\" /></a></li>",
+						//"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\"  alt=\"$label_loading\" /></a></li>",
+						"thumb_src" => $img_url,
+						"link" => $link_url,
+						"label" => padstring($file, $label_max_length),
 					);
 				} else {
 					// Set thumbnail to first image found (if any):
@@ -135,9 +119,13 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 						$img_url = GALLERY_ROOT . "createthumb.php?$img_params";
 
 						$dirs[] = array(
+							"type" => "dir",
 							"name" => $file,
 							"date" => filemtime($current_dir . "/" . $file),
-							"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\"  alt='$label_loading' /></a></li>",
+							//"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\"  alt='$label_loading' /></a></li>",
+							"thumb_src" => $img_url,
+							"link" => $link_url,
+							"label" => padstring($file, $label_max_length),
 						);
 					} else {
 						// If no folder.jpg or image is found, then display default icon:
@@ -150,9 +138,13 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 						$img_url = GALLERY_ROOT . 'images/' . strtolower($folder_icon);
 
 						$dirs[] = array(
+							"type" => "dir",
 							"name" => $file,
 							"date" => filemtime($current_dir . "/" . $file),
-							"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\" width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>",
+							//"html" => "<li><a href=\"{$link_url}\"><em>" . padstring($file, $label_max_length) . "</em><span></span><img src=\"{$img_url}\" width='$thumb_size' height='$thumb_size' alt='$label_loading' /></a></li>",
+							"thumb_src" => $img_url,
+							"link" => $link_url,
+							"label" => padstring($file, $label_max_length),
 						);
 					}
 				}
@@ -160,7 +152,7 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 		}
 
 		/**
-		 * 3. LOAD FILES
+		 * 2. LOAD FILES
 		 */
 		if ($file != "." && $file != ".." && $file != "folder.jpg") {
 			if ($display_filename) {
@@ -204,7 +196,14 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 					"name" => $file,
 					"date" => filemtime($current_dir . "/" . $file),
 					"size" => filesize($current_dir . "/" . $file),
-					"html" => "<li><a href=\"{$link_url}\" title=\"" . htmlentities($img_captions[$file]) . "\"><img $imgopts alt='$label_loading' /></a>" . $filename_caption . "</li>");
+					//"html" => "<li><a href=\"{$link_url}\" title=\"" . htmlentities($img_captions[$file]) . "\"><img $imgopts alt='$label_loading' /></a>" . $filename_caption . "</li>",
+					"link" => $link_url,
+					"thumb_src" => $img_url,
+					"alt" => $label_loading,
+					"label" => htmlentities($img_captions[$file]),
+					"filename_caption" => $filename_caption
+
+				);
 			}
 			// Other filetypes
 			$extension = "";
@@ -380,7 +379,7 @@ if (count($dirs) + count($files) == 0) {
 $offset_current = $offset_start;
 for ($x = $offset_start; $x < sizeof($dirs) && $x < $offset_end; $x++) {
 	$offset_current++;
-	$thumbnails .= $dirs[$x]["html"];
+	$images[] = $dirs[$x];
 }
 
 //-----------------------
@@ -389,7 +388,7 @@ for ($x = $offset_start; $x < sizeof($dirs) && $x < $offset_end; $x++) {
 for ($i = $offset_start - sizeof($dirs); $i < $offset_end && $offset_current < $offset_end; $i++) {
 	if ($i >= 0) {
 		$offset_current++;
-		$thumbnails .= $files[$i]["html"];
+		$images[] = $files[$i];
 	}
 }
 
@@ -410,7 +409,7 @@ for ($y = $i; $y < sizeof($files); $y++) {
 $comment_filepath = $current_dir . $file . "/comment.html";
 if (file_exists($comment_filepath)) {
 	$fd = fopen($comment_filepath, "r");
-	$comment = fread($fd, filesize($comment_filepath));
+	$folder_comment = htmlspecialchars(fread($fd, filesize($comment_filepath)));
 	fclose($fd);
 }
 

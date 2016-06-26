@@ -2,7 +2,6 @@ html{
     font-size: 62.5%;
 }
 body {
-    position: relative;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -33,7 +32,6 @@ body > header{
 #container,
 #innerheader,
 .Message {
-    max-width: <% gallery_width %>;
     margin: 0px auto;
 }
 
