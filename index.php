@@ -25,16 +25,16 @@ require_once "functions.index.php";
 //-----------------------
 $page_navigation = "";
 $breadcrumb_navigation = "";
-$thumbnails = [];
+$thumbnails = "";
 $new = "";
 $images = "";
 $exif_data = "";
 $messages = [];
 $comment = "";
 
-if (!defined("GALLERY_ROOT")) {
-	define("GALLERY_ROOT", "");
-}
+define("GALLERY_ROOT", "");
+define("THEME_ROOT", GALLERY_ROOT . "templates/" . $template_name . '/');
+
 
 //-----------------------
 // PHP ENVIRONMENT CHECK
@@ -43,7 +43,6 @@ if (!function_exists('exif_read_data') && $display_exif == 1) {
 	$display_exif = 0;
 	$messages[] = "Error: PHP EXIF is not available on your server. Set &#36;display_exif = 0; in config.php to remove this message";
 }
-
 
 $requested_dir = '';
 if (!empty($_GET['dir'])) {
@@ -63,8 +62,10 @@ $files = array();
 $dirs = array();
 $img_captions = array();
 if (is_dir($current_dir) && $handle = opendir($current_dir)) {
-	// 1. LOAD CAPTIONS
-	// TODO : find a better way
+	/**
+	 * 1. LOAD CAPTIONS
+	 * TODO : find a better way
+	 */
 	$caption_filename = "$current_dir/captions.txt";
 	if (is_readable($caption_filename)) {
 		$caption_handle = fopen($caption_filename, "rb");
@@ -80,7 +81,9 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 	}
 
 	while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) {
-		// 2. LOAD FOLDERS
+		/**
+		 * 2. LOAD FOLDERS
+		 */
 		if (is_dir($current_dir . "/" . $file)) {
 			if ($file != "." && $file != "..") {
 				checkpermissions($current_dir . "/" . $file); // Check for correct file permission
@@ -144,7 +147,7 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 							'&amp;'
 						);
 						$link_url = "?$link_params";
-						$img_url = GALLERY_ROOT . 'images/folder_' . strtolower($folder_color) . '.png';
+						$img_url = GALLERY_ROOT . 'images/' . strtolower($folder_icon);
 
 						$dirs[] = array(
 							"name" => $file,
@@ -156,7 +159,9 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 			}
 		}
 
-		// 3. LOAD FILES
+		/**
+		 * 3. LOAD FILES
+		 */
 		if ($file != "." && $file != ".." && $file != "folder.jpg") {
 			if ($display_filename) {
 				$filename_caption = "<em>" . padstring($file, $label_max_length) . "</em>";
@@ -193,11 +198,7 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 					'',
 					'&amp;');
 				$img_url = GALLERY_ROOT . "createthumb.php?$img_params";
-				if ($lazyload) {
-					$imgopts = "class=\"b-lazy\" src=data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw== data-src=\"$img_url\"";
-				} else {
-					$imgopts = "src=\"{$img_url}\"";
-				}
+				$imgopts = "src=\"$img_url\"";
 
 				$files[] = array(
 					"name" => $file,
@@ -367,8 +368,9 @@ for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
 // DISPLAY FOLDERS
 //-----------------------
 if (count($dirs) + count($files) == 0) {
-	$thumbnails .= "<div class=\"Empty\">$label_noimages</div> <div class=\"EmptyAdvice\">$label_noimages_advice</div>"; //Display 'no images' text
+	// empty folder
 	if ($current_dir == "photos") {
+		// empty root folder
 		$messages[] =
 		"It looks like you have just installed MiniGal Nano.
             Please run the <a href='system_check.php'>system check tool</a>. <br>
@@ -413,15 +415,15 @@ if (file_exists($comment_filepath)) {
 }
 
 // Process template file
-if (!$template_file) {
-	$template_file = "board";
+if (!$template_name) {
+	$template_name = "board";
 }
 
-$template_file = "templates/" . $template_file . ".php";
+$template_name = "templates/" . $template_name . "/index.php";
 
-if (!$fd = fopen($template_file, "r")) {
-	echo "Template " . htmlspecialchars(stripslashes($template_file)) . " not found!";
+if (!$fd = fopen($template_name, "r")) {
+	echo "Template " . htmlspecialchars(stripslashes($template_name)) . " not found!";
 	exit();
 }
 
-require_once $template_file;
+require_once $template_name;

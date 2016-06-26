@@ -1,6 +1,6 @@
-/*
+/**
  * LazyLoading
  */
 window.addEventListener('load', function(){
-	var bLazy = new Blazy;
+    // var bLazy = new Blazy;
 }, false);
