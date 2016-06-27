@@ -15,7 +15,20 @@
         <header role="banner">
             <h1><a href="<?php echo GALLERY_ROOT ?>"><?php echo $title ?></a></h1>
 
-            <nav role="navigation"><?php echo $breadcrumb_navigation?></nav>
+            <nav role="navigation">
+                <?php if(count($breadcrumbs) > 0) :?>
+                    <ol class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
+                        <?php foreach ($breadcrumbs as $i=>$crumb) : ?>
+                            <li class="breadcrumbs__crumb_line" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                <a class="breadcrumbs__crumb_link" href="<?php echo $crumb['url']; ?>" itemprop="item">
+                                    <span itemprop="name"><?php echo $crumb['label']; ?></span>
+                                </a>
+                                <meta itemprop="position" content="<?php echo $i+1 ?>" />
+                            </li>
+                        <?php endforeach; ?>
+                    </ol>
+                <?php endif; ?>
+            </nav>
         </header>
 
         <main>

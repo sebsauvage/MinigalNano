@@ -22,10 +22,10 @@ require_once "functions.index.php";
 // DEFINE VARIABLES
 //-----------------------
 $page_navigation = "";
-$breadcrumb_navigation = "";
 $images = [];
 $exif_data = "";
 $messages = [];
+$breadcrumbs = [];
 $folder_comment = "";
 $exif = "";
 
@@ -269,27 +269,24 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
 // BREADCRUMB NAVIGATION
 //-----------------------
 if ($requested_dir != "" && $requested_dir != "photos") {
-    $breadcrumb_navigation .= "<a href='?dir='>" . $label_home . "</a> ";
+    $breadcrumbs[] = array('label'=>$label_home, 'url'=>GALLERY_ROOT);
     $navitems = explode("/", htmlspecialchars($_REQUEST['dir']));
+
     for ($i = 0; $i < sizeof($navitems); $i++) {
         if ($i == sizeof($navitems) - 1) {
-            $breadcrumb_navigation .= $navitems[$i];
+            $breadcrumbs[] = array('label'=>$navitems[$i], 'url'=>'');
         } else {
-            $breadcrumb_navigation .= "<a href='?dir=";
+            $url = "?dir=";
             for ($x = 0; $x <= $i; $x++) {
-                $breadcrumb_navigation .= $navitems[$x];
+                $url .= $navitems[$x];
                 if ($x < $i) {
-                    $breadcrumb_navigation .= "/";
+                    $url .= "/";
                 }
             }
-            $breadcrumb_navigation .= "'>" . $navitems[$i] . "</a>";
+            $breadcrumbs[] = array('label'=>$navitems[$i], 'url'=>$url );
         }
     }
-}
 
-//Include hidden links for all images BEFORE current page so lightbox is able to browse images on different pages
-for ($y = 0; $y < $offset_start - sizeof($dirs); $y++) {
-    $breadcrumb_navigation .= "<a href='" . $current_dir . "/" . $files[$y]["name"] . "' class='hidden' title='" . $img_captions[$files[$y]["name"]] . "'></a>";
 }
 
 //-----------------------
