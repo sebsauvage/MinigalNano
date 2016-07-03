@@ -9,64 +9,81 @@
         <meta name='robots' content='index,follow'>
         <title><?php echo $title ?></title>
         <link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss.php" />
-        <link rel="stylesheet" href="<?php echo THEME_ROOT ?>styles.css">
+        <link rel="stylesheet" href="<?php echo THEME_ROOT ?>css/styles.min.css">
     </head>
     <body>
-        <header role="banner">
-            <h1><a href="<?php echo GALLERY_ROOT ?>"><?php echo $title ?></a></h1>
+        <div class="header">
+            <div class="container">
+                <header role="banner">
+                    <h1 class="title">
+                        <a class="title__a" href="/"><?php echo $title ?></a>
+                    </h1>
 
-            <nav role="navigation">
-                <?php if(count($breadcrumbs) > 0) :?>
-                    <ol class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
-                        <?php foreach ($breadcrumbs as $i=>$crumb) : ?>
-                            <li class="breadcrumbs__crumb_line" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-                                <a class="breadcrumbs__crumb_link" href="<?php echo $crumb['url']; ?>" itemprop="item">
-                                    <span itemprop="name"><?php echo $crumb['label']; ?></span>
-                                </a>
-                                <meta itemprop="position" content="<?php echo $i+1 ?>" />
-                            </li>
-                        <?php endforeach; ?>
-                    </ol>
+                    <nav role="navigation">
+                        <?php if(count($breadcrumbs) > 0) :?>
+                            <ol class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
+                                <?php foreach ($breadcrumbs as $i=>$crumb) : ?>
+                                    <li class="breadcrumbs__crumb" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                        <a class="breadcrumbs__crumb_a" href="<?php echo $crumb['url']; ?>" itemprop="item">
+                                            <span itemprop="name"><?php echo $crumb['label']; ?></span>
+                                        </a>
+                                        <meta itemprop="position" content="<?php echo $i+1 ?>" />
+                                    </li>
+                                <?php endforeach; ?>
+                            </ol>
+                        <?php endif; ?>
+                    </nav>
+                </header>
+
+
+                <?php if(count($messages) > 0) :?>
+                    <aside>
+                        <ul class="messages">
+                            <?php foreach ($messages as $message) : ?>
+                                <li class="messages__message"><?php echo $message; ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </aside>
                 <?php endif; ?>
-            </nav>
-        </header>
 
-        <main>
-            <?php if(count($folder_comment) > 0) :?>
-                <p><?php echo $folder_comment ?></p>
-            <?php endif; ?>
 
-            <?php if(count($messages) > 0) :?>
-                <ul class="messages">
-                    <?php foreach ($messages as $message) : ?>
-                        <li class="messages__message"><?php echo $message; ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
+                <?php if(count($folder_comment) > 0) :?>
+                    <p class="content"><?php echo $folder_comment ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+
+
+        <main class="container">
+
 
             <?php if ( count($images) > 0) : ?>
-                <ul>
+                <ul class="grid row">
                 <?php foreach ($images as $image) : ?>
-                    <li>
-                        <a href="<?php echo $image["link"]; ?>" title="20131125-2143_elan.png">
-                            <img class="b-lazy b-loaded" src="<?php echo $image["thumb_src"]; ?>" alt="<?php echo $image["alt"]; ?>">
+                    <li class="grid__element col-xs-12 col-sm-5 col-md-4 col-lg-3">
+                        <a class="grid__element__a" href="<?php echo $image["link"]; ?>" title="20131125-2143_elan.png">
+                            <img class="grid__element__a__img" class="b-lazy b-loaded" src="<?php echo $image["thumb_src"]; ?>" alt="<?php echo $image["alt"]; ?>">
                             <?php if($image["type"] == "dir") : ?>
-                                <p><?php echo $image["label"] ?></p>
+                            <p class="grid__element__a__label"><?php echo $image["label"] ?></p>
                             <?php endif; ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
                 </ul>
             <?php else : ?>
-                <p>No pictures :(</p>
+                <div class="empty-folder">
+                    <i class="empty-folder__icon-folder-open-empty icon-folder-open-empty"></i>
+                    <span>Empty folder</span>
+                </div>
             <?php endif ?>
         </main>
 
         <nav role="navigation"><?php echo $page_navigation ?></nav>
 
-        <a href="#top" id="backtop">top</a>
+        <button  href="#top" class="back-to-top">top</button>
 
-        <footer role="contentinfo">
+        <footer class="footer container" role="contentinfo">
             Gallery by <?php echo $author ?> /
             <a href="https://github.com/sebsauvage/MinigalNano" title="Powered by MiniGal Nano" target="_blank">
                 Powered by MiniGal Nano <?php echo $version ?>

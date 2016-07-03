@@ -1,0 +1,185 @@
+@import (inline) 'bootstrap.min.css';
+
+.transition {
+    transition: all .2s ease-in;
+}
+
+/*!
+ * Minigal Nano - Board theme by Tom Canac
+ */
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    margin: 0;
+    font-size: 1.5rem;
+    font-family: Helvetica, Arial, sans-serif;
+    background: #E7E6E0;
+    color: #333333;
+}
+
+a {
+    color: #333333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+h1 {
+    margin: 0;
+    padding: 1.5rem 0;
+    font-family: Georgia, Lucida, serif;
+    font-style: italic;
+}
+
+h1 a {
+    color: #CC2027;
+}
+
+.header {
+    background-color: #FFF;
+}
+
+.modal {
+    background-color: #2ecc71;
+    border-radius: 2px;
+}
+
+.breadcrumbs {
+    list-style:none;
+    padding:0;
+    
+    &__crumb {
+        display: inline;
+
+        &:after {
+            content: ' > ';
+            font-family: monospace;
+        }
+
+        &:last-child:after {
+            content: '';
+        }
+
+        &__a {
+
+        }
+    }
+}
+
+.comment {
+    padding: 2rem 0;
+}
+
+.pagination {
+
+}
+
+.grid {
+    list-style: none;
+    padding: 0;
+
+    &__element {
+        padding-bottom:15px;
+
+        &__a {
+            display: block;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            box-shadow: 0px 0px 2px -1px #000;
+
+            &__img {
+                width: 100%;
+                height:auto;
+
+            }
+
+            &__label {
+                background: #FFF;
+                text-align: center;
+                margin: 0;
+                padding: 8px;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                overflow: hidden;
+                text-overflow:ellipsis;
+            }
+        }
+    }
+}
+
+.empty-folder {
+    text-align: center;
+    font-size: 5rem;
+    padding: 2rem 0;
+
+    &__icon-folder-open-empty {
+        display: block;
+    }
+}
+
+.footer {
+    padding-top: 15px;
+    text-align: center;
+}
+
+/*----Back to top button---*/
+.back-to-top {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 1rem 4rem;
+    border: none;
+    background-color: #CC2027;
+    color: #FFF;
+    margin: .5%;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px -1px #000;
+    .transition;
+}
+
+/*----lazyloading---*/
+
+.b-lazy {
+    opacity: 0;
+    .transition;
+}
+
+.b-lazy.b-loaded {
+    opacity: 1;
+}
+
+/**
+ * Icons
+ */
+@font-face {
+    font-family: 'fontello';
+    src: url('../font/fontello.eot?98345567');
+    src: url('../font/fontello.eot?98345567#iefix') format('embedded-opentype'),
+    url('../font/fontello.woff2?98345567') format('woff2'),
+    url('../font/fontello.woff?98345567') format('woff'),
+    url('../font/fontello.ttf?98345567') format('truetype'),
+    url('../font/fontello.svg?98345567#fontello') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+    font-family: "fontello";
+    font-style: normal;
+    font-weight: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.icon-folder-open-empty:before { content: '\e800'; }
+.icon-info-circled:before { content: '\e801'; }
