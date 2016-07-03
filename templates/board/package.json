@@ -1,0 +1,14 @@
+{
+  "name": "board",
+  "version": "1.0.0",
+  "devDependencies": {
+    "gulp-cssmin": "^0.1.7",
+    "gulp-less": "^3.1.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.4"
+  },
+  "author": "Tom Canac <contact@tomcanac.com> (http://tomcanac.com)",
+  "license": "AGLP"
+}
