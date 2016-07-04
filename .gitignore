@@ -7,3 +7,4 @@ db_rss_timestamp
 rss.locker
 new_files_list
 .idea/
+node_modules

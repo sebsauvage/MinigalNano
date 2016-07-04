@@ -269,7 +269,7 @@ if (!$lazyload && sizeof($dirs) + sizeof($files) > $thumbs_pr_page) {
 // BREADCRUMB NAVIGATION
 //-----------------------
 if ($requested_dir != "" && $requested_dir != "photos") {
-    $breadcrumbs[] = array('label'=>$label_home, 'url'=>GALLERY_ROOT);
+    $breadcrumbs[] = array('label'=>$label_home, 'url'=>$homepage_url);
     $navitems = explode("/", htmlspecialchars($_REQUEST['dir']));
 
     for ($i = 0; $i < sizeof($navitems); $i++) {

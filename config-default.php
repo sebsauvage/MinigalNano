@@ -17,18 +17,20 @@
  */
 
 /** Basic config */
-// Number of thumbnails on a single page
-$thumbs_pr_page = "39";
-// Template filename (must be placed in 'templates' folder)
-$template_name = "board";
+// Install url
+$homepage_url = "http://example.org/";
 // Text to be displayed in browser titlebar
 $title = "MiniGal Nano";
 // Gallery description
 $description = "MiniGal Nano";
 // Author Name
 $author = "John Doe";
+// Template filename (must be placed in 'templates' folder)
+$template_name = "board";
 // Name of folder icon
 $folder_icon = "folder_black.png";
+// Number of thumbnails on a single page
+$thumbs_pr_page = "39";
 // Sort folders by: [name][date]
 $sorting_folders = "name";
 // Sort files by: [name][date][size]

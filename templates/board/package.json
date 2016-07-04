@@ -2,6 +2,7 @@
   "name": "board",
   "version": "1.0.0",
   "devDependencies": {
+    "gulp-autoprefixer": "^3.1.0",
     "gulp-cssmin": "^0.1.7",
     "gulp-less": "^3.1.0",
     "gulp-plumber": "^1.1.0",

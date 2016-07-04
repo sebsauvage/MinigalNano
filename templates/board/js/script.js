@@ -1,7 +1,7 @@
 /**
  * LazyLoading
  */
-window.addEventListener('load', function(){
+$(document).ready(function(){
     // var bLazy = new Blazy;
     console.log('test');
-}, false);
+});

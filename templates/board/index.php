@@ -13,10 +13,10 @@
     </head>
     <body>
         <div class="header">
-            <div class="container">
+            <div class="container-fluid">
                 <header role="banner">
                     <h1 class="title">
-                        <a class="title__a" href="/"><?php echo $title ?></a>
+                        <a class="title__a" href="<?php echo $homepage_url ?>"><?php echo $title ?></a>
                     </h1>
 
                     <nav role="navigation">
@@ -53,15 +53,11 @@
             </div>
         </div>
 
-
-
         <main class="container">
-
-
             <?php if ( count($images) > 0) : ?>
                 <ul class="grid row">
                 <?php foreach ($images as $image) : ?>
-                    <li class="grid__element col-xs-12 col-sm-5 col-md-4 col-lg-3">
+                    <li class="grid__element col-xs-12 col-sm-6 col-md-4 col-lg-3">
                         <a class="grid__element__a" href="<?php echo $image["link"]; ?>" title="20131125-2143_elan.png">
                             <img class="grid__element__a__img" class="b-lazy b-loaded" src="<?php echo $image["thumb_src"]; ?>" alt="<?php echo $image["alt"]; ?>">
                             <?php if($image["type"] == "dir") : ?>
@@ -97,6 +93,7 @@
         </footer>
 
         <script src="<?php echo GALLERY_ROOT ?>js/lazy.js"></script>
-        <script src="<?php echo THEME_ROOT ?>script.js"></script>
+        <script src="<?php echo THEME_ROOT ?>js/jquery-3.0.0.js"></script>
+        <script src="<?php echo THEME_ROOT ?>js/script.js"></script>
     </body>
 </html>
