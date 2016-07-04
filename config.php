@@ -13,5 +13,3 @@
  */
 
 $title = "Your Own MiniGal Nano";
-
-?>

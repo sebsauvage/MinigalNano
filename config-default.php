@@ -39,7 +39,8 @@ $sortdir_folders = SORT_ASC;
 $sortdir_files = SORT_ASC;
 // 0 is pagination, 1 is display all pictures on one page
 $lazyload = 1;
-//Those files and folders will not be displayed (affects the page and the RSS feed) e.g. : $skip_objects = array('aFolder', 'aFile.ext');
+// Those files and folders will not be displayed (affects the page and the RSS feed)
+// e.g. : $skip_objects = array('aFolder', 'aFile.ext');
 $skip_objects = array();
 
 /** Language strings */
