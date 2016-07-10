@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     uglify = require('gulp-uglify'),
     cssmin = require('gulp-cssmin'),
-    autoprefixer = require('gulp-autoprefixer')
+    autoprefixer = require('gulp-autoprefixer'),
     rename = require('gulp-rename');
 
 var input = {
@@ -25,7 +25,6 @@ gulp.task('css', function() {
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        //.pipe(cssmin())
         .pipe(sourcemaps.write())
         .pipe(rename({
             suffix: '.min'

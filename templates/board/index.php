@@ -13,7 +13,7 @@
     </head>
     <body>
         <div class="header">
-            <div class="container-fluid">
+            <div class="container">
                 <header role="banner">
                     <h1 class="title">
                         <a class="title__a" href="<?php echo $homepage_url ?>"><?php echo $title ?></a>

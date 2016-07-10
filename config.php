@@ -13,4 +13,3 @@
  */
 
 $title = "Your Own MiniGal Nano";
-$homepage_url = "http://localhost/perso/minigal/";
