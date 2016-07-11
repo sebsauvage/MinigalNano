@@ -58,8 +58,12 @@
                 <ul class="grid row">
                 <?php foreach ($images as $image) : ?>
                     <li class="grid__element col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                        <a class="grid__element__a" href="<?php echo $image["link"]; ?>" title="20131125-2143_elan.png">
-                            <img class="grid__element__a__img" class="b-lazy b-loaded" src="<?php echo $image["thumb_src"]; ?>" alt="<?php echo $image["alt"]; ?>">
+                        <a class="grid__element__a grid__element__a__<?php echo $image["type"]?>" href="<?php echo $image["link"]; ?>" title="20131125-2143_elan.png">
+                            <img
+                                class="grid__element__a__img"
+                                src="<?php echo $image["thumb_src"]; ?>"
+                                alt="<?php echo $image["alt"]; ?>"
+                                data-original="<?php echo $image["link"]; ?>">
                             <?php if($image["type"] == "dir") : ?>
                             <p class="grid__element__a__label"><?php echo $image["label"] ?></p>
                             <?php endif; ?>
@@ -93,7 +97,7 @@
         </footer>
 
         <script src="<?php echo GALLERY_ROOT ?>js/lazy.js"></script>
-        <script src="<?php echo THEME_ROOT ?>js/jquery-3.0.0.js"></script>
+        <script src="<?php echo THEME_ROOT ?>js/jquery-3.0.0.min.js"></script>
         <script src="<?php echo THEME_ROOT ?>js/script.js"></script>
     </body>
 </html>

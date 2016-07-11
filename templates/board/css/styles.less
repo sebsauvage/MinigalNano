@@ -4,6 +4,9 @@
     transition: all .2s ease-in;
 }
 
+@background: #E7E6E0;
+@dark-text: #333;
+
 /*!
  * Minigal Nano - Board theme by Tom Canac
  */
@@ -16,18 +19,14 @@ body {
     margin: 0;
     font-size: 1.5rem;
     font-family: Helvetica, Arial, sans-serif;
-    background: #E7E6E0;
-    color: #333333;
+    background: @background;
+    color: @dark-text;
 }
 
 a {
-    color: #333333;
+    color: @dark-text;
     font-weight: bold;
     text-decoration: none;
-}
-
-img {
-    max-height: 95vh;
 }
 
 .title {

@@ -176,6 +176,7 @@ while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) 
 
         $files[] = array(
             "name" => $file,
+            "type" => "pic",
             "date" => filemtime($current_dir . "/" . $file),
             "size" => filesize($current_dir . "/" . $file),
             "link" => $link_url,
