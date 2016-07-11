@@ -96,6 +96,15 @@
             </a>
         </footer>
 
+        <aside class="lightbox">
+            <header class="lightbox__header">
+
+            </header>
+            <div class="lightbox__body">
+                <img src="" alt="" class="lightbox__body__img" id="js_lightbox__body__img">
+            </div>
+        </aside>
+
         <script src="<?php echo GALLERY_ROOT ?>js/lazy.js"></script>
         <script src="<?php echo THEME_ROOT ?>js/jquery-3.0.0.min.js"></script>
         <script src="<?php echo THEME_ROOT ?>js/script.js"></script>

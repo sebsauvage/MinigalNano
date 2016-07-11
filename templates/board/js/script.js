@@ -14,3 +14,8 @@ $(document).ready(function(){
 function toggle_light_box() {
 
 }
+
+function load_light_box(pic_url) {
+    var img = $('#js_lightbox__body__img');
+    
+}
