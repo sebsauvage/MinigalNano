@@ -96,6 +96,7 @@ while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) 
                 "name" => $file,
                 "date" => filemtime($folder_jpg),
                 "thumb_src" => $img_url,
+                "alt" => null,
                 "link" => $link_url,
                 "label" => padstring($file, $label_max_length),
             );
@@ -122,6 +123,7 @@ while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) 
                     "name" => $file,
                     "date" => filemtime($current_dir . "/" . $file),
                     "thumb_src" => $img_url,
+                    "alt" => null,
                     "link" => $link_url,
                     "label" => padstring($file, $label_max_length),
                 );
@@ -135,6 +137,7 @@ while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) 
                     "name" => $file,
                     "date" => filemtime($current_dir . "/" . $file),
                     "thumb_src" => $img_url,
+                    "alt" => null,
                     "link" => $link_url,
                     "label" => padstring($file, $label_max_length),
                 );
@@ -164,6 +167,7 @@ while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) 
         // Format: title::caption
         // Example: My cat::My cat like to <i>roll</i> on the floor.
         // If file is not provided, image filename will be used instead.
+        $img_captions[$file] = null;
         if (is_file($current_dir . '/' . $file . '.html')) {
             $img_captions[$file] = $file . '::' . htmlspecialchars(file_get_contents($current_dir . '/' . $file . '.html'), ENT_QUOTES);
         }
@@ -173,6 +177,8 @@ while (false !== ($file = readdir($handle)) && !in_array($file, $skip_objects)) 
         $img_params = http_build_query(array('filename' => "$thumb_dir/$file", 'size' => $thumb_size),'',AMP);
         $img_url = GALLERY_ROOT . "createthumb.php?$img_params";
         $imgopts = "src=\"$img_url\"";
+
+        $label_loading = '';
 
         $files[] = array(
             "name" => $file,
