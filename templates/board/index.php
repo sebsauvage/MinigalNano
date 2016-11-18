@@ -6,10 +6,13 @@
         <meta name="description" content="<?php echo $description ?>" />
         <meta name="generator" content="MinigalNano <?php echo $version ?>" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name='robots' content='index,follow'>
+        <meta name="robots" content="index,follow">
         <title><?php echo $title ?></title>
-        <link rel="alternate" type="application/rss+xml" title="<% title %>" href="rss.php" />
+        <link rel="alternate" type="application/rss+xml" title="<?php echo $title ?>" href="rss.php" />
         <link rel="stylesheet" href="<?php echo THEME_ROOT ?>css/styles.min.css">
+        <meta property="og:title" content="<?php echo $title ?>">
+        <meta property="og:description" content="<?php echo $description ?>">
+        <meta property="og:url" content="<?php echo $homepage_url ?>">
     </head>
     <body>
         <div class="header">
