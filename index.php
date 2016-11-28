@@ -353,11 +353,12 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 			// audio files
 
 			if ($extension != "") {
+				$linkUrl = str_replace('%2F', '/', rawurlencode("$current_dir/$file"));
 				$files[] = array(
 					"name" => $file,
 					"date" => filemtime($current_dir . "/" . $file),
 					"size" => filesize($current_dir . "/" . $file),
-					"html" => "<li><a href='$current_dir/$file' title='$file'><em-pdf>" . padstring($file, 20) . "</em-pdf><span></span><img src='" . GALLERY_ROOT . "images/filetype_" . $extension . ".png' width='$thumb_size' height='$thumb_size' alt='$file' /></a>$filename_caption</li>");
+					"html" => "<li><a href='$linkUrl' title='$file'><em-pdf>" . padstring($file, 20) . "</em-pdf><span></span><img src='" . GALLERY_ROOT . "images/filetype_" . $extension . ".png' width='$thumb_size' height='$thumb_size' alt='$file' /></a>$filename_caption</li>");
 			}
 		}
 	}
