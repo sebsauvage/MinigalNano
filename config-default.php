@@ -36,7 +36,7 @@ $breadcrumb_separator = ">"; // Breadcrumb parts separator
 $description = "MiniGal Nano";
 $nb_items_rss = 25; // Number of elements to display in the feed. If you add a lot of pictures at the time, consider increasing this number
 $rss_refresh_interval = 60; // Time, in seconds, between two RSS refresh. for example, 3600 = 1update max per hour, 86400 = 1/day.
-$keep_extensions = array('jpg', 'jpeg', 'png', 'gif'); //Files with one of this extension will not be displayed on the RSS feed
+$keep_extensions = array('jpg', 'jpeg', 'png', 'gif'); // Only files with these extensions will be displayed on the RSS feed
 
 //ADVANCED SETTINGS
 $thumb_size = 320; // Thumbnail height/width (square thumbs). Changing this will most likely require manual altering of the template file to make it look properly!
