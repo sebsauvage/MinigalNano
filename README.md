@@ -46,6 +46,17 @@ Using a custom image for folders
 
 * Create `folder.jpg` inside a folder: This image will be used as default image for folder.
 
+Manual album ordering
+=====================
+
+Create a file named order.html add list folders inside.
+
+> \+ first folder  
+> \+ second folder  
+> \- last folder  
+
+Unlisted folders are added in the middle (between 'second folder' and 'last folder' in our case) using the default sort strategy.
+
 Thumbnails
 =========
 You do not have to care about thumbnails: They are automatically created in the `thumbs` directory.

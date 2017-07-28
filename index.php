@@ -167,6 +167,7 @@ guardAgainstDirectoryTraversal($current_dir);
 $files = array();
 $dirs = array();
 $img_captions = array();
+
 if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 	// 1. LOAD CAPTIONS
 	$caption_filename = "$current_dir/captions.txt";
@@ -369,6 +370,66 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 //-----------------------
 // SORT FILES AND FOLDERS
 //-----------------------
+
+$order_dir = array();
+
+if (file_exists("$current_dir/order.html")) {
+	$order_handle = fopen("$current_dir/order.html", "rb");
+	while (!feof($order_handle)) {
+		$order_line = strtolower(trim(fgetss($order_handle)));
+		if ("" == $order_line) {
+		} else if (preg_match("/ *- */", $order_line)) {
+			$order_dir["last"][] = preg_replace("/ *- */", "", $order_line, 1);
+		} else {
+			$order_dir["first"][] = preg_replace(" *\+ *", "", $order_line, 1);
+		}
+	}
+	fclose ($order_handle);
+}
+
+
+function sortFolders($a, $b) {
+	// ($a < $b) ? -1 : 1
+	global $order_dir;
+	global $sortdir_folders;
+	global $sorting_folders; // name | date
+
+	$orderBy = (SORT_ASC == $sortdir_folders) ? 1 : -1;
+
+	$aName = strtolower($a["name"]);
+	$bName = strtolower($b["name"]);
+
+	$aDate = $a["date"];
+	$bDate = $b["date"];
+
+	$aKeyFirst = array_search($aName, $order_dir["first"]);
+	$bKeyFirst = array_search($bName, $order_dir["first"]);
+	$aKeyLast = array_search($aName, $order_dir["last"]);
+	$bKeyLast = array_search($bName, $order_dir["last"]);
+
+	if (false !== $aKeyFirst && false !== $bKeyFirst) {
+		$r = $aKeyFirst < $bKeyFirst ? -1 : 1;
+	} else if (false !== $aKeyFirst) {
+		$r = -1;
+	} else if (false !== $bKeyFirst) {
+		$r = 1;
+	} else if (false !== $aKeyLast) {
+		$r = 1;
+	} else if (false !== $bKeyLast) {
+		$r = -1;
+	} else {
+		if ("name" == $sorting_folders) {
+			$r = $orderBy * strcmp($aName, $bName);
+		} else if ("date" == $sorting_folders) {
+			$r = $orderBy * (($aDate < $bDate) ? -1 : 1);
+		} else {
+			die("sorting_folders : '$sorting_folders' not suported.");
+		}
+	}
+
+	return $r;
+}
+
 if (sizeof($dirs) > 0) {
 	foreach ($dirs as $key => $row) {
 		if ($row["name"] == "") {
@@ -378,7 +439,9 @@ if (sizeof($dirs) > 0) {
 		$name[$key] = strtolower($row['name']);
 		$date[$key] = strtolower($row['date']);
 	}
-	@array_multisort($$sorting_folders, $sortdir_folders, $name, $sortdir_folders, $dirs);
+
+	usort($dirs, 'sortFolders');
+
 }
 
 if (sizeof($files) > 0) {
