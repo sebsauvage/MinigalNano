@@ -535,6 +535,7 @@ if (!$fd = fopen($templatefile, "r")) {
 	fclose($fd);
 	$template = stripslashes($template);
 	$template = preg_replace("/<% title %>/", $title, $template);
+	$template = preg_replace("/<% extra_html_head %>/", $extra_html_head, $template);
 	$template = preg_replace("/<% messages %>/", $messages, $template);
 	$template = preg_replace("/<% author %>/", $author, $template);
 	$template = preg_replace("/<% gallery_root %>/", GALLERY_ROOT, $template);
