@@ -5,7 +5,7 @@ MinigalNano is a very simple image gallery. It adheres to the KISS principle and
 
 MinigalNano uses a javascript Lightbox (Use left/right arrows for navigation), but it degrades gracefully if javascript is disabled.
 
-MinigalNano is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandonned in 2010. It adds new themes and icons, use more modern html/css, updates JS libs, and wants to be more community pull-friendly for the future.
+MinigalNano is based on [Thomas Rybak's](http://www.minigal.dk/minigal-nano.html) version which seems to have been abandoned in 2010. It adds new themes and icons, use more modern html/css, updates JS libs, and wants to be more community pull-friendly for the future.
 
 Features
 ============
