@@ -269,7 +269,7 @@ if (is_dir($current_dir) && $handle = opendir($current_dir)) {
 			}
 
 			// JPG, GIF and PNG
-			if (preg_match("/.jpg$|.gif$|.png$/i", $file)) {
+			if (preg_match("/.jpe?g$|.gif$|.png$/i", $file)) {
 				//Read EXIF
 				if (!array_key_exists($file, $img_captions)) {
 					if ($display_exif == 1) {
