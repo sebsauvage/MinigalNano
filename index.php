@@ -123,7 +123,7 @@ function readEXIF($file) {
 		return "::" . implode(" | ", $exif_arr);
 	}
 
-	return $exif_arr;
+	return '';
 }
 
 function checkpermissions($file) {
